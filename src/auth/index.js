@@ -106,7 +106,7 @@ export const useAuth0 = ({
 
           // Notify subscribers that the redirect callback has happened, passing the appState
           // (useful for retrieving any pre-authentication state)
-          onRedirectCallback(appState);
+          await onRedirectCallback(appState);
         }
       } catch (e) {
         this.error = e;
@@ -115,6 +115,9 @@ export const useAuth0 = ({
         this.isAuthenticated = await this.auth0Client.isAuthenticated();
         this.user = await this.auth0Client.getUser();
         this.loading = false;
+        if (this.isAuthenticated) {
+          await axios.post('/api/users', this.user);
+        }
       }
     }
   });
