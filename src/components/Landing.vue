@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Vue Starter</h1>
-    <img src="/imgs/img.png" />
+    <img src="/imgs/img.png" id="img" />
     <br />
     <button @click="onDecr">Decrement</button>
     &nbsp;&nbsp;
@@ -33,4 +33,9 @@ export default {
 </script>
 
 <style scoped>
+
+#img {
+  width: 400px;
+}
+
 </style>
