@@ -1,9 +1,12 @@
 import Vue from "vue";
 import createAuth0Client from "@auth0/auth0-spa-js";
+import axios from "axios";
 
 /** Define a default action to perform after authentication */
-const DEFAULT_REDIRECT_CALLBACK = () =>
+const DEFAULT_REDIRECT_CALLBACK = async (user) => {
+  await axios.post('/api/users', user);
   window.history.replaceState({}, document.title, window.location.pathname);
+};
 
 let instance;
 
@@ -51,9 +54,9 @@ export const useAuth0 = ({
       async handleRedirectCallback() {
         this.loading = true;
         try {
-          await this.auth0Client.handleRedirectCallback();
           this.user = await this.auth0Client.getUser();
           this.isAuthenticated = true;
+          await this.auth0Client.handleRedirectCallback(this.user);
         } catch (e) {
           this.error = e;
         } finally {
