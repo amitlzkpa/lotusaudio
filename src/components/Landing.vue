@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>Vue Starter</h1>
+    <img src="/imgs/img.png" />
+    <br />
     <button @click="onDecr">Decrement</button>
     &nbsp;&nbsp;
     <span>{{ num }}</span>
