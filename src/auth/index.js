@@ -114,10 +114,19 @@ export const useAuth0 = ({
           // handle the redirect and retrieve tokens
           const { appState } = await this.auth0Client.handleRedirectCallback();
 
-          let isAuthenticated = await this.auth0Client.isAuthenticated();
-          let user = await this.auth0Client.getUser();
-          if (isAuthenticated) {
-            await this.$api.post('/api/users', user);
+          this.isAuthenticated = await this.auth0Client.isAuthenticated();
+          this.user = await this.auth0Client.getUser();
+          if (this.isAuthenticated) {
+            this.token = await this.auth0Client.getTokenSilently();
+            this.jwt = await this.auth0Client.getIdTokenClaims();
+            this.$api.defaults.headers.common["Authorization"] = `Bearer ${this.jwt.__raw}`;
+          } else {
+            this.token = null;
+            this.jwt = null;
+            this.$api.defaults.headers.common["Authorization"] = null;
+          }
+          if (this.isAuthenticated) {
+            await this.$api.post('/api/users', this.user);
           }
 
           // Notify subscribers that the redirect callback has happened, passing the appState
