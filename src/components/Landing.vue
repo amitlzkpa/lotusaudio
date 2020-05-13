@@ -14,10 +14,15 @@
     <span>{{ $store.state.count }}</span>
     &nbsp;&nbsp;
     <button @click="onIncrVuex">Increment Vuex</button>
+    <br />
+    <button @click="onTestRoute">Test API</button>
+    &nbsp;&nbsp;
+    <button @click="onTestUserRoute">Test User API</button>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 
 export default {
   name: 'vuestarter',
@@ -38,6 +43,14 @@ export default {
     },
     async onDecrVuex() {
       this.$store.commit('decrement');
+    },
+    async onTestRoute() {
+      let res = await axios.get('/api/test');
+      console.log(res.data);
+    },
+    async onTestUserRoute() {
+      let res = await axios.get('/api/users/test');
+      console.log(res.data);
     }
   }
 }
