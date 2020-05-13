@@ -72,6 +72,20 @@ export const useAuth0 = ({
           this.loading = false;
         }
       },
+      /** Update state vars as per auth state */
+      async updateStateVars() {
+        this.isAuthenticated = await this.auth0Client.isAuthenticated();
+        this.user = await this.auth0Client.getUser();
+        if (this.isAuthenticated) {
+          this.token = await this.auth0Client.getTokenSilently();
+          this.jwt = await this.auth0Client.getIdTokenClaims();
+          this.$api.defaults.headers.common["Authorization"] = `Bearer ${this.jwt.__raw}`;
+        } else {
+          this.token = null;
+          this.jwt = null;
+          this.$api.defaults.headers.common["Authorization"] = null;
+        }
+      },
       /** Authenticates the user using the redirect method */
       loginWithRedirect(o) {
         return this.auth0Client.loginWithRedirect(o);
@@ -114,17 +128,7 @@ export const useAuth0 = ({
           // handle the redirect and retrieve tokens
           const { appState } = await this.auth0Client.handleRedirectCallback();
 
-          this.isAuthenticated = await this.auth0Client.isAuthenticated();
-          this.user = await this.auth0Client.getUser();
-          if (this.isAuthenticated) {
-            this.token = await this.auth0Client.getTokenSilently();
-            this.jwt = await this.auth0Client.getIdTokenClaims();
-            this.$api.defaults.headers.common["Authorization"] = `Bearer ${this.jwt.__raw}`;
-          } else {
-            this.token = null;
-            this.jwt = null;
-            this.$api.defaults.headers.common["Authorization"] = null;
-          }
+          await this.updateStateVars();
           if (this.isAuthenticated) {
             await this.$api.post('/api/users', this.user);
           }
@@ -137,18 +141,7 @@ export const useAuth0 = ({
         console.log(e);
         this.error = e;
       } finally {
-        // Initialize our internal authentication state
-        this.isAuthenticated = await this.auth0Client.isAuthenticated();
-        this.user = await this.auth0Client.getUser();
-        if (this.isAuthenticated) {
-          this.token = await this.auth0Client.getTokenSilently();
-          this.jwt = await this.auth0Client.getIdTokenClaims();
-          this.$api.defaults.headers.common["Authorization"] = `Bearer ${this.jwt.__raw}`;
-        } else {
-          this.token = null;
-          this.jwt = null;
-          this.$api.defaults.headers.common["Authorization"] = null;
-        }
+        await this.updateStateVars();
         this.loading = false;
       }
     }
