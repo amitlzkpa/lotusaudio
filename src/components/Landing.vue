@@ -22,7 +22,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 
 export default {
   name: 'vuestarter',
@@ -45,15 +44,11 @@ export default {
       this.$store.commit('decrement');
     },
     async onTestRoute() {
-      let res = await axios.get('/api/test');
+      let res = await this.$api.get('/api/test');
       console.log(res.data);
     },
     async onTestUserRoute() {
-      let tk = (this.$auth.isAuthenticated) ? this.$auth.jwt.__raw : null;
-      let opts = {
-        headers: { 'Authorization': `Bearer ${tk}` }
-      };
-      let res = await axios.get('/api/users/test', opts);
+      let res = await this.$api.get('/api/users/test');
       console.log(res.data);
     }
   }
