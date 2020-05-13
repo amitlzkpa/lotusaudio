@@ -91,7 +91,8 @@ export const useAuth0 = ({
         domain: options.domain,
         client_id: options.clientId,
         audience: options.audience,
-        redirect_uri: redirectUri
+        redirect_uri: redirectUri,
+        cacheLocation: 'localstorage'
       });
 
       try {
@@ -108,6 +109,7 @@ export const useAuth0 = ({
           await onRedirectCallback(appState);
         }
       } catch (e) {
+        console.log(e);
         this.error = e;
       } finally {
         // Initialize our internal authentication state
