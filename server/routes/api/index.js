@@ -3,12 +3,14 @@ const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 
 
+
 // public routes
 
 router.get('/test', function(req, res) {
   console.log('Test route');
   return res.send('Test route');
 });
+
 
 
 // protected routes
@@ -25,6 +27,16 @@ const checkJwt = jwt({
   algorithms: ['RS256']
 });
 
-router.use('/users', checkJwt, require('./user'));
+
+const errHandler = function (err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    return res.status(401).send();
+  }
+  next();
+};
+
+router.use('/users', checkJwt, errHandler, require('./user'));
+
+
 
 module.exports = router;

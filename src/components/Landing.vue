@@ -15,9 +15,9 @@
     &nbsp;&nbsp;
     <button @click="onIncrVuex">Increment Vuex</button>
     <br />
-    <button @click="onTestRoute">Test API</button>
+    <button @click="onTestRoute">Test public API route</button>
     &nbsp;&nbsp;
-    <button @click="onTestUserRoute">Test User API</button>
+    <button @click="onTestUserRoute">Test protected User API route</button>
   </div>
 </template>
 
