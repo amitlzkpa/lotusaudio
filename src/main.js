@@ -19,7 +19,7 @@ async function main() {
   Vue.use(Auth0Plugin, {
     domain,
     clientId,
-    onRedirectCallback: appState => {
+    onRedirectCallback: async appState => {
       router.push(
         appState && appState.targetUrl
           ? appState.targetUrl

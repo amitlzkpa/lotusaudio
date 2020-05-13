@@ -104,6 +104,12 @@ export const useAuth0 = ({
           // handle the redirect and retrieve tokens
           const { appState } = await this.auth0Client.handleRedirectCallback();
 
+          let isAuthenticated = await this.auth0Client.isAuthenticated();
+          let user = await this.auth0Client.getUser();
+          if (isAuthenticated) {
+            await this.$axios.post('/api/users', user);
+          }
+
           // Notify subscribers that the redirect callback has happened, passing the appState
           // (useful for retrieving any pre-authentication state)
           await onRedirectCallback(appState);
@@ -116,10 +122,6 @@ export const useAuth0 = ({
         this.isAuthenticated = await this.auth0Client.isAuthenticated();
         this.user = await this.auth0Client.getUser();
         this.loading = false;
-        if (this.isAuthenticated) {
-          localStorage.setItem(`vuestarter_user`, JSON.stringify(this.user));
-          await this.$axios.post('/api/users', this.user);
-        }
       }
     }
   });
