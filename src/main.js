@@ -1,8 +1,27 @@
 import Vue from 'vue';
+import Vuex from 'vuex';
 import App from '@/App.vue';
 import router from '@/router';
 
 import { Auth0Plugin } from "./auth";
+
+
+Vue.use(Vuex);
+
+const store = new Vuex.Store({
+  state: {
+    count: 0
+  },
+  mutations: {
+    increment (state) {
+      state.count++;
+    },
+    decrement (state) {
+      state.count--;
+    }
+  }
+})
+
 
 async function main() {
 
@@ -26,9 +45,11 @@ async function main() {
   Vue.config.productionTip = false;
   
   new Vue({
+    el: '#app',
+    store: store,
     router,
     render: h => h(App),
-  }).$mount('#app');
+  });
 
 
 }

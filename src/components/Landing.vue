@@ -3,16 +3,21 @@
     <h1>Vue Starter</h1>
     <img src="/imgs/img.png" id="img" />
     <br />
-    <button @click="onDecr">Decrement</button>
+    <button @click="onDecrLcl">Decrement Local</button>
     &nbsp;&nbsp;
     <span>{{ num }}</span>
     &nbsp;&nbsp;
-    <button @click="onIncr">Incrment</button>
+    <button @click="onIncrLcl">Increment Local</button>
+    <br />
+    <button @click="onDecrVuex">Decrement Vuex</button>
+    &nbsp;&nbsp;
+    <span>{{ $store.state.count }}</span>
+    &nbsp;&nbsp;
+    <button @click="onIncrVuex">Increment Vuex</button>
   </div>
 </template>
 
 <script>
-// import axios from 'axios';
 
 export default {
   name: 'vuestarter',
@@ -22,11 +27,17 @@ export default {
     }
   },
   methods: {
-    async onIncr() {
+    async onIncrLcl() {
       this.num++;
     },
-    async onDecr() {
+    async onDecrLcl() {
       this.num--;
+    },
+    async onIncrVuex() {
+      this.$store.commit('increment');
+    },
+    async onDecrVuex() {
+      this.$store.commit('decrement');
     }
   }
 }
