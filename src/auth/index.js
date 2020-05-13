@@ -1,10 +1,9 @@
 import Vue from "vue";
 import createAuth0Client from "@auth0/auth0-spa-js";
-import axios from "axios";
 
 /** Define a default action to perform after authentication */
 const DEFAULT_REDIRECT_CALLBACK = async (user) => {
-  await axios.post('/api/users', user);
+  await this.$axios.post('/api/users', user);
   window.history.replaceState({}, document.title, window.location.pathname);
 };
 
@@ -116,7 +115,7 @@ export const useAuth0 = ({
         this.user = await this.auth0Client.getUser();
         this.loading = false;
         if (this.isAuthenticated) {
-          await axios.post('/api/users', this.user);
+          await this.$axios.post('/api/users', this.user);
         }
       }
     }
