@@ -49,7 +49,11 @@ export default {
       console.log(res.data);
     },
     async onTestUserRoute() {
-      let res = await axios.get('/api/users/test');
+      let tk = (this.$auth.isAuthenticated) ? this.$auth.jwt.__raw : null;
+      let opts = {
+        headers: { 'Authorization': `Bearer ${tk}` }
+      };
+      let res = await axios.get('/api/users/test', opts);
       console.log(res.data);
     }
   }
