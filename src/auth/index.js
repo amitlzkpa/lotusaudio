@@ -1,9 +1,9 @@
 import Vue from "vue";
 import createAuth0Client from "@auth0/auth0-spa-js";
+import axios from "axios";
 
 /** Define a default action to perform after authentication */
-const DEFAULT_REDIRECT_CALLBACK = async (user) => {
-  await this.$axios.post('/api/users', user);
+const DEFAULT_REDIRECT_CALLBACK = async () => {
   window.history.replaceState({}, document.title, window.location.pathname);
 };
 
@@ -27,6 +27,8 @@ export const useAuth0 = ({
         loading: true,
         isAuthenticated: false,
         user: {},
+        token: null,
+        jwt: null,
         auth0Client: null,
         popupOpen: false,
         error: null
@@ -48,6 +50,13 @@ export const useAuth0 = ({
 
         this.user = await this.auth0Client.getUser();
         this.isAuthenticated = true;
+        if (this.isAuthenticated) {
+          this.token = await this.auth0Client.getTokenSilently();
+          this.jwt = await this.auth0Client.getIdTokenClaims();
+        } else {
+          this.token = null;
+          this.jwt = null;
+        }
       },
       /** Handles the callback when logging in using a redirect */
       async handleRedirectCallback() {
@@ -107,7 +116,7 @@ export const useAuth0 = ({
           let isAuthenticated = await this.auth0Client.isAuthenticated();
           let user = await this.auth0Client.getUser();
           if (isAuthenticated) {
-            await this.$axios.post('/api/users', user);
+            await axios.post('/api/users', user);
           }
 
           // Notify subscribers that the redirect callback has happened, passing the appState
@@ -121,6 +130,13 @@ export const useAuth0 = ({
         // Initialize our internal authentication state
         this.isAuthenticated = await this.auth0Client.isAuthenticated();
         this.user = await this.auth0Client.getUser();
+        if (this.isAuthenticated) {
+          this.token = await this.auth0Client.getTokenSilently();
+          this.jwt = await this.auth0Client.getIdTokenClaims();
+        } else {
+          this.token = null;
+          this.jwt = null;
+        }
         this.loading = false;
       }
     }

@@ -4,7 +4,7 @@ import Home from '@/views/Home.vue';
 import About from '@/views/About.vue';
 import Profile from '@/views/Profile.vue';
 
-import { authGuard } from "../auth/authGuard";
+import { authGuard } from "@/auth/authGuard";
 
 Vue.use(VueRouter);
 

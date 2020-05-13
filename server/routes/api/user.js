@@ -27,7 +27,7 @@ router.get('/all', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const u = req.body;
-  if (!u) {
+  if (!u || u === {}) {
     return res.status(400).send();
   }
   let user = await User.findOne({ username: u.nickname });

@@ -2,12 +2,8 @@ import Vue from 'vue';
 import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
-import axios from "axios";
-
-Vue.prototype.$axios = axios;
 
 import { Auth0Plugin } from "./auth";
-
 
 async function main() {
 
@@ -18,14 +14,7 @@ async function main() {
 
   Vue.use(Auth0Plugin, {
     domain,
-    clientId,
-    onRedirectCallback: async appState => {
-      router.push(
-        appState && appState.targetUrl
-          ? appState.targetUrl
-          : window.location.pathname
-      );
-    }
+    clientId
   });
   
   Vue.config.productionTip = false;
