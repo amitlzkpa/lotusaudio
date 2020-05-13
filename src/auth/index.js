@@ -53,9 +53,9 @@ export const useAuth0 = ({
       async handleRedirectCallback() {
         this.loading = true;
         try {
+          await this.auth0Client.handleRedirectCallback();
           this.user = await this.auth0Client.getUser();
           this.isAuthenticated = true;
-          await this.auth0Client.handleRedirectCallback(this.user);
         } catch (e) {
           this.error = e;
         } finally {
@@ -115,6 +115,7 @@ export const useAuth0 = ({
         this.user = await this.auth0Client.getUser();
         this.loading = false;
         if (this.isAuthenticated) {
+          localStorage.setItem(`vuestarter_user`, JSON.stringify(this.user));
           await this.$axios.post('/api/users', this.user);
         }
       }
