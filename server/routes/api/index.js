@@ -1,20 +1,8 @@
-const router = require('express').Router();
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 
 const User = require('../../models/User');
 
-
-// public routes
-
-router.get('/test', function(req, res) {
-  console.log('Test route');
-  return res.send('Test route');
-});
-
-
-
-// protected routes
 
 const checkJwt = jwt({
   secret: jwksRsa.expressJwtSecret({
@@ -25,7 +13,7 @@ const checkJwt = jwt({
   }),
   audience: "OJGLK6iqjY4sBlrhtOCAaOuUOMkXLd7h",
   issuer: "https://amitlzkpa.auth0.com/",
-  algorithms: ['RS256']
+  algorithms: ["RS256"]
 });
 
 
@@ -51,8 +39,24 @@ const addUserToReq = async function(req, res, next) {
 
 
 
-router.use('/users', [checkJwt, errHandler, addUserToReq], require('./user'));
+
+function setup(app) {
+
+  // public routes
+  app.get('/api/test', function(req, res) {
+    console.log('Test route');
+    return res.send('Test route');
+  });
+  
+  
+  // protected routes
+  app.use('/api/users', [checkJwt, errHandler, addUserToReq], require('./user'));
+
+}
 
 
 
-module.exports = router;
+
+module.exports = {
+  setup
+};
