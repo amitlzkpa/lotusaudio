@@ -4,7 +4,7 @@ const swaggerUi = require("swagger-ui-express");
 
 
 
-const options = {
+const jsdocOptions = {
   swaggerDefinition: {
     openapi: "3.0.0",
     info: {
@@ -17,12 +17,16 @@ const options = {
   ]
 };
 
-const swaggerDocs = swaggerJsdoc(options);
+const swaggerDocs = swaggerJsdoc(jsdocOptions);
 
 
+
+const swaggerOptions = { 
+  customCss: '.swagger-ui .topbar { display: none }'
+};
 
 function setup(app) {
-  app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs, { explorer: true }));
+  app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs, swaggerOptions));
 }
 
 
