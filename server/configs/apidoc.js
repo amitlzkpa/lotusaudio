@@ -8,7 +8,7 @@ const jsdocOptions = {
   swaggerDefinition: {
     openapi: "3.0.0",
     info: {
-      title: "vuestarter API docs",
+      title: "VueStarter API Docs",
       version: "1.0.0",
     }
   },
@@ -22,7 +22,8 @@ const swaggerDocs = swaggerJsdoc(jsdocOptions);
 
 
 const swaggerOptions = { 
-  customCss: '.swagger-ui .topbar { display: none }'
+  customCss: '.swagger-ui .topbar { display: none }',
+  customJs: '/swagger/customization.js'
 };
 
 function setup(app) {
