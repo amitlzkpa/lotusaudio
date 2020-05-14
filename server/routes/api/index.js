@@ -18,8 +18,8 @@ const checkJwt = jwt({
     jwksRequestsPerMinute: 5,
     jwksUri: AUTH0_JWKS_URI
   }),
-  audience: AUTH0_TOKEN_ISSUER,
-  issuer: AUTH0_AUDIENCE,
+  audience: AUTH0_AUDIENCE,
+  issuer: AUTH0_TOKEN_ISSUER,
   algorithms: ["RS256"]
 });
 
