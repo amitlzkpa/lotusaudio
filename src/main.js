@@ -29,7 +29,6 @@ async function main() {
     render: h => h(App),
   });
 
-
 }
 
 

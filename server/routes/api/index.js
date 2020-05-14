@@ -6,15 +6,20 @@ const jwksRsa = require('jwks-rsa');
 const User = require('../../models/User');
 
 
+const AUTH0_JWKS_URI = process.env.AUTH0_JWKS_URI;
+const AUTH0_TOKEN_ISSUER = process.env.AUTH0_TOKEN_ISSUER;
+const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE;
+
+
 const checkJwt = jwt({
   secret: jwksRsa.expressJwtSecret({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: "https://amitlzkpa.auth0.com/.well-known/jwks.json"
+    jwksUri: AUTH0_JWKS_URI
   }),
-  audience: "OJGLK6iqjY4sBlrhtOCAaOuUOMkXLd7h",
-  issuer: "https://amitlzkpa.auth0.com/",
+  audience: AUTH0_TOKEN_ISSUER,
+  issuer: AUTH0_AUDIENCE,
   algorithms: ["RS256"]
 });
 
