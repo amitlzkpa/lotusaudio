@@ -1,3 +1,5 @@
+const router = require('express').Router();
+
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 
@@ -40,23 +42,17 @@ const addUserToReq = async function(req, res, next) {
 
 
 
-function setup(app) {
+// public routes
+router.get('/test', function(req, res) {
+  console.log('Test route');
+  return res.send('Test route');
+});
 
-  // public routes
-  app.get('/api/test', function(req, res) {
-    console.log('Test route');
-    return res.send('Test route');
-  });
-  
-  
-  // protected routes
-  app.use('/api/users', [checkJwt, errHandler, addUserToReq], require('./user'));
 
-}
+// protected routes
+router.use('/users', [checkJwt, errHandler, addUserToReq], require('./user'));
 
 
 
 
-module.exports = {
-  setup
-};
+module.exports = router;

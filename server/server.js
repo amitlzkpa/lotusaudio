@@ -3,7 +3,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const routingSetup = require('./routes');
 const swaggerAPIDocSetup = require('./configs/apidoc');
 
 const DIR = 'dist';
@@ -19,7 +18,7 @@ app.use(cookieParser());
 app.use(bodyParser.json({ limit: '500mb' }));
 app.use(bodyParser.urlencoded({ limit: '500mb', extended: true }));
 
-routingSetup.setup(app);
+app.use("/", require('./routes'));
 
 swaggerAPIDocSetup.setup(app);
 
