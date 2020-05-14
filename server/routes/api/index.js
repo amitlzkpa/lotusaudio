@@ -2,6 +2,7 @@ const router = require('express').Router();
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 
+const User = require('../../models/User');
 
 
 // public routes
@@ -28,14 +29,29 @@ const checkJwt = jwt({
 });
 
 
-const errHandler = function (err, req, res, next) {
+const errHandler = async function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
-    return res.status(401).send();
+    return res.status(403).json({
+      success: false,
+      message: err.message || 'Failed to authenticate token.'
+    });
   }
   next();
 };
 
-router.use('/users', checkJwt, errHandler, require('./user'));
+
+
+const addUserToReq = async function(req, res, next) {
+  let auth0User = req.user;
+  let user = await User.findOne({username: auth0User.nickname});
+  req.auth0User = auth0User;
+  req.user = user;
+  next();
+}
+
+
+
+router.use('/users', [checkJwt, errHandler, addUserToReq], require('./user'));
 
 
 
