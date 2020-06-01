@@ -1,4 +1,4 @@
-document.title = "VueStarter API Docs";
+document.title = "TripMeUp API Docs";
 
 var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
 link.type = 'image/x-icon';

@@ -24,7 +24,6 @@
 <script>
 
 export default {
-  name: 'vuestarter',
   data() {
     return {
       num: 0,

@@ -1,4 +1,4 @@
-# vuestarter
+# tripmeup
 
 ## Project setup
 ```
