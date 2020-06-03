@@ -11,7 +11,6 @@ const store = new Vuex.Store({
   mutations: {
     updateCode (state, newCode) {
       state.code = newCode;
-      console.log(state.code);
     }
   },
   actions: {}

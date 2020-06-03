@@ -88,6 +88,15 @@
 <script>
 import Three from "@/components/Three.vue";
 
+let testCode = "\n\
+\n\
+function __init__() {\n\
+  let cube = new THREE.Mesh(new THREE.CubeGeometry(2, 2, 2), new THREE.MeshNormalMaterial());\n\
+  return cube;\n\
+}\n\
+\n\
+";
+
 export default {
   name: 'App',
   components: {
@@ -95,7 +104,7 @@ export default {
   },
   data() {
     return {
-      code: ""
+      code: testCode
     }
   },
   methods: {
@@ -109,7 +118,7 @@ export default {
     },
     async run() {
       this.$store.commit('updateCode', this.code);
-      this.$refs.three.test();
+      this.$refs.three.onCodeUpdate();
     },
     async clear() {
       this.code = null;

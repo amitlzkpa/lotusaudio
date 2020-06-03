@@ -7,6 +7,8 @@
 <script>
 import * as THREE from 'three';
 
+window.THREE = THREE;
+
 let container, renderer, scene, camera;
 
 export default {
@@ -16,16 +18,22 @@ export default {
     }
   },
   methods: {
-    test() {
+    onCodeUpdate() {
+      try {
 
-      console.log(this.$store.state.code);
-      
+        eval.apply(window, [this.$store.state.code]);
+        let o = window.__init__();
+        scene.add(o);
+
+      } catch(ex) {
+        console.log(ex);
+      }
     },
     init: function() {
       container = document.getElementById('container');
 
       camera = new THREE.PerspectiveCamera(70, container.clientWidth/container.clientHeight, 0.01, 10);
-      camera.position.z = 1;
+      camera.position.z = 10;
 
       scene = new THREE.Scene();
 
