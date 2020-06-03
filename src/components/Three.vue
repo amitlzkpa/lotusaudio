@@ -14,14 +14,15 @@ export default {
       camera: null,
       scene: null,
       renderer: null,
+      container: null,
       mesh: null
     }
   },
   methods: {
     init: function() {
-      let container = document.getElementById('container');
+      this.container = document.getElementById('container');
 
-      this.camera = new THREE.PerspectiveCamera(70, container.clientWidth/container.clientHeight, 0.01, 10);
+      this.camera = new THREE.PerspectiveCamera(70, this.container.clientWidth/this.container.clientHeight, 0.01, 10);
       this.camera.position.z = 1;
 
       this.scene = new THREE.Scene();
@@ -33,8 +34,14 @@ export default {
       this.scene.add(this.mesh);
 
       this.renderer = new THREE.WebGLRenderer({antialias: true});
-      this.renderer.setSize(container.clientWidth, container.clientHeight);
-      container.appendChild(this.renderer.domElement);
+      this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+      this.container.appendChild(this.renderer.domElement);
+      
+      window.addEventListener('resize', () => {
+        this.camera.aspect = this.container.clientWidth / this.container.clientHeight;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+      }, false);
 
     },
     animate: function() {
