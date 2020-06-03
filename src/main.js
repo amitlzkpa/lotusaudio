@@ -4,6 +4,11 @@ import router from '@/router';
 import store from '@/store';
 import axios from 'axios';
 
+import Buefy from 'buefy';
+import 'buefy/dist/buefy.css';
+
+Vue.use(Buefy, { defaultIconPack: 'fas' });
+
 Vue.prototype.$api = axios.create();
 
 import { Auth0Plugin } from "./auth";
