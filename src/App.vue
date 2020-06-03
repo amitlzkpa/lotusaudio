@@ -34,6 +34,7 @@
 
           <section style="height: 88vh;">
             <vue-codemirror-editor
+              @keydown.enter="handleEnter"
               v-model="code"
               :option="{
                 theme:'base16-dark',
@@ -111,6 +112,11 @@ export default {
     },
     async clear() {
       this.code = null;
+      await this.run();
+    },
+    async handleEnter(e) {
+      if (!e.ctrlKey) return;
+      await this.run();
     }
   }
 }
