@@ -6,8 +6,8 @@ const jwksRsa = require('jwks-rsa');
 const User = require('../../models/User');
 
 
-const AUTH0_JWKS_URI = process.env.AUTH0_JWKS_URI;
-const AUTH0_TOKEN_ISSUER = process.env.AUTH0_TOKEN_ISSUER;
+const AUTH0_JWKS_URI = `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`;
+const AUTH0_TOKEN_ISSUER = `https://${process.env.AUTH0_DOMAIN}/`;
 const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE;
 
 
