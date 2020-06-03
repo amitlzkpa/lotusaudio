@@ -76,7 +76,7 @@
       </SplitArea>
 
       <SplitArea :size="75">
-        <Three />
+        <Three ref="three" />
       </SplitArea>
       
     </Split>
@@ -109,6 +109,7 @@ export default {
     },
     async run() {
       this.$store.commit('updateCode', this.code);
+      this.$refs.three.test();
     },
     async clear() {
       this.code = null;

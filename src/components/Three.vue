@@ -16,6 +16,11 @@ export default {
     }
   },
   methods: {
+    test() {
+
+      console.log(this.$store.state.code);
+      
+    },
     init: function() {
       container = document.getElementById('container');
 
