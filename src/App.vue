@@ -3,36 +3,66 @@
 
     <Split style="height: 100vh">
       
-      <SplitArea :size="25">
-        <nav class="level">
+      <SplitArea :size="35">
+
+        <div class="level is-marginless">
           
           <div class="level-left">
+
             <div class="level-item">
-              <router-link to="/">Home</router-link>
+              <div v-if="$auth.isAuthenticated">
+                <b-button
+                  type="is-primary"
+                  size="is-small"
+                  @click="save"
+                >Save</b-button>
+                <b-button
+                  type="is-text"
+                  size="is-small"
+                  @click="saveNew"
+                >Save New</b-button>
+              </div>
+
+              <div v-else>
+                <span>
+                  <a v-if="!$auth.isAuthenticated" @click="login" href="#!">Login</a> &nbsp;&nbsp; to save
+                </span>
+              </div>
             </div>
-            <div class="level-item">
-              <router-link to="/about">About</router-link>
-            </div>
-            <div class="level-item">
-              <router-link v-if="$auth.isAuthenticated" to="/profile">Profile</router-link>
-            </div>
+            
           </div>
 
           <div class="level-right">
             <div class="level-item">
-              <span v-if="!$auth.loading">
-                <a v-if="!$auth.isAuthenticated" @click="login" href="#!">Log in</a>
-                <a v-if="$auth.isAuthenticated" @click="logout" href="#!">Log out({{ $auth.user.name }})</a>
-              </span>
+
+              <b-dropdown position="is-bottom-left" aria-role="list">
+                <button class="button is-text" slot="trigger" slot-scope="{ active }">
+                  <b-icon
+                    icon="prescription-bottle"
+                    size="is-small"
+                  ></b-icon>
+                </button>
+
+                <b-dropdown-item aria-role="listitem">
+                  <router-link to="/home">Home</router-link>
+                </b-dropdown-item>
+                <b-dropdown-item aria-role="listitem" v-if="$auth.isAuthenticated">
+                  <router-link to="/profile">Profile({{ $auth.user.name }})</router-link>
+                </b-dropdown-item>
+                <b-dropdown-item aria-role="listitem" v-if="$auth.isAuthenticated" >
+                  <a @click="logout" href="#!">Log out</a>  
+                </b-dropdown-item>
+              </b-dropdown>
+
             </div>
           </div>
           
-        </nav>
+        </div>
 
 
         <div class="flex-container">
 
-          <section style="height: 88vh;">
+          <div style="height: 88vh;">
             <vue-codemirror-editor
               @keydown.enter="handleEnter"
               v-model="code"
@@ -41,9 +71,9 @@
                 mode:'text/javascript',
               }"
             />
-          </section>
+          </div>
 
-          <section>
+          <div>
 
             <div class="level">
 
@@ -69,13 +99,13 @@
               
             </div>
 
-          </section>
+          </div>
 
         </div>
 
       </SplitArea>
 
-      <SplitArea :size="75">
+      <SplitArea :size="65">
         <Three ref="three" />
       </SplitArea>
       
@@ -101,12 +131,18 @@ export default {
   },
   methods: {
     login() {
-      this.$auth.loginWithRedirect();
+      this.$auth.loginWithPopup();
     },
     logout() {
       this.$auth.logout({
         returnTo: window.location.origin
       });
+    },
+    async save() {
+      console.log('save');
+    },
+    async saveNew() {
+      console.log('save as new');
     },
     async run() {
       this.$store.commit('updateCode', this.code);
@@ -120,6 +156,9 @@ export default {
       if (!e.ctrlKey) return;
       await this.run();
     }
+  },
+  async mounted() {
+    this.run();
   }
 }
 </script>
