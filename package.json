@@ -30,6 +30,7 @@
     "nodemon": "^2.0.3",
     "swagger-jsdoc": "^4.0.0",
     "swagger-ui-express": "^4.1.4",
+    "three": "^0.117.1",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6",
     "vuex": "^3.4.0"

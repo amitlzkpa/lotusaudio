@@ -8,7 +8,7 @@ const User = require('../../models/User');
 
 const AUTH0_JWKS_URI = `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`;
 const AUTH0_TOKEN_ISSUER = `https://${process.env.AUTH0_DOMAIN}/`;
-const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE;
+const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
 
 
 const checkJwt = jwt({
@@ -18,7 +18,7 @@ const checkJwt = jwt({
     jwksRequestsPerMinute: 5,
     jwksUri: AUTH0_JWKS_URI
   }),
-  audience: AUTH0_AUDIENCE,
+  audience: AUTH0_CLIENT_ID,
   issuer: AUTH0_TOKEN_ISSUER,
   algorithms: ["RS256"]
 });
