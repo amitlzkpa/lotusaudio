@@ -107,8 +107,7 @@ export default {
       });
     },
     async run() {
-      console.log('runnnnnnnn');
-      console.log(this.code);
+      this.$store.commit('updateCode', this.code);
     },
     async clear() {
       this.code = null;

@@ -5,14 +5,12 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    count: 0
+    code: null
   },
   mutations: {
-    increment (state) {
-      state.count++;
-    },
-    decrement (state) {
-      state.count--;
+    updateCode (state, newCode) {
+      state.code = newCode;
+      console.log(state.code);
     }
   }
 });
