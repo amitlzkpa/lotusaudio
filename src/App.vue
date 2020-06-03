@@ -29,13 +29,48 @@
           
         </nav>
 
-        <vue-codemirror-editor
-          v-model="code"
-          :option="{
-            theme:'base16-dark',
-            mode:'text/javascript',
-          }"
-        />
+
+        <div class="flex-container">
+
+          <section style="height: 88vh;">
+            <vue-codemirror-editor
+              v-model="code"
+              :option="{
+                theme:'base16-dark',
+                mode:'text/javascript',
+              }"
+            />
+          </section>
+
+          <section>
+
+            <div class="level">
+
+              <div class="level-left">
+                <div class="level-item clickable-icon" @click="clear">
+                  <b-icon
+                    pack="fas"
+                    icon="trash"
+                    size="is-small"
+                  ></b-icon>
+                </div>
+              </div>
+
+              <div class="level-right">
+                <div class="level-item clickable-icon" @click="run">
+                  <b-icon
+                    pack="fas"
+                    icon="play"
+                    size="is-small"
+                  ></b-icon>
+                </div>
+              </div>
+              
+            </div>
+
+          </section>
+
+        </div>
 
       </SplitArea>
 
@@ -68,10 +103,26 @@ export default {
       this.$auth.logout({
         returnTo: window.location.origin
       });
+    },
+    async run() {
+      console.log('runnnnnnnn');
+      console.log(this.code);
+    },
+    async clear() {
+      this.code = null;
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
+.flex-container {
+  display:flex;
+  flex-direction:column;
+}
+
+.clickable-icon {
+  cursor: pointer;
+  margin: 4px;
+}
 </style>
