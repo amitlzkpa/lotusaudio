@@ -4,6 +4,8 @@ import router from '@/router';
 import store from '@/store';
 import axios from 'axios';
 
+import VueSplit from 'vue-split-panel';
+
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -14,6 +16,8 @@ import 'buefy/dist/buefy.css';
 library.add(fas);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.use(Buefy, { defaultIconPack: 'fas' });
+
+Vue.use(VueSplit);
 
 Vue.prototype.$api = axios.create();
 
