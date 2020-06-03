@@ -95,7 +95,7 @@ export default {
   },
   data() {
     return {
-      code: null
+      code: ""
     }
   },
   methods: {
