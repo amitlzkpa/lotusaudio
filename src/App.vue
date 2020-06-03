@@ -75,7 +75,7 @@
       </SplitArea>
 
       <SplitArea :size="75">
-        <router-view />
+        <Three />
       </SplitArea>
       
     </Split>
@@ -85,15 +85,17 @@
 </template>
 
 <script>
+import Three from "@/components/Three.vue";
 
 export default {
   name: 'App',
+  components: {
+    Three
+  },
   data() {
     return {
       code: null
     }
-  },
-  components: {
   },
   methods: {
     login() {
