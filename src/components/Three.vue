@@ -6,10 +6,12 @@
 
 <script>
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 window.THREE = THREE;
 
-let container, renderer, scene, camera;
+let container, renderer, scene, camera, controls;
+let vizObj;
 
 export default {
   name: 'Three',
@@ -21,9 +23,14 @@ export default {
     onCodeUpdate() {
       try {
 
+        if(vizObj) {
+          scene.remove(vizObj);
+          vizObj = null;
+        }
+
         eval.apply(window, [this.$store.state.code]);
-        let o = window.__init__();
-        scene.add(o);
+        vizObj = window.__init__();
+        scene.add(vizObj);
 
       } catch(ex) {
         console.log(ex);
@@ -32,14 +39,18 @@ export default {
     init: function() {
       container = document.getElementById('container');
 
-      camera = new THREE.PerspectiveCamera(70, container.clientWidth/container.clientHeight, 0.01, 10);
-      camera.position.z = 10;
+      camera = new THREE.PerspectiveCamera(60, container.clientWidth/container.clientHeight, 1, 1000);
+      camera.position.z = 100;
+      camera.lookAt(new THREE.Vector3());
 
       scene = new THREE.Scene();
 
       renderer = new THREE.WebGLRenderer({antialias: true});
       renderer.setSize(container.clientWidth, container.clientHeight);
       container.appendChild(renderer.domElement);
+
+      controls = new OrbitControls(camera, renderer.domElement);
+      controls.update();
       
       window.addEventListener('resize', () => {
         camera.aspect = container.clientWidth / container.clientHeight;
@@ -50,6 +61,7 @@ export default {
     },
     animate: function() {
       requestAnimationFrame(this.animate);
+      controls.update();
       renderer.render(scene, camera);
     }
   },

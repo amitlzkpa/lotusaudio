@@ -91,7 +91,7 @@ import Three from "@/components/Three.vue";
 let testCode = "\n\
 \n\
 function __init__() {\n\
-  let cube = new THREE.Mesh(new THREE.CubeGeometry(2, 2, 2), new THREE.MeshNormalMaterial());\n\
+  let cube = new THREE.Mesh(new THREE.CubeGeometry(20, 20, 20), new THREE.MeshNormalMaterial());\n\
   return cube;\n\
 }\n\
 \n\
