@@ -1,8 +1,17 @@
 import Vue from 'vue';
+
+import VueCodemirrorEditor from 'vue-codemirror-editor'
+import CodeMirror from 'codemirror'
+import 'codemirror/mode/htmlmixed/htmlmixed'
+import 'codemirror/addon/selection/active-line.js'
+
 import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
 import axios from 'axios';
+ 
+import 'codemirror/lib/codemirror.css';
+import 'vue-codemirror-editor/dist/vue-codemirror-editor.css';
 
 import VueSplit from 'vue-split-panel';
 
@@ -18,6 +27,9 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.use(Buefy, { defaultIconPack: 'fas' });
 
 Vue.use(VueSplit);
+
+window.CodeMirror = CodeMirror
+Vue.component(VueCodemirrorEditor.name, VueCodemirrorEditor)
 
 Vue.prototype.$api = axios.create();
 

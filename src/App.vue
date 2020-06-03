@@ -28,6 +28,14 @@
           </div>
           
         </nav>
+
+        <vue-codemirror-editor
+          v-model="code"
+          :option="{
+            mode:'text/javascript',
+          }"
+        />
+
       </SplitArea>
 
       <SplitArea :size="75">
@@ -44,6 +52,11 @@
 
 export default {
   name: 'App',
+  data() {
+    return {
+      code: null
+    }
+  },
   components: {
   },
   methods: {
