@@ -12,6 +12,7 @@ import axios from 'axios';
  
 import 'codemirror/lib/codemirror.css';
 import 'vue-codemirror-editor/dist/vue-codemirror-editor.css';
+import 'codemirror/theme/base16-dark.css';
 
 import VueSplit from 'vue-split-panel';
 

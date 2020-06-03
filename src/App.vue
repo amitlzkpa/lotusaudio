@@ -32,6 +32,7 @@
         <vue-codemirror-editor
           v-model="code"
           :option="{
+            theme:'base16-dark',
             mode:'text/javascript',
           }"
         />
