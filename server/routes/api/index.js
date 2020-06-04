@@ -48,7 +48,6 @@ const addUserToReq = async function(req, res, next) {
 
 
 // public routes
-router.use('/viz', [addUserToReq], require('./viz'));
 router.get('/test', function(req, res) {
   console.log('Test route');
   return res.send('Test route');
@@ -56,6 +55,7 @@ router.get('/test', function(req, res) {
 
 
 // protected routes
+router.use('/vizs', [checkJwt, errHandler, addUserToReq], require('./viz'));
 router.use('/users', [checkJwt, errHandler, addUserToReq], require('./user'));
 
 

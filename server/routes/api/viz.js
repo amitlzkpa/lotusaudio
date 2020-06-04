@@ -21,12 +21,23 @@ router.get('/all', async (req, res) => {
 
 router.post('/new', async (req, res) => {
   let data = req.body;
-  console.log(data);
-  data.visibility = "public";
   data.author = req.user;
-  let v = new Viz(data);
-  v = await v.save();
-  return res.json(v);
+  let viz = new Viz(data);
+  viz = await viz.save();
+  return res.json(viz);
+});
+
+
+router.post('/save', async (req, res) => {
+  let data = req.body;
+  let viz = await Viz.findOne({_id: data.id});
+  viz.name = data.name || viz.name;
+  viz.visibility = data.visibility || viz.visibility;
+  viz.short_description = data.short_description || viz.short_description;
+  viz.description = data.description || viz.description;
+  viz.code = data.code || viz.code;
+  viz = await viz.save();
+  return res.json(viz);
 });
 
 

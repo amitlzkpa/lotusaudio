@@ -75,6 +75,15 @@
             v-model="name"
             size="is-small"
           ></b-input>
+          <p class="control" size="is-small" @click="visibility = (visibility === 'public') ? 'private' : 'public'">
+            <span class="button is-static is-small">
+              <b-icon
+                :icon="(visibility === 'public') ? 'eye' : 'eye-slash'"
+                size="is-small"
+                class="clickable-icon"
+              ></b-icon>
+            </span>
+          </p>
         </b-field>
 
           <div style="height: 88vh;">
@@ -143,6 +152,7 @@ export default {
     return {
       id: "abc",
       name: "<unnamed>",
+      visibility: "public",
       short_description: "",
       description: "",
       code: templateViz
@@ -158,19 +168,27 @@ export default {
       });
     },
     async save() {
-      console.log('save');
-    },
-    async saveNew() {
-      console.log('save as new');
       let postData = {
           id: this.id,
           name: this.name,
+          visibility: this.visibility,
           short_description: this.short_description,
           description: this.description,
           code: this.code
       };
-      console.log(postData);
-      let v = await this.$api.post("/api/viz/new", postData);
+      let v = await this.$api.post("/api/vizs/save", postData);
+      console.log(v);
+    },
+    async saveNew() {
+      let postData = {
+          id: this.id,
+          name: this.name,
+          visibility: this.visibility,
+          short_description: this.short_description,
+          description: this.description,
+          code: this.code
+      };
+      let v = await this.$api.post("/api/vizs/new", postData);
       console.log(v);
     },
     async run() {
