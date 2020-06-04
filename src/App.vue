@@ -21,6 +21,10 @@
                   size="is-small"
                   @click="saveNew"
                 >Save New</b-button>
+                <span
+                  class="has-text-grey-light is-italic is-size-7"
+                >{{ id }}
+                </span>
               </div>
 
               <div v-else>
@@ -62,6 +66,17 @@
 
         <div class="flex-container">
 
+        <b-field>
+          <p class="control" size="is-small">
+            <span class="button is-static is-small">Name:</span>
+          </p>
+          <b-input
+            expanded
+            v-model="name"
+            size="is-small"
+          ></b-input>
+        </b-field>
+
           <div style="height: 88vh;">
             <vue-codemirror-editor
               @keydown.enter="handleEnter"
@@ -75,7 +90,7 @@
 
           <div>
 
-            <div class="level">
+            <div class="level is-marginless">
 
               <div class="level-left">
                 <div class="level-item clickable-icon" @click="clear">
@@ -126,6 +141,10 @@ export default {
   },
   data() {
     return {
+      id: "abc",
+      name: "<unnamed>",
+      short_description: "",
+      description: "",
       code: templateViz
     }
   },
@@ -143,6 +162,16 @@ export default {
     },
     async saveNew() {
       console.log('save as new');
+      let postData = {
+          id: this.id,
+          name: this.name,
+          short_description: this.short_description,
+          description: this.description,
+          code: this.code
+      };
+      console.log(postData);
+      let v = await this.$api.post("/api/viz/new", postData);
+      console.log(v);
     },
     async run() {
       this.$store.commit('updateCode', this.code);

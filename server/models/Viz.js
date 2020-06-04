@@ -20,6 +20,10 @@ const VizSchema = new mongoose.Schema({
     ref: 'User',
     default: null
   },
+  short_description: {
+    type: String,
+    default: ""
+  },
   description: {
     type: String,
     default: ""
