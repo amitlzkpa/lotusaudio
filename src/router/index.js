@@ -18,7 +18,7 @@ export default new VueRouter({
       component: Home
     },
     {
-      path: '/edit',
+      path: '/edit/:id?',
       name: 'edit',
       component: VizEdit
     },

@@ -7,7 +7,7 @@ module.exports = {
     progress: false,
     overlay: false,
     proxy: {
-      "/": {
+      "/api": {
         target: `http://localhost:${PORT}/`,
         logLevel: "debug"
       }

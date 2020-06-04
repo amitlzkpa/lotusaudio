@@ -40,7 +40,7 @@
             <div class="level-item">
 
               <b-dropdown position="is-bottom-left" aria-role="list">
-                <button class="button is-text" slot="trigger" slot-scope="{ active }">
+                <button class="button is-text" slot="trigger">
                   <b-icon
                     icon="prescription-bottle"
                     size="is-small"
@@ -141,7 +141,7 @@
 
 <script>
 import Three from "@/components/Three.vue";
-import templateViz from "!raw-loader!@/assets/template_viz.js";
+import templateViz from "!raw-loader!@/assets/template_viz.js.txt";
 
 export default {
   name: 'VizEdit',
@@ -160,7 +160,7 @@ export default {
   },
   methods: {
     login() {
-      this.$auth.loginWithPopup();
+      this.$auth.loginWithRedirect();
     },
     logout() {
       this.$auth.logout({
@@ -205,6 +205,10 @@ export default {
     }
   },
   async mounted() {
+    if(this.$route.params.id) {
+      let viz = await this.$api.get(`/api/vizs/id/${this.$route.params.id}`);
+      console.log(viz);
+    }
     this.run();
   }
 }

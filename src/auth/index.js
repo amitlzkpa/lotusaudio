@@ -50,14 +50,11 @@ export const useAuth0 = ({
 
         this.user = await this.auth0Client.getUser();
         this.isAuthenticated = true;
+
+        await this.updateStateVars();
         if (this.isAuthenticated) {
-          this.token = await this.auth0Client.getTokenSilently();
-          this.jwt = await this.auth0Client.getIdTokenClaims();
-          this.$api.defaults.headers.common["Authorization"] = `Bearer ${this.jwt.__raw}`;
-        } else {
-          this.token = null;
-          this.jwt = null;
-          this.$api.defaults.headers.common["Authorization"] = null;
+          let resp = await this.$api.post('/api/users', this.user);
+          this.dbUser = resp.data;
         }
       },
       /** Handles the callback when logging in using a redirect */
@@ -77,6 +74,7 @@ export const useAuth0 = ({
       async updateStateVars() {
         this.isAuthenticated = await this.auth0Client.isAuthenticated();
         this.user = await this.auth0Client.getUser();
+        console.log(this.user);
         if (this.isAuthenticated) {
           this.token = await this.auth0Client.getTokenSilently();
           this.jwt = await this.auth0Client.getIdTokenClaims();
