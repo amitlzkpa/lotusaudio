@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Navbar />
     <h1>Profile</h1>
     <img :src="$auth.user.picture" />
     <p>
@@ -12,8 +13,14 @@
 </template>
 
 <script>
-export default {
+import Navbar from '@/partials/Navbar.vue';
 
+
+export default {
+  name: 'profile',
+  components: {
+    Navbar
+  }
 }
 </script>
 
