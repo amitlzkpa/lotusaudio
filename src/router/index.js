@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/Home.vue';
-import About from '@/views/About.vue';
 import Profile from '@/views/Profile.vue';
+import VizEdit from '@/views/VizEdit.vue';
 
 import { authGuard } from "@/auth/authGuard";
 
@@ -18,9 +18,9 @@ export default new VueRouter({
       component: Home
     },
     {
-      path: '/about',
-      name: 'about',
-      component: About
+      path: '/edit',
+      name: 'edit',
+      component: VizEdit
     },
     {
       path: '/profile',
