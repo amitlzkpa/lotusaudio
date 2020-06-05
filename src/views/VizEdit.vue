@@ -140,6 +140,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import Three from "@/components/Three.vue";
 import templateViz from "!raw-loader!@/assets/template_viz.js.txt";
 
@@ -207,8 +208,17 @@ export default {
   async mounted() {
     console.log(this.$route.params.id);
     if(this.$route.params.id) {
-      let viz = await this.$api.get(`/api/vizs/id/${this.$route.params.id}`);
-      console.log(viz);
+      let v = await axios({
+        method: 'get',
+        url: `/api/vizs/id/${this.$route.params.id}`,
+        headers: {
+          Authorization: `Bearer ${this.$auth.jwt.__raw}`,
+          Email: this.$auth.user.email
+        }
+      });
+      console.log(v);
+      // let viz = await this.$api.get(`/api/vizs/id/${this.$route.params.id}`);
+      // console.log(viz);
     }
     this.run();
     console.log('---------------------------');
