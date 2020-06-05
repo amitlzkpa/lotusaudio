@@ -9,6 +9,7 @@ import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
 import axios from 'axios';
+Vue.prototype.$api = axios.create();
  
 import 'codemirror/lib/codemirror.css';
 import 'vue-codemirror-editor/dist/vue-codemirror-editor.css';
@@ -29,10 +30,8 @@ Vue.use(Buefy, { defaultIconPack: 'fas' });
 
 Vue.use(VueSplit);
 
-window.CodeMirror = CodeMirror
-Vue.component(VueCodemirrorEditor.name, VueCodemirrorEditor)
-
-Vue.prototype.$api = axios.create();
+window.CodeMirror = CodeMirror;
+Vue.component(VueCodemirrorEditor.name, VueCodemirrorEditor);
 
 import { Auth0Plugin } from "./auth";
 

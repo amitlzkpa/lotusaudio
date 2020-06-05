@@ -205,11 +205,13 @@ export default {
     }
   },
   async mounted() {
+    console.log(this.$route.params.id);
     if(this.$route.params.id) {
       let viz = await this.$api.get(`/api/vizs/id/${this.$route.params.id}`);
       console.log(viz);
     }
     this.run();
+    console.log('---------------------------');
   }
 }
 </script>

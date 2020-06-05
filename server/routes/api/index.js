@@ -37,10 +37,11 @@ const errHandler = async function (err, req, res, next) {
 
 
 const addUserToReq = async function(req, res, next) {
-  let auth0User = req.user;
-  let user = await User.findOne({username: auth0User.nickname});
-  req.auth0User = auth0User;
-  req.user = user;
+  let userEmail = req.headers.email;
+  let user = await User.findOne({email: userEmail.toLowerCase()});
+  if (user) {
+    req.user = user;
+  }
   next();
 }
 
