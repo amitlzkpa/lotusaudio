@@ -150,8 +150,8 @@ export default {
   },
   data() {
     return {
-      id: "abc",
-      name: "<unnamed>",
+      id: "",
+      name: "",
       visibility: "public",
       short_description: "",
       description: "",
@@ -205,11 +205,23 @@ export default {
     }
   },
   async mounted() {
-    if(this.$route.params.id) {
-      let viz = await this.$api.get(`/api/vizs/id/${this.$route.params.id}`);
-      console.log(viz);
-    }
-    this.run();
+
+    setTimeout(async () => {
+      if(this.$route.params.id) {
+        let resp = await this.$api.get(`/api/vizs/id/${this.$route.params.id}`);
+        let viz = resp.data;
+        this.id = viz._id;
+        this.name = viz.name;
+        this.visibility = viz.visibility;
+        this.short_description = viz.short_description;
+        this.description = viz.description;
+        this.code = viz.code;
+        this.$store.commit('updateCode', this.code);
+      }
+      this.run();
+
+    }, 1000);
+    
   }
 }
 </script>
