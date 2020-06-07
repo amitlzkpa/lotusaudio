@@ -104,13 +104,23 @@
 
             <b-tab-item label="Details" class="is-marginless">
               <div style="height: 77vh;">
-                <p>
-                  {{ short_description }}
-                </p>
-                <hr />
-                <p>
-                  {{ description }}
-                </p>
+                <b-field label="Short Description">
+                  <b-input
+                    type="textarea"
+                    v-model="short_description"
+                    minlength="0"
+                    maxlength="100"
+                  ></b-input>
+                </b-field>
+                
+                <b-field label="Description">
+                  <b-input
+                    type="textarea"
+                    v-model="description"
+                    minlength="0"
+                    maxlength="800"
+                  ></b-input>
+                </b-field>
               </div>
             </b-tab-item>
 
@@ -174,8 +184,8 @@ export default {
       id: "",
       name: "",
       visibility: "public",
-      short_description: "adam",
-      description: "yallapalooza",
+      short_description: "",
+      description: "",
       code: templateViz
     }
   },
