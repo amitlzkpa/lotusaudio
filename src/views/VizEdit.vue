@@ -86,16 +86,37 @@
           </p>
         </b-field>
 
-          <div style="height: 88vh;">
-            <vue-codemirror-editor
-              @keydown.enter="handleEnter"
-              v-model="code"
-              :option="{
-                theme:'base16-dark',
-                mode:'text/javascript',
-              }"
-            />
-          </div>
+
+          <b-tabs size="is-small">
+
+            <b-tab-item label="Code" class="is-marginless">
+              <div style="height: 77vh;">
+                <vue-codemirror-editor
+                  @keydown.enter="handleEnter"
+                  v-model="code"
+                  :option="{
+                    theme:'base16-dark',
+                    mode:'text/javascript',
+                  }"
+                />
+              </div>
+            </b-tab-item>
+
+            <b-tab-item label="Details" class="is-marginless">
+              <div style="height: 77vh;">
+                <p>
+                  {{ short_description }}
+                </p>
+                <hr />
+                <p>
+                  {{ description }}
+                </p>
+              </div>
+            </b-tab-item>
+
+          </b-tabs>
+
+
 
           <div>
 
@@ -153,8 +174,8 @@ export default {
       id: "",
       name: "",
       visibility: "public",
-      short_description: "",
-      description: "",
+      short_description: "adam",
+      description: "yallapalooza",
       code: templateViz
     }
   },
