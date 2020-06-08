@@ -66,66 +66,76 @@
 
         <div class="flex-container">
 
-        <b-field>
-          <p class="control" size="is-small">
-            <span class="button is-static is-small">Name:</span>
-          </p>
-          <b-input
-            expanded
-            v-model="name"
-            size="is-small"
-          ></b-input>
-          <p class="control" size="is-small" @click="visibility = (visibility === 'public') ? 'private' : 'public'">
-            <span class="button is-static is-small">
-              <b-icon
-                :icon="(visibility === 'public') ? 'eye' : 'eye-slash'"
-                size="is-small"
-                class="clickable-icon"
-              ></b-icon>
+          <b-field>
+            <p class="control" size="is-small">
+              <span class="button is-static is-small">Name:</span>
+            </p>
+            <b-input
+              expanded
+              v-model="name"
+              size="is-small"
+            ></b-input>
+            <p class="control" size="is-small" @click="visibility = (visibility === 'public') ? 'private' : 'public'">
+              <span class="button is-static is-small">
+                <b-icon
+                  :icon="(visibility === 'public') ? 'eye' : 'eye-slash'"
+                  size="is-small"
+                  class="clickable-icon"
+                ></b-icon>
+              </span>
+            </p>
+          </b-field>
+
+          <b-dropdown hoverable expanded aria-role="list">
+            <span slot="trigger">
+              <span class="is-size-6">
+                <b-icon
+                  pack="fas"
+                  icon="caret-down"
+                  size="is-small"
+                ></b-icon>
+                {{ activeTab }}
+              </span>
             </span>
-          </p>
-        </b-field>
 
+            <b-dropdown-item aria-role="listitem" @click="activeTab = 'Code'" expandable>Code</b-dropdown-item>
+            <b-dropdown-item aria-role="listitem" @click="activeTab = 'Details'" expandable>Details</b-dropdown-item>
+          </b-dropdown>
 
-          <b-tabs size="is-small">
+          <div v-if="activeTab === 'Code'">
+            <div style="height: 85vh;">
+              <vue-codemirror-editor
+                @keydown.enter="handleEnter"
+                v-model="code"
+                :option="{
+                  theme:'base16-dark',
+                  mode:'text/javascript',
+                }"
+              />
+            </div>
+          </div>
 
-            <b-tab-item label="Code" class="is-marginless">
-              <div style="height: 77vh;">
-                <vue-codemirror-editor
-                  @keydown.enter="handleEnter"
-                  v-model="code"
-                  :option="{
-                    theme:'base16-dark',
-                    mode:'text/javascript',
-                  }"
-                />
-              </div>
-            </b-tab-item>
-
-            <b-tab-item label="Details" class="is-marginless">
-              <div style="height: 77vh;">
-                <b-field label="Short Description">
-                  <b-input
-                    type="textarea"
-                    v-model="short_description"
-                    minlength="0"
-                    maxlength="100"
-                  ></b-input>
-                </b-field>
-                
-                <b-field label="Description">
-                  <b-input
-                    type="textarea"
-                    v-model="description"
-                    minlength="0"
-                    maxlength="800"
-                  ></b-input>
-                </b-field>
-              </div>
-            </b-tab-item>
-
-          </b-tabs>
-
+          <div v-if="activeTab === 'Details'" style="padding: 0px 6px 0px 6px;">
+            <div style="height: 85vh;">
+              <b-field label="Short Description">
+                <b-input
+                  type="textarea"
+                  v-model="short_description"
+                  minlength="0"
+                  maxlength="100"
+                ></b-input>
+              </b-field>
+              
+              <b-field label="Description">
+                <b-input
+                  type="textarea"
+                  v-model="description"
+                  minlength="0"
+                  maxlength="800"
+                ></b-input>
+              </b-field>
+            </div>
+          </div>
 
 
           <div>
@@ -186,7 +196,8 @@ export default {
       visibility: "public",
       short_description: "",
       description: "",
-      code: templateViz
+      code: templateViz,
+      activeTab: 'Code'
     }
   },
   methods: {
