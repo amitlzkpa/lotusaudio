@@ -74,7 +74,6 @@ export const useAuth0 = ({
       async updateStateVars() {
         this.isAuthenticated = await this.auth0Client.isAuthenticated();
         this.user = await this.auth0Client.getUser();
-        console.log(this.user);
         if (this.isAuthenticated) {
           this.token = await this.auth0Client.getTokenSilently();
           this.jwt = await this.auth0Client.getIdTokenClaims();

@@ -36,6 +36,10 @@ Vue.prototype.$api = axios.create();
 
 import { Auth0Plugin } from "./auth";
 
+Vue.prototype.wait = async function(ms) {
+	return new Promise((resolve, reject) => setTimeout(() => resolve(), ms));
+}
+
 async function main() {
 
   let resp = await fetch('/api/auth0-secrets');

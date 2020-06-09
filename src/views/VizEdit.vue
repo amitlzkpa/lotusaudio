@@ -254,11 +254,8 @@ export default {
     async handleEnter(e) {
       if (!e.ctrlKey) return;
       await this.run();
-    }
-  },
-  async mounted() {
-
-    setTimeout(async () => {
+    },
+    async updateFromParam() {
       if(this.$route.params.id) {
         let resp = await this.$api.get(`/api/vizs/id/${this.$route.params.id}`);
         let viz = resp.data;
@@ -272,9 +269,16 @@ export default {
         this.$store.commit('updateCode', this.code);
       }
       this.run();
+    }
+  },
+  async mounted() {
 
-    }, 1000);
-    
+    while(this.$auth.loading) {
+      await this.wait(100);
+    }
+
+    await this.updateFromParam();
+
   }
 }
 </script>
