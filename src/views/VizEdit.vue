@@ -69,24 +69,30 @@
           <div style="padding: 0px 6px 0px 6px;">
 
             <b-field>
+
               <p class="control" size="is-small">
                 <span class="button is-static is-small">Name:</span>
               </p>
+              
               <b-input
                 expanded
                 placeholder="<unnamed>"
                 v-model="name"
                 size="is-small"
               ></b-input>
+                
               <p class="control" size="is-small" @click="visibility = (visibility === 'public') ? 'private' : 'public'">
-                <span class="button is-static is-small">
-                  <b-icon
-                    :icon="(visibility === 'public') ? 'eye' : 'eye-slash'"
-                    size="is-small"
-                    class="clickable-icon"
-                  ></b-icon>
-                </span>
+                <b-tooltip :label="'Make ' + (visibility === 'public' ? 'private' : 'public')" position="is-left">
+                  <span class="button is-static is-small">
+                    <b-icon
+                      :icon="(visibility === 'public') ? 'eye' : 'eye-slash'"
+                      size="is-small"
+                      class="clickable-icon"
+                    ></b-icon>
+                  </span>
+                </b-tooltip>
               </p>
+
             </b-field>
             
           </div>
@@ -130,6 +136,7 @@
 
               <b-field label="Payment Pointer">
                 <b-input
+                  :disabled="!paymentEnabled"
                   type="text"
                   v-model="paymentPointer"
                 ></b-input>
