@@ -180,6 +180,18 @@ export default {
         this.code = JSON.parse(viz.code);
         this.paymentPointer = viz.paymentPointer;
         this.$store.commit('updateCode', this.code);
+
+        if (this.paymentPointer !== "") {
+          let m = document.createElement("meta");
+          let att1 = document.createAttribute("name");
+          att1.value = "monetization";
+          let att2 = document.createAttribute("content");
+          att2.value = this.paymentPointer;
+          m.setAttributeNode(att1);
+          m.setAttributeNode(att2);
+          document.head.appendChild(m);
+        }
+
       }
       this.run();
     }
