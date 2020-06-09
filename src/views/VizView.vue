@@ -24,10 +24,10 @@
               
               <p class="is-size-7">
                 <b-icon
-                  :icon="(paymentPointer !== '') ? 'lock' : 'lock-open'"
+                  :icon="isPayable ? 'lock' : 'lock-open'"
                   size="is-small"
                 ></b-icon>
-                {{ (paymentPointer !== '') ? 'Paid' : 'Free' }}
+                {{ isPayable ? 'Paid' : 'Free' }}
               </p>
 
             </div>
@@ -84,7 +84,7 @@
           </div>
 
           <div v-if="activeTab === 'Details'" style="padding: 0px 6px 0px 6px;">
-            <div style="height: 80vh;">
+            <div style="height: 79vh;">
 
               <b-field label="Short Description">
                 <p>
@@ -107,15 +107,26 @@
             <div class="level is-marginless">
 
               <div class="level-left">
+                <div class="level-item">
+                  <span class="clickable-icon" @click="toggleUserWantsToPay" v-if="isPayable">
+                    <b-icon
+                      pack="fas"
+                      :icon="userWantsToPay ? 'tint' : 'tint-slash'"
+                      size="is-small"
+                    ></b-icon>
+                  </span>
+                </div>
               </div>
 
               <div class="level-right">
-                <div class="level-item clickable-icon" @click="run">
-                  <b-icon
-                    pack="fas"
-                    icon="play"
-                    size="is-small"
-                  ></b-icon>
+                <div class="level-item">
+                  <span @click="run" class="clickable-icon" v-if="((isPayable) ? isPayable && userWantsToPay : true)">
+                    <b-icon
+                      pack="fas"
+                      icon="play"
+                      size="is-small"
+                    ></b-icon>
+                  </span>
                 </div>
               </div>
               
@@ -155,7 +166,14 @@ export default {
       description: "",
       code: templateViz,
       paymentPointer: "",
-      activeTab: 'Details'
+      activeTab: 'Details',
+      paymentEnabled: true,
+      userWantsToPay: false
+    }
+  },
+  computed: {
+    isPayable() {
+      return this.paymentPointer !== "" && this.paymentEnabled;
     }
   },
   methods: {
@@ -166,6 +184,9 @@ export default {
       this.$auth.logout({
         returnTo: window.location.origin
       });
+    },
+    toggleUserWantsToPay() {
+      this.userWantsToPay = !this.userWantsToPay;
     },
     async run() {
       this.$store.commit('updateCode', this.code);
@@ -183,9 +204,10 @@ export default {
         this.description = viz.description;
         this.code = JSON.parse(viz.code);
         this.paymentPointer = viz.paymentPointer;
+        this.paymentEnabled = viz.paymentEnabled;
         this.$store.commit('updateCode', this.code);
 
-        if (this.paymentPointer !== "") {
+        if (document.monetization && this.paymentPointer !== "") {
           let m = document.createElement("meta");
           let att1 = document.createAttribute("name");
           att1.value = "monetization";
