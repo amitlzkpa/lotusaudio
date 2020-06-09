@@ -10,26 +10,10 @@
           <div class="level-left">
 
             <div class="level-item">
-
-              <p class="is-size-7">
-                <b-icon
-                  :icon="(visibility === 'public') ? 'eye' : 'eye-slash'"
-                  size="is-small"
-                ></b-icon>
-                {{ (visibility === 'public') ? 'Public' : 'Private' }}
-              </p>
-              
-              <p style="margin: 0px 2px 0px 2px;">
-              </p>
-              
-              <p class="is-size-7">
-                <b-icon
-                  :icon="isPayable ? 'lock' : 'lock-open'"
-                  size="is-small"
-                ></b-icon>
-                {{ isPayable ? 'Paid' : 'Free' }}
-              </p>
-
+              <span
+                class="has-text-grey-light is-italic is-size-7"
+              >{{ id }}
+              </span>
             </div>
 
           </div>
@@ -86,17 +70,45 @@
           <div v-if="activeTab === 'Details'" style="padding: 0px 6px 0px 6px;">
             <div style="height: 79vh;">
 
-              <b-field label="Short Description">
-                <p>
-                  {{ short_description }}
-                </p>
-              </b-field>
-              
-              <b-field label="Description">
-                <p>
-                  {{ description }}
-                </p>
-              </b-field>
+              <div class="columns">
+
+                <div class="column">
+                  <p>
+                    <b-icon
+                      :icon="(visibility === 'public') ? 'eye' : 'eye-slash'"
+                    ></b-icon>
+                    {{ (visibility === 'public') ? 'Public' : 'Private' }}
+                  </p>
+                </div>
+                
+                <div class="column">
+                  <p>
+                    <b-icon
+                      :icon="isPayable ? 'lock' : 'lock-open'"
+                    ></b-icon>
+                    {{ isPayable ? 'Paid' : 'Free' }}
+                  </p>
+                </div>
+                
+              </div>
+
+              <div class="columns">
+                <div class="column">
+
+                    <b-field label="Short Description">
+                      <p>
+                        {{ short_description }}
+                      </p>
+                    </b-field>
+                    
+                    <b-field label="Description">
+                      <p>
+                        {{ description }}
+                      </p>
+                    </b-field>
+                    
+                </div>
+              </div>
               
             </div>
           </div>
@@ -108,25 +120,33 @@
 
               <div class="level-left">
                 <div class="level-item">
-                  <span class="clickable-icon" @click="toggleUserWantsToPay" v-if="isPayable">
-                    <b-icon
-                      pack="fas"
-                      :icon="userWantsToPay ? 'tint' : 'tint-slash'"
-                      size="is-small"
-                    ></b-icon>
-                  </span>
+                  
+                  <b-tooltip :label="(userWantsToPay ? 'Stop' : 'Start') + ' streaming payments'" position="is-right" v-if="isPayable">
+                    <span class="clickable-icon" @click="toggleUserWantsToPay" v-if="isPayable">
+                      <b-icon
+                        pack="fas"
+                        :icon="userWantsToPay ? 'tint' : 'tint-slash'"
+                        size="is-small"
+                      ></b-icon>
+                    </span>
+                  </b-tooltip>
+
                 </div>
               </div>
 
               <div class="level-right">
                 <div class="level-item">
-                  <span @click="run" class="clickable-icon" v-if="((isPayable) ? isPayable && userWantsToPay : true)">
-                    <b-icon
-                      pack="fas"
-                      icon="play"
-                      size="is-small"
-                    ></b-icon>
-                  </span>
+
+                  <b-tooltip label="Run visualization" position="is-left">
+                    <span @click="run" class="clickable-icon" v-if="((isPayable) ? isPayable && userWantsToPay : true)">
+                      <b-icon
+                        pack="fas"
+                        icon="play"
+                        size="is-small"
+                      ></b-icon>
+                    </span>
+                  </b-tooltip>
+                  
                 </div>
               </div>
               
