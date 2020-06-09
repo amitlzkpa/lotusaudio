@@ -234,7 +234,7 @@ export default {
           visibility: this.visibility,
           short_description: this.short_description,
           description: this.description,
-          code: this.code,
+          code: JSON.stringify(this.code),
           paymentPointer: this.paymentPointer
       };
       let v = await this.$api.post("/api/vizs/save", postData);
@@ -273,7 +273,7 @@ export default {
         this.visibility = viz.visibility;
         this.short_description = viz.short_description;
         this.description = viz.description;
-        this.code = viz.code;
+        this.code = JSON.parse(viz.code);
         this.paymentPointer = viz.paymentPointer;
         this.$store.commit('updateCode', this.code);
       }
