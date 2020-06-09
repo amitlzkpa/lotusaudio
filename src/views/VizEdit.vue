@@ -66,41 +66,50 @@
 
         <div class="flex-container">
 
-          <b-field>
-            <p class="control" size="is-small">
-              <span class="button is-static is-small">Name:</span>
-            </p>
-            <b-input
-              expanded
-              v-model="name"
-              size="is-small"
-            ></b-input>
-            <p class="control" size="is-small" @click="visibility = (visibility === 'public') ? 'private' : 'public'">
-              <span class="button is-static is-small">
-                <b-icon
-                  :icon="(visibility === 'public') ? 'eye' : 'eye-slash'"
-                  size="is-small"
-                  class="clickable-icon"
-                ></b-icon>
-              </span>
-            </p>
-          </b-field>
+          <div style="padding: 0px 6px 0px 6px;">
 
-          <b-dropdown hoverable expanded aria-role="list">
-            <span slot="trigger">
-              <span class="is-size-6">
-                <b-icon
-                  pack="fas"
-                  icon="caret-down"
-                  size="is-small"
-                ></b-icon>
-                {{ activeTab }}
-              </span>
+            <b-field>
+              <p class="control" size="is-small">
+                <span class="button is-static is-small">Name:</span>
+              </p>
+              <b-input
+                expanded
+                v-model="name"
+                size="is-small"
+              ></b-input>
+              <p class="control" size="is-small" @click="visibility = (visibility === 'public') ? 'private' : 'public'">
+                <span class="button is-static is-small">
+                  <b-icon
+                    :icon="(visibility === 'public') ? 'eye' : 'eye-slash'"
+                    size="is-small"
+                    class="clickable-icon"
+                  ></b-icon>
+                </span>
+              </p>
+            </b-field>
+            
+          </div>
+
+
+          <div class="is-marginless is-paddingless">
+            <span
+               @click="activeTab = 'Code'"
+               class="is-size-7 clickable-icon">
+              <span v-if="activeTab === 'Code'" class="has-text-weight-bold">Code</span>
+              <span v-else>Code</span>
             </span>
 
-            <b-dropdown-item aria-role="listitem" @click="activeTab = 'Code'" expandable>Code</b-dropdown-item>
-            <b-dropdown-item aria-role="listitem" @click="activeTab = 'Details'" expandable>Details</b-dropdown-item>
-          </b-dropdown>
+            &nbsp;&nbsp;
+            <span class="is-size-7">|</span>
+            &nbsp;&nbsp;
+
+            <span
+               @click="activeTab = 'Details'"
+               class="is-size-7 clickable-icon">
+              <span v-if="activeTab === 'Details'" class="has-text-weight-bold">Details</span>
+              <span v-else>Details</span>
+            </span>
+          </div>
 
           <div v-if="activeTab === 'Code'">
             <div style="height: 85vh;">
