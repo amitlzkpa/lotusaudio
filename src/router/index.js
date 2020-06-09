@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '@/views/Home.vue';
 import Profile from '@/views/Profile.vue';
 import VizEdit from '@/views/VizEdit.vue';
+import VizView from '@/views/VizView.vue';
 
 import { authGuard } from "@/auth/authGuard";
 
@@ -21,6 +22,12 @@ export default new VueRouter({
       path: '/new',
       name: 'new',
       component: VizEdit,
+      beforeEnter: authGuard
+    },
+    {
+      path: '/view/:id?',
+      name: 'view',
+      component: VizView,
       beforeEnter: authGuard
     },
     {
