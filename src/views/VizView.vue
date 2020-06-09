@@ -8,9 +8,30 @@
         <div class="level is-marginless">
           
           <div class="level-left">
-            <p class="has-text-grey-light is-italic is-size-7">
-              {{ id }}
-            </p>
+
+            <div class="level-item">
+
+              <p class="is-size-7">
+                <b-icon
+                  :icon="(visibility === 'public') ? 'eye' : 'eye-slash'"
+                  size="is-small"
+                ></b-icon>
+                {{ (visibility === 'public') ? 'Public' : 'Private' }}
+              </p>
+              
+              <p style="margin: 0px 2px 0px 2px;">
+              </p>
+              
+              <p class="is-size-7">
+                <b-icon
+                  :icon="(paymentPointer !== '') ? 'lock' : 'lock-open'"
+                  size="is-small"
+                ></b-icon>
+                {{ (paymentPointer !== '') ? 'Paid' : 'Free' }}
+              </p>
+
+            </div>
+
           </div>
 
           <div class="level-right">
@@ -65,24 +86,6 @@
           <div v-if="activeTab === 'Details'" style="padding: 0px 6px 0px 6px;">
             <div style="height: 80vh;">
 
-              <b-field label="Visibility">
-                <b-icon
-                  :icon="(visibility === 'public') ? 'eye' : 'eye-slash'"
-                  size="is-small"
-                  class="clickable-icon"
-                ></b-icon>
-                {{ (visibility === 'public') ? 'Public' : 'Private' }}
-              </b-field>
-
-              <b-field label="Paid">
-                <b-icon
-                  :icon="(paymentPointer !== '') ? 'lock' : 'lock-open'"
-                  size="is-small"
-                  class="clickable-icon"
-                ></b-icon>
-                {{ (paymentPointer !== '') ? 'Paid' : 'Free' }}
-              </b-field>
-
               <b-field label="Short Description">
                 <p>
                   {{ short_description }}
@@ -94,6 +97,7 @@
                   {{ description }}
                 </p>
               </b-field>
+              
             </div>
           </div>
 
