@@ -8,7 +8,7 @@ const Viz = require('../../models/Viz');
 
 router.get('/id/:id', async (req, res) => {
   let id = req.params.id;
-  let viz = await Viz.findOne({_id: id});
+  let viz = await Viz.findOne({_id: id}).populate('author').exec();
   return res.json(viz);
 });
 

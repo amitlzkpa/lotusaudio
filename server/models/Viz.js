@@ -15,11 +15,6 @@ const VizSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
-  forker: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    default: null
-  },
   short_description: {
     type: String,
     default: ""
@@ -35,6 +30,10 @@ const VizSchema = new mongoose.Schema({
   paymentPointer: {
     type: String,
     default: ""
+  },
+  paymentEnabled: {
+    type: Boolean,
+    default: false
   },
 }, {timestamps: true});
 
