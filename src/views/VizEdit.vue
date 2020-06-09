@@ -74,6 +74,7 @@
               </p>
               <b-input
                 expanded
+                placeholder="<unnamed>"
                 v-model="name"
                 size="is-small"
               ></b-input>

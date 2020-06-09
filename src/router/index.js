@@ -18,6 +18,12 @@ export default new VueRouter({
       component: Home
     },
     {
+      path: '/new',
+      name: 'new',
+      component: VizEdit,
+      beforeEnter: authGuard
+    },
+    {
       path: '/edit/:id?',
       name: 'edit',
       component: VizEdit,
