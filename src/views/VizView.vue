@@ -207,6 +207,7 @@ export default {
     },
     toggleUserWantsToPay() {
       this.userWantsToPay = !this.userWantsToPay;
+      this.updatePaymentStream();
     },
     async run() {
       this.$store.commit('updateCode', this.code);
@@ -227,19 +228,34 @@ export default {
         this.paymentEnabled = viz.paymentEnabled;
         this.$store.commit('updateCode', this.code);
 
-        if (document.monetization && this.paymentPointer !== "") {
-          let m = document.createElement("meta");
-          let att1 = document.createAttribute("name");
-          att1.value = "monetization";
-          let att2 = document.createAttribute("content");
-          att2.value = this.paymentPointer;
-          m.setAttributeNode(att1);
-          m.setAttributeNode(att2);
-          document.head.appendChild(m);
-        }
+        this.updatePaymentStream();
 
       }
       this.run();
+    },
+    updatePaymentStream() {
+      
+      let metas = Array.from(document.getElementsByTagName("meta"));
+      let elem = metas.filter(m => Array.from(m.attributes).filter(a => { return a.name === "name" && a.value === "monetization"; }).length > 0 )[0];
+      let shouldBeOn = this.isPayable ? this.isPayable && this.userWantsToPay : false;
+      let isCurrentlyOn = !!elem;
+
+      if ((shouldBeOn && isCurrentlyOn) || (!shouldBeOn && !isCurrentlyOn)) return;
+      if (!shouldBeOn && isCurrentlyOn) {
+        elem.parentNode.removeChild(elem);
+        return;
+      }
+      if (shouldBeOn && !isCurrentlyOn) {
+        let m = document.createElement("meta");
+        let att1 = document.createAttribute("name");
+        att1.value = "monetization";
+        let att2 = document.createAttribute("content");
+        att2.value = this.paymentPointer;
+        m.setAttributeNode(att1);
+        m.setAttributeNode(att2);
+        document.head.appendChild(m);
+      }
+
     }
   },
   async mounted() {
