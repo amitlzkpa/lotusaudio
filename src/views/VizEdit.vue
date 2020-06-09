@@ -161,23 +161,31 @@
             <div class="level is-marginless">
 
               <div class="level-left">
-                <div class="level-item clickable-icon" @click="clear">
-                  <b-icon
-                    pack="fas"
-                    icon="trash"
-                    size="is-small"
-                  ></b-icon>
-                </div>
+
+                <b-tooltip :label="'Make ' + (paymentEnabled ? 'free' : 'paid')" position="is-right">
+                  <div @click="paymentEnabled = !paymentEnabled" class="clickable-icon">
+                    <b-icon
+                      pack="fas"
+                      :icon="(paymentEnabled) ? 'coins' : 'star-of-life'"
+                      size="is-small"
+                    ></b-icon>
+                  </div>
+                </b-tooltip>
+
               </div>
 
               <div class="level-right">
-                <div class="level-item clickable-icon" @click="run">
-                  <b-icon
-                    pack="fas"
-                    icon="play"
-                    size="is-small"
-                  ></b-icon>
-                </div>
+
+                <b-tooltip label="Run visualization" position="is-left">
+                  <div class="level-item clickable-icon" @click="run">
+                    <b-icon
+                      pack="fas"
+                      icon="play"
+                      size="is-small"
+                    ></b-icon>
+                  </div>
+                </b-tooltip>
+                
               </div>
               
             </div>
@@ -216,6 +224,7 @@ export default {
       description: "",
       code: templateViz,
       paymentPointer: "",
+      paymentEnabled: false,
       activeTab: 'Code'
     }
   },
@@ -236,7 +245,8 @@ export default {
           short_description: this.short_description,
           description: this.description,
           code: JSON.stringify(this.code),
-          paymentPointer: this.paymentPointer
+          paymentPointer: this.paymentPointer,
+          paymentEnabled: this.paymentEnabled
       };
       let v = await this.$api.post("/api/vizs/save", postData);
       console.log(v);
@@ -276,6 +286,7 @@ export default {
         this.description = viz.description;
         this.code = JSON.parse(viz.code);
         this.paymentPointer = viz.paymentPointer;
+        this.paymentEnabled = viz.paymentEnabled;
         this.$store.commit('updateCode', this.code);
       }
       this.run();
