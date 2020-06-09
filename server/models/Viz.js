@@ -31,7 +31,11 @@ const VizSchema = new mongoose.Schema({
   code: {
     type: String,
     default: ""
-  }
+  },
+  paymentPointer: {
+    type: String,
+    default: ""
+  },
 }, {timestamps: true});
 
 

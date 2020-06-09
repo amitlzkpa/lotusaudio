@@ -117,6 +117,14 @@
 
           <div v-if="activeTab === 'Details'" style="padding: 0px 6px 0px 6px;">
             <div style="height: 85vh;">
+
+              <b-field label="Payment Pointer">
+                <b-input
+                  type="text"
+                  v-model="paymentPointer"
+                ></b-input>
+              </b-field>
+
               <b-field label="Short Description">
                 <b-input
                   type="textarea"
@@ -197,6 +205,7 @@ export default {
       short_description: "",
       description: "",
       code: templateViz,
+      paymentPointer: "",
       activeTab: 'Code'
     }
   },
@@ -216,7 +225,8 @@ export default {
           visibility: this.visibility,
           short_description: this.short_description,
           description: this.description,
-          code: this.code
+          code: this.code,
+          paymentPointer: this.paymentPointer
       };
       let v = await this.$api.post("/api/vizs/save", postData);
       console.log(v);
@@ -258,6 +268,7 @@ export default {
         this.short_description = viz.short_description;
         this.description = viz.description;
         this.code = viz.code;
+        this.paymentPointer = viz.paymentPointer;
         this.$store.commit('updateCode', this.code);
       }
       this.run();

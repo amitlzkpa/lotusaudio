@@ -36,6 +36,7 @@ router.post('/save', async (req, res) => {
   viz.short_description = data.short_description || viz.short_description;
   viz.description = data.description || viz.description;
   viz.code = data.code || viz.code;
+  viz.paymentPointer = data.paymentPointer || viz.paymentPointer;
   viz = await viz.save();
   return res.json(viz);
 });
