@@ -85,7 +85,6 @@
             
           </div>
 
-
           <div class="is-marginless is-paddingless">
             <span
                @click="activeTab = 'Code'"
@@ -166,17 +165,63 @@
             <div style="height: 85vh; padding: 0px 6px 0px 6px;">
 
               <b-field label="Available sources"></b-field>
+
+              <b>Visualization:</b>
+              <br />
+
+              <p class="is-italic is-small has-text-grey" v-if="vizAudioSources.length < 1">
+                &lt;none&gt;
+              </p>
+              
+              <div v-if="vizAudioSources.length > 0">
+                <AudioItem
+                  v-for="audioItem in vizAudioSources" :key="audioItem.name"
+                  :source="audioItem.source"
+                  :name="audioItem.name"
+                  :format="audioItem.format"
+                />
+              </div>
+
+              <div class="panel">
+                
+                <div class="panel-block">
+
+                  <b-input
+                    type="text"
+                    v-model="newAudioSource.name"
+                    placeholder="Name"
+                  ></b-input>
+
+                  <b-input
+                    type="text"
+                    v-model="newAudioSource.source"
+                    placeholder="Source"
+                  ></b-input>
+
+                  <b-button type="is-primary" expanded @click="addNewViz">Add new source</b-button>
+
+                </div>
+                
+              </div>
+
+              <b>Default:</b>
+              <br />
+
+              <p class="is-italic is-small has-text-grey" v-if="defaultSources.length < 1">
+                &lt;none&gt;
+              </p>
               
               <AudioItem
-                source="/audio_samples/lotus_03.mp3"
-                name="Lotus 03"
-                format="audio/mpeg"
+                v-else
+                v-for="audioItem in defaultSources" :key="audioItem.name"
+                :source="audioItem.source"
+                :name="audioItem.name"
+                :format="audioItem.format"
               />
-              
+
             </div>
 
           </div>
-
 
           <div>
 
@@ -259,7 +304,25 @@ export default {
       code: templateViz,
       paymentPointer: "",
       paymentEnabled: false,
-      activeTab: 'Code'
+      vizAudioSources: [],
+      activeTab: 'Code',
+      newAudioSource: {
+        name: "",
+        source: "",
+        format: "audio/mpeg"
+      },
+      defaultSources: [
+        {
+          name: "Tours01 - Enthusiast",
+          source: "/audio_samples/Tours01-Enthusiast.mp3",
+          format: "audio/mpeg"
+        },
+        {
+          name: "Lotus 03",
+          source: "/audio_samples/lotus_03.mp3",
+          format: "audio/mpeg"
+        },
+      ]
     }
   },
   methods: {
@@ -280,10 +343,11 @@ export default {
           description: this.description,
           code: JSON.stringify(this.code),
           paymentPointer: this.paymentPointer,
-          paymentEnabled: this.paymentEnabled
+          paymentEnabled: this.paymentEnabled,
+          audioSources: this.vizAudioSources
       };
       let v = await this.$api.post("/api/vizs/save", postData);
-      console.log(v);
+      console.log(v.data);
     },
     async saveNew() {
       let postData = {
@@ -292,10 +356,11 @@ export default {
           visibility: this.visibility,
           short_description: this.short_description,
           description: this.description,
-          code: this.code
+          code: this.code,
+          audioSources: this.vizAudioSources
       };
       let v = await this.$api.post("/api/vizs/new", postData);
-      console.log(v);
+      console.log(v.data);
     },
     async run() {
       this.$store.commit('updateCode', this.code);
@@ -321,9 +386,18 @@ export default {
         this.code = JSON.parse(viz.code);
         this.paymentPointer = viz.paymentPointer;
         this.paymentEnabled = viz.paymentEnabled;
+        this.vizAudioSources = viz.audioSources;
         this.$store.commit('updateCode', this.code);
       }
       this.run();
+    },
+    addNewViz() {
+      if (this.newAudioSource.name === ""
+       || this.newAudioSource.source === "") return;
+      let a = JSON.parse(JSON.stringify(this.newAudioSource));
+      this.vizAudioSources.push(a);
+      this.newAudioSource.name = "";
+      this.newAudioSource.source = "";
     }
   },
   async mounted() {

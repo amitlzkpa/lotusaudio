@@ -27,6 +27,10 @@ const VizSchema = new mongoose.Schema({
     type: String,
     default: ""
   },
+  audioSources: {
+    type: Array,
+    default: []
+  },
   paymentPointer: {
     type: String,
     default: ""
