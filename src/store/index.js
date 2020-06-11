@@ -7,6 +7,7 @@ const store = new Vuex.Store({
   state: {
     code: null,
     audioSource: {},
+    isPlaying: false
   },
   getters: {},
   mutations: {
@@ -15,6 +16,9 @@ const store = new Vuex.Store({
     },
     updateAudioSource(state, newAudioSource) {
       state.audioSource = newAudioSource;
+    },
+    updatePlayStatus(state, newStatus) {
+      state.isPlaying = newStatus;
     }
   },
   actions: {}

@@ -20,6 +20,10 @@ export default {
     }
   },
   methods: {
+    onPlayClicked() {
+      console.log(this.$store.state.audioSource);
+      this.$store.commit('updatePlayStatus', !this.$store.state.isPlaying);
+    },
     onCodeUpdate() {
       try {
 

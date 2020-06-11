@@ -269,7 +269,7 @@
                   <div class="level-item clickable-icon" @click="run">
                     <b-icon
                       pack="fas"
-                      icon="play"
+                      :icon="($store.state.isPlaying) ? 'pause' : 'play'"
                       size="is-small"
                     ></b-icon>
                   </div>
@@ -377,6 +377,7 @@ export default {
     async run() {
       this.$store.commit('updateCode', this.code);
       this.$refs.three.onCodeUpdate();
+      this.$refs.three.onPlayClicked();
     },
     async clear() {
       this.code = null;
@@ -403,7 +404,6 @@ export default {
         let audioSourceToLoad = (this.vizAudioSources.length > 0) ? this.vizAudioSources[0] : this.defaultSources[0];
         this.$store.commit('updateAudioSource', audioSourceToLoad);
       }
-      this.run();
     },
     addNewAudioSource() {
       if (this.newAudioSource.name === ""
