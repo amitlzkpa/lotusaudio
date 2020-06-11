@@ -30,7 +30,7 @@
                 </button>
 
                 <b-dropdown-item aria-role="listitem">
-                  <router-link to="/home">Home</router-link>
+                  <router-link to="/">Home</router-link>
                 </b-dropdown-item>
                 <b-dropdown-item aria-role="listitem" v-if="$auth.isAuthenticated">
                   <router-link to="/profile">Profile({{ $auth.user.name }})</router-link>

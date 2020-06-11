@@ -52,10 +52,6 @@ export const useAuth0 = ({
         this.isAuthenticated = true;
 
         await this.updateStateVars();
-        if (this.isAuthenticated) {
-          let resp = await this.$api.post('/api/users', this.user);
-          this.dbUser = resp.data;
-        }
       },
       /** Handles the callback when logging in using a redirect */
       async handleRedirectCallback() {
@@ -82,6 +78,10 @@ export const useAuth0 = ({
           this.token = null;
           this.jwt = null;
           this.$api.defaults.headers.common["Authorization"] = null;
+        }
+        if (this.isAuthenticated) {
+          let resp = await this.$api.post('/api/users', this.user);
+          this.dbUser = resp.data;
         }
       },
       /** Authenticates the user using the redirect method */
@@ -125,12 +125,6 @@ export const useAuth0 = ({
         ) {
           // handle the redirect and retrieve tokens
           const { appState } = await this.auth0Client.handleRedirectCallback();
-
-          await this.updateStateVars();
-          if (this.isAuthenticated) {
-            let resp = await this.$api.post('/api/users', this.user);
-            this.dbUser = resp.data;
-          }
 
           // Notify subscribers that the redirect callback has happened, passing the appState
           // (useful for retrieving any pre-authentication state)

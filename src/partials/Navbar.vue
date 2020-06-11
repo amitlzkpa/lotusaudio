@@ -6,7 +6,7 @@
         <router-link to="/">Home</router-link>
       </div>
       <div class="level-item">
-        <router-link to="/edit">Edit</router-link>
+        <router-link to="/new">New</router-link>
       </div>
       <div class="level-item">
         <router-link v-if="$auth.isAuthenticated" to="/profile">Profile</router-link>
