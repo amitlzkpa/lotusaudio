@@ -7,7 +7,7 @@
 
         <Navbar />
 
-        <div class="flex-container" v-if="id !== ''">
+        <div class="flex-container">
 
           <div class="side-pad">
 
@@ -28,16 +28,25 @@
 
               <div class="level-right">
                 <div class="level-item">
-                  <b-button
-                    type="is-text"
-                    size="is-small"
-                    @click="saveNew"
-                  >Save as new</b-button>
-                  <b-button
-                    type="is-primary"
-                    size="is-small"
-                    @click="save"
-                  >Save</b-button>
+                  <div v-if="!$auth.isLoading && !$auth.isAuthenticated">
+                    <p class="is-size-7 is-italic has-text-grey-light">
+                      Please login to save.
+                    </p>
+                  </div>
+                  <div v-else>
+                    <div v-if="!$auth.isLoading && !author || $auth.dbUser._id === author._id">
+                      <b-button
+                        type="is-text"
+                        size="is-small"
+                        @click="saveNew"
+                      >Save as new</b-button>
+                      <b-button
+                        type="is-primary"
+                        size="is-small"
+                        @click="save"
+                      >Save</b-button>
+                    </div>
+                  </div>
                 </div>
               </div>
               
@@ -287,6 +296,7 @@ export default {
     return {
       id: "",
       name: "",
+      author: null,
       visibility: "public",
       short_description: "",
       description: "",
@@ -371,6 +381,7 @@ export default {
         let viz = resp.data;
         this.id = viz._id;
         this.name = viz.name;
+        this.author = viz.author;
         this.visibility = viz.visibility;
         this.short_description = viz.short_description;
         this.description = viz.description;

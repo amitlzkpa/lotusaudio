@@ -52,10 +52,11 @@ router.get('/test', function(req, res) {
   console.log('Test route');
   return res.send('Test route');
 });
+router.use('/vizs', require('./viz-public'));
 
 
 // protected routes
-router.use('/vizs', [checkJwt, errHandler, addUserToReq], require('./viz'));
+router.use('/vizs', [checkJwt, errHandler, addUserToReq], require('./viz-private'));
 router.use('/users', [checkJwt, errHandler, addUserToReq], require('./user'));
 
 

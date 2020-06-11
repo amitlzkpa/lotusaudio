@@ -22,13 +22,11 @@ export default new VueRouter({
       path: '/new',
       name: 'new',
       component: VizEdit,
-      beforeEnter: authGuard
     },
     {
       path: '/view/:id?',
       name: 'view',
-      component: VizView,
-      beforeEnter: authGuard
+      component: VizView
     },
     {
       path: '/edit/:id?',
@@ -39,8 +37,7 @@ export default new VueRouter({
     {
       path: '/profile',
       name: 'profile',
-      component: Profile,
-      beforeEnter: authGuard
+      component: Profile
     }
   ]
 });

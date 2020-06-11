@@ -28,7 +28,7 @@
 
               <div class="level-right">
                 <div class="level-item">
-                  <router-link :to="{ name: 'edit', params: { id: id } }" v-if="$auth.dbUser._id === author._id ">
+                  <router-link :to="{ name: 'edit', params: { id: id } }" v-if="$auth.isAuthenticated && $auth.dbUser._id === author._id">
                     <b-button
                       type="is-text"
                       size="is-small"
