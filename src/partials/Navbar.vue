@@ -56,7 +56,18 @@ export default {
 </script>
 
 <style>
+.flex-container {
+  display:flex;
+  flex-direction:column;
+}
 
+.cont-ht {
+  height: 82vh;
+}
+
+.side-pad {
+  padding: 0px 6px 0px 6px;
+}
 
 .clickable-icon {
   cursor: pointer;

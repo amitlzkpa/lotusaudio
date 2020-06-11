@@ -5,68 +5,43 @@
       
       <SplitArea :size="35">
 
-        <div class="level is-marginless">
-          
-          <div class="level-left">
+        <Navbar />
 
-            <div class="level-item">
-              <div v-if="$auth.isAuthenticated">
-                <b-button
-                  type="is-primary"
-                  size="is-small"
-                  @click="save"
-                >Save</b-button>
-                <b-button
-                  type="is-text"
-                  size="is-small"
-                  @click="saveNew"
-                >Save New</b-button>
-                <span
-                  class="has-text-grey-light is-italic is-size-7"
-                >{{ id }}
-                </span>
+        <div class="flex-container" v-if="id !== ''">
+
+          <div class="side-pad">
+
+            <div class="level" style="margin: 2px 0px 2px 0px;">
+              
+              <div class="level-left">
+
+                <div class="level-item">
+                  <router-link :to="{ name: 'view', params: { id: id } }">
+                    <span
+                      class="has-text-grey-light is-italic is-size-7"
+                    >{{ id }}
+                    </span>
+                  </router-link>
+                </div>
+                
               </div>
 
-              <div v-else>
-                <span>
-                  <a v-if="!$auth.isAuthenticated" @click="login" href="#!">Login</a> &nbsp;&nbsp; to save
-                </span>
-              </div>
-            </div>
-            
-          </div>
-
-          <div class="level-right">
-            <div class="level-item">
-
-              <b-dropdown position="is-bottom-left" aria-role="list">
-                <button class="button is-text" slot="trigger">
-                  <b-icon
-                    icon="ellipsis-h"
+              <div class="level-right">
+                <div class="level-item">
+                  <b-button
+                    type="is-text"
                     size="is-small"
-                  ></b-icon>
-                </button>
-
-                <b-dropdown-item aria-role="listitem">
-                  <router-link to="/">Home</router-link>
-                </b-dropdown-item>
-                <b-dropdown-item aria-role="listitem" v-if="$auth.isAuthenticated">
-                  <router-link to="/profile">Profile({{ $auth.user.name }})</router-link>
-                </b-dropdown-item>
-                <b-dropdown-item aria-role="listitem" v-if="$auth.isAuthenticated" >
-                  <a @click="logout" href="#!">Log out</a>  
-                </b-dropdown-item>
-              </b-dropdown>
-
+                    @click="saveNew"
+                  >Save as new</b-button>
+                  <b-button
+                    type="is-primary"
+                    size="is-small"
+                    @click="save"
+                  >Save</b-button>
+                </div>
+              </div>
+              
             </div>
-          </div>
-          
-        </div>
-
-
-        <div class="flex-container">
-
-          <div style="padding: 0px 6px 0px 6px;">
 
             <b-field>
 
@@ -85,7 +60,7 @@
             
           </div>
 
-          <div class="is-marginless is-paddingless">
+          <div class="is-marginless is-paddingless side-pad">
             <span
                @click="activeTab = 'Code'"
                class="is-size-7 clickable-icon">
@@ -117,7 +92,7 @@
           </div>
 
           <div v-if="activeTab === 'Code'">
-            <div style="height: 85vh;">
+            <div class="cont-ht">
               <vue-codemirror-editor
                 @keydown.enter="handleEnter"
                 v-model="code"
@@ -130,7 +105,7 @@
           </div>
 
           <div v-if="activeTab === 'Details'">
-            <div style="height: 85vh; padding: 0px 6px 0px 6px;">
+            <div class="cont-ht side-pad">
 
               <b-field label="Payment Pointer">
                 <b-input
@@ -162,7 +137,7 @@
 
           <div v-if="activeTab === 'Audio'">
 
-            <div style="height: 85vh; padding: 0px 6px 0px 6px;">
+            <div class="cont-ht side-pad">
 
               <b-field label="Available sources"></b-field>
 
@@ -296,6 +271,7 @@
 </template>
 
 <script>
+import Navbar from '@/partials/Navbar.vue';
 import AudioItem from "@/components/AudioItem.vue";
 import Three from "@/components/Three.vue";
 import templateViz from "!raw-loader!@/assets/template_viz.js.txt";
@@ -303,6 +279,7 @@ import templateViz from "!raw-loader!@/assets/template_viz.js.txt";
 export default {
   name: 'VizEdit',
   components: {
+    Navbar,
     AudioItem,
     Three
   },
@@ -449,8 +426,5 @@ export default {
 </script>
 
 <style scoped>
-.flex-container {
-  display:flex;
-  flex-direction:column;
-}
+
 </style>

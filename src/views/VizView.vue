@@ -5,79 +5,64 @@
       
       <SplitArea :size="35">
 
-        <div class="level is-marginless">
-          
-          <div class="level-left">
+        <Navbar />
 
-            <div class="level-item">
-              <span
-                class="has-text-grey-light is-italic is-size-7"
-              >{{ id }}
-              </span>
-            </div>
+        <div class="flex-container" v-if="id !== ''">
 
-          </div>
+          <div class="side-pad">
 
-          <div class="level-right">
-            <div class="level-item">
-
-              <b-dropdown position="is-bottom-left" aria-role="list">
-                <button class="button is-text" slot="trigger">
-                  <b-icon
-                    icon="prescription-bottle"
-                    size="is-small"
-                  ></b-icon>
-                </button>
-
-                <b-dropdown-item aria-role="listitem">
-                  <router-link to="/">Home</router-link>
-                </b-dropdown-item>
-                <b-dropdown-item aria-role="listitem" v-if="$auth.isAuthenticated">
-                  <router-link to="/profile">Profile({{ $auth.user.name }})</router-link>
-                </b-dropdown-item>
-                <b-dropdown-item aria-role="listitem" v-if="$auth.isAuthenticated" >
-                  <a @click="logout" href="#!">Log out</a>  
-                </b-dropdown-item>
-              </b-dropdown>
-
-            </div>
-          </div>
-          
-        </div>
-
-
-        <div class="flex-container">
-
-          <div style="padding: 0px 6px 0px 6px;">
-
-            <p class="has-text-weight-bold is-size-4">
+            <span class="has-text-weight-bold is-size-4">
               {{ name }}
-            </p>
+            </span>
+
+            <div class="level" style="margin: 2px 0px 2px 0px;">
+              
+              <div class="level-left">
+                <div class="level-item">
+                  <span
+                    class="has-text-grey-light is-italic is-size-7"
+                  >{{ id }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="level-right">
+                <div class="level-item">
+                  <router-link :to="{ name: 'edit', params: { id: id } }" v-if="$auth.dbUser._id === author._id ">
+                    <b-button
+                      type="is-text"
+                      size="is-small"
+                    >Edit</b-button>
+                  </router-link>
+                </div>
+              </div>
+              
+            </div>
 
           </div>
 
-          <hr />
-
-          <div class="is-marginless is-paddingless">
-
+          <div class="is-marginless is-paddingless side-pad">
             <span
                @click="activeTab = 'Details'"
-               class="clickable-icon">
+               class="is-size-7 clickable-icon">
               <span v-if="activeTab === 'Details'" class="has-text-weight-bold">Details</span>
               <span v-else>Details</span>
             </span>
-            
+
+            &nbsp;&nbsp;
+            <span class="is-size-7">|</span>
+            &nbsp;&nbsp;
+
             <span
                @click="activeTab = 'Audio'"
-               class="clickable-icon">
+               class="is-size-7 clickable-icon">
               <span v-if="activeTab === 'Audio'" class="has-text-weight-bold">Audio</span>
               <span v-else>Audio</span>
             </span>
-
           </div>
 
-          <div v-if="activeTab === 'Details'" style="padding: 0px 6px 0px 6px;">
-            <div style="height: 79vh;">
+          <div v-if="activeTab === 'Details'">
+            <div class="cont-ht side-pad">
 
               <div class="columns">
 
@@ -124,7 +109,7 @@
 
           <div v-if="activeTab === 'Audio'">
 
-            <div style="height: 79vh; padding: 0px 6px 0px 6px;">
+            <div class="cont-ht side-pad">
 
               <b-field label="Available sources"></b-field>
 
@@ -228,6 +213,7 @@
 </template>
 
 <script>
+import Navbar from '@/partials/Navbar.vue';
 import AudioItem from "@/components/AudioItem.vue";
 import Three from "@/components/Three.vue";
 import templateViz from "!raw-loader!@/assets/template_viz.js.txt";
@@ -235,6 +221,7 @@ import templateViz from "!raw-loader!@/assets/template_viz.js.txt";
 export default {
   name: 'VizEdit',
   components: {
+    Navbar,
     AudioItem,
     Three
   },
@@ -242,6 +229,7 @@ export default {
     return {
       id: "",
       name: "",
+      author: null,
       visibility: "public",
       short_description: "",
       description: "",
@@ -299,6 +287,7 @@ export default {
         let viz = resp.data;
         this.id = viz._id;
         this.name = viz.name;
+        this.author = viz.author;
         this.visibility = viz.visibility;
         this.short_description = viz.short_description;
         this.description = viz.description;
@@ -356,8 +345,5 @@ export default {
 </script>
 
 <style scoped>
-.flex-container {
-  display:flex;
-  flex-direction:column;
-}
+
 </style>
