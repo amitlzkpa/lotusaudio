@@ -179,6 +179,9 @@
                   :source="audioItem.source"
                   :name="audioItem.name"
                   :format="audioItem.format"
+                  :deleteDisabled="false"
+                  @activeAudioClick="setActiveAudio"
+                  @removeAudioSourceClick="removeAudioSource"
                 />
               </div>
 
@@ -198,7 +201,7 @@
                     placeholder="Source"
                   ></b-input>
 
-                  <b-button type="is-primary" expanded @click="addNewViz">Add new source</b-button>
+                  <b-button type="is-primary" expanded @click="addNewAudioSource">Add new source</b-button>
 
                 </div>
                 
@@ -217,6 +220,9 @@
                 :source="audioItem.source"
                 :name="audioItem.name"
                 :format="audioItem.format"
+                :deleteDisabled="true"
+                @activeAudioClick="setActiveAudio"
+                @removeAudioSourceClick="removeAudioSource"
               />
 
             </div>
@@ -305,7 +311,7 @@ export default {
       paymentPointer: "",
       paymentEnabled: false,
       vizAudioSources: [],
-      activeTab: 'Code',
+      activeTab: 'Audio',
       newAudioSource: {
         name: "",
         source: "",
@@ -391,14 +397,25 @@ export default {
       }
       this.run();
     },
-    addNewViz() {
+    addNewAudioSource() {
       if (this.newAudioSource.name === ""
        || this.newAudioSource.source === "") return;
+      let i = this.vizAudioSources.filter(a => a.name === this.newAudioSource.name);
+      if (i > 0) return;
+      i = this.defaultSources.filter(a => a.name === this.newAudioSource.name);
+      if (i > 0) return;
       let a = JSON.parse(JSON.stringify(this.newAudioSource));
       this.vizAudioSources.push(a);
       this.newAudioSource.name = "";
       this.newAudioSource.source = "";
-    }
+    },
+    setActiveAudio(audioParams) {
+      console.log(audioParams);
+    },
+    removeAudioSource(audioParams) {
+      console.log(audioParams);
+      this.vizAudioSources = this.vizAudioSources.filter(s => s.name !== audioParams.name);
+    },
   },
   async mounted() {
 
