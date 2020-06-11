@@ -3,8 +3,10 @@
 
     <div class="tile is-ancestor">
       <div class="tile is-4 is-child" style="padding: 6px;" v-for="viz in vizs" :key="viz._id">
-          
-        <VizCard :visualization="viz" />
+        
+        <router-link :to="{ name: 'edit', params: { id: viz._id } }">
+          <VizCard :visualization="viz" />
+        </router-link>
         
       </div>
     </div>

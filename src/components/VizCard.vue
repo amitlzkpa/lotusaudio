@@ -5,7 +5,7 @@
 
       <div class="card-image">
         <figure class="image is-3by2">
-          <img src="https://bulma.io/images/placeholders/480x320.png" alt="Placeholder image">
+          <img :src="img" />
         </figure>
       </div>
 
@@ -53,20 +53,28 @@
 </template>
 
 <script>
-
+import GeoPattern from 'geopattern';
 
 export default {
   name: 'VizCard',
   props: ['visualization'],
   data() {
     return {
-      viz: null
+      viz: null,
+      img: null
+    }
+  },
+  methods: {
+    updateImg() {
+      let pattern = GeoPattern.generate(this.viz._id);
+      this.img = pattern.toDataUri();
     }
   },
   async mounted() {
 
     if (this.visualization) {
       this.viz = this.visualization;
+      this.updateImg();
       return;
     }
 
@@ -78,6 +86,7 @@ export default {
   watch: { 
     visualization: function(newVal) {
       this.viz = newVal
+      this.updateImg();
     }
   }
   

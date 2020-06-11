@@ -53,8 +53,6 @@ export default {
   },
   async mounted() {
 
-    console.log(this.vizs);
-
     while(this.$auth.loading) {
       await this.wait(100);
     }
@@ -62,7 +60,6 @@ export default {
     let v = await this.$api.get(`/api/vizs/userid/${this.$auth.dbUser._id}`);
     this.vizs = v.data;
 
-    console.log(this.vizs);
   }
 }
 </script>
