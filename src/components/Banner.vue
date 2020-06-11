@@ -18,7 +18,7 @@
         <p class="is-size-1">
           Create shareable virtual music environments using web technologies.
         </p>
-        <a href="/view/5ed860cc5b997a27d0c21a69" class="button">See Demo</a>
+        <a href="/view/5ed860cc5b997a27d0c21a69" class="button is-primary">See Demo</a>
       </div>
 
       <div class="column">
@@ -41,3 +41,7 @@ export default {
   
 }
 </script>
+
+<style scoped>
+
+</style>

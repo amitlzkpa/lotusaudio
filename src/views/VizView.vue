@@ -360,9 +360,4 @@ export default {
   display:flex;
   flex-direction:column;
 }
-
-.clickable-icon {
-  cursor: pointer;
-  margin: 4px;
-}
 </style>

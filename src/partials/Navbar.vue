@@ -3,13 +3,15 @@
     
     <div class="level-left">
       <div class="level-item">
-        <router-link to="/">Home</router-link>
+        <router-link to="/" class="clickable-icon">
+          <b-icon
+            size="is-small"
+            icon="spa"
+          ></b-icon>
+        </router-link>
       </div>
       <div class="level-item">
         <router-link to="/new">New</router-link>
-      </div>
-      <div class="level-item">
-        <router-link v-if="$auth.isAuthenticated" to="/profile">Profile</router-link>
       </div>
     </div>
     
@@ -17,7 +19,19 @@
       <div class="level-item">
         <span v-if="!$auth.loading">
           <a v-if="!$auth.isAuthenticated" @click="login" href="#!">Log in</a>
-          <a v-if="$auth.isAuthenticated" @click="logout" href="#!">Log out({{ $auth.user.name }})</a>
+          <a v-if="$auth.isAuthenticated" href="#!">
+            <b-dropdown position="is-bottom-left" aria-role="list">
+              <button class="button is-text" slot="trigger">
+                {{ $auth.dbUser.username }}
+              </button>
+              <b-dropdown-item aria-role="listitem">
+                <router-link to="/profile">Profile</router-link>
+              </b-dropdown-item>
+              <b-dropdown-item aria-role="listitem" >
+                <a @click="logout" href="#!">Log out</a>  
+              </b-dropdown-item>
+            </b-dropdown>
+          </a>
         </span>
       </div>
     </div>
@@ -43,4 +57,9 @@ export default {
 
 <style>
 
+
+.clickable-icon {
+  cursor: pointer;
+  margin: 4px;
+}
 </style>
