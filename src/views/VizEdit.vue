@@ -42,7 +42,7 @@
               <b-dropdown position="is-bottom-left" aria-role="list">
                 <button class="button is-text" slot="trigger">
                   <b-icon
-                    icon="prescription-bottle"
+                    icon="ellipsis-h"
                     size="is-small"
                   ></b-icon>
                 </button>
@@ -80,18 +80,6 @@
                 v-model="name"
                 size="is-small"
               ></b-input>
-                
-              <p class="control" size="is-small" @click="visibility = (visibility === 'public') ? 'private' : 'public'">
-                <b-tooltip :label="'Make ' + (visibility === 'public' ? 'private' : 'public')" position="is-left">
-                  <span class="button is-static is-small">
-                    <b-icon
-                      :icon="(visibility === 'public') ? 'eye' : 'eye-slash'"
-                      size="is-small"
-                      class="clickable-icon"
-                    ></b-icon>
-                  </span>
-                </b-tooltip>
-              </p>
 
             </b-field>
             
@@ -172,8 +160,18 @@
                 <b-tooltip :label="'Make ' + (paymentEnabled ? 'free' : 'paid')" position="is-right">
                   <div @click="paymentEnabled = !paymentEnabled" class="clickable-icon">
                     <b-icon
-                      pack="fas"
                       :icon="(paymentEnabled) ? 'coins' : 'star-of-life'"
+                      size="is-small"
+                    ></b-icon>
+                  </div>
+                </b-tooltip>
+
+                <div style="margin: 0px 6px 0px 0px"></div>
+                
+                <b-tooltip :label="'Make ' + (visibility === 'public' ? 'private' : 'public')" position="is-right">
+                  <div @click="visibility = (visibility === 'public') ? 'private' : 'public'" class="clickable-icon">
+                    <b-icon
+                      :icon="(visibility === 'public') ? 'eye' : 'eye-slash'"
                       size="is-small"
                     ></b-icon>
                   </div>
