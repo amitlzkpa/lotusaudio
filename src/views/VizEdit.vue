@@ -104,6 +104,17 @@
               <span v-if="activeTab === 'Details'" class="has-text-weight-bold">Details</span>
               <span v-else>Details</span>
             </span>
+
+            &nbsp;&nbsp;
+            <span class="is-size-7">|</span>
+            &nbsp;&nbsp;
+
+            <span
+               @click="activeTab = 'Audio'"
+               class="is-size-7 clickable-icon">
+              <span v-if="activeTab === 'Audio'" class="has-text-weight-bold">Audio</span>
+              <span v-else>Audio</span>
+            </span>
           </div>
 
           <div v-if="activeTab === 'Code'">
@@ -119,8 +130,8 @@
             </div>
           </div>
 
-          <div v-if="activeTab === 'Details'" style="padding: 0px 6px 0px 6px;">
-            <div style="height: 85vh;">
+          <div v-if="activeTab === 'Details'">
+            <div style="height: 85vh; padding: 0px 6px 0px 6px;">
 
               <b-field label="Payment Pointer">
                 <b-input
@@ -148,6 +159,22 @@
                 ></b-input>
               </b-field>
             </div>
+          </div>
+
+          <div v-if="activeTab === 'Audio'">
+
+            <div style="height: 85vh; padding: 0px 6px 0px 6px;">
+
+              <b-field label="Available sources"></b-field>
+              
+              <AudioItem
+                source="/audio_samples/lotus_03.mp3"
+                name="Lotus 03"
+                format="audio/mpeg"
+              />
+              
+            </div>
+
           </div>
 
 
@@ -212,12 +239,14 @@
 </template>
 
 <script>
+import AudioItem from "@/components/AudioItem.vue";
 import Three from "@/components/Three.vue";
 import templateViz from "!raw-loader!@/assets/template_viz.js.txt";
 
 export default {
   name: 'VizEdit',
   components: {
+    AudioItem,
     Three
   },
   data() {
