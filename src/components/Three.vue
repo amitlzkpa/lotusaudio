@@ -13,6 +13,15 @@ window.THREE = THREE;
 let container, renderer, scene, camera, controls;
 let vizObj;
 
+
+let audioContext = new AudioContext();
+let audioBufferSouceNode = audioContext.createBufferSource();
+let analyser = audioContext.createAnalyser();
+audioBufferSouceNode.connect(analyser);
+// each bin represents sampleRate/fftSize = 48000 / 512 = 93.75 Hz
+analyser.fftSize = 512;
+analyser.connect(audioContext.destination);
+
 export default {
   name: 'Three',
   data() {
@@ -20,8 +29,19 @@ export default {
     }
   },
   methods: {
-    onPlayClicked() {
+    async onPlayClicked() {
       console.log(this.$store.state.audioSource);
+      if (this.$store.state.isPlaying) {
+        audioBufferSouceNode.stop(0);
+      } else {
+        let resp = await this.$api.get(this.$store.state.audioSource.source, {
+          responseType: 'arraybuffer'
+        });
+        let audio = resp.data;
+        let buffer = await audioContext.decodeAudioData(audio);
+        audioBufferSouceNode.buffer = buffer;
+        audioBufferSouceNode.start(0);
+      }
       this.$store.commit('updatePlayStatus', !this.$store.state.isPlaying);
     },
     onCodeUpdate() {
