@@ -8,7 +8,7 @@
           <div class="card" exapnded>
             <div class="card-content">
               <p class="has-text-weight-light is-size-7 is-italic">
-                {{ viz.author.name }}
+                {{ viz.author.username }}
               </p>
               <p class="has-text-weight-semibold is-size-4">
                 {{ viz.name }}
@@ -25,6 +25,7 @@
 
 <script>
 export default {
+  props: ['visualizations'],
   data() {
     return {
       vizs: []
@@ -32,13 +33,17 @@ export default {
   },
   async mounted() {
 
+    if (this.visualizations) {
+      this.vizs = this.visualizations;
+      return;
+    }
+
     while(this.$auth.loading) {
       await this.wait(100);
     }
 
     let v = await this.$api.get("/api/vizs/all");
     this.vizs = v.data;
-    console.log(this.vizs);
   }
 }
 </script>

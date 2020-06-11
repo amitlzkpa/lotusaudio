@@ -13,8 +13,15 @@ router.get('/id/:id', async (req, res) => {
 });
 
 
+router.get('/userid/:userid', async (req, res) => {
+  let id = req.params.userid;
+  let viz = await Viz.find({author: id}).populate('author').exec();
+  return res.json(viz);
+});
+
+
 router.get('/all', async (req, res) => {
-  let vizs = await Viz.find({}).populate('author').exec();
+  let vizs = await Viz.find({visibility: "public"}).populate('author').exec();
   return res.json(vizs);
 });
 
