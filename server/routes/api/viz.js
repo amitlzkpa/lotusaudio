@@ -14,7 +14,7 @@ router.get('/id/:id', async (req, res) => {
 
 
 router.get('/all', async (req, res) => {
-  let vizs = await Viz.find({});
+  let vizs = await Viz.find({}).populate('author').exec();
   return res.json(vizs);
 });
 
