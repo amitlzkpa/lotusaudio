@@ -59,12 +59,21 @@
           <hr />
 
           <div class="is-marginless is-paddingless">
+
             <span
                @click="activeTab = 'Details'"
                class="clickable-icon">
               <span v-if="activeTab === 'Details'" class="has-text-weight-bold">Details</span>
               <span v-else>Details</span>
             </span>
+            
+            <span
+               @click="activeTab = 'Audio'"
+               class="clickable-icon">
+              <span v-if="activeTab === 'Audio'" class="has-text-weight-bold">Audio</span>
+              <span v-else>Audio</span>
+            </span>
+
           </div>
 
           <div v-if="activeTab === 'Details'" style="padding: 0px 6px 0px 6px;">
@@ -113,6 +122,50 @@
             </div>
           </div>
 
+          <div v-if="activeTab === 'Audio'">
+
+            <div style="height: 79vh; padding: 0px 6px 0px 6px;">
+
+              <b-field label="Available sources"></b-field>
+
+              <b>Visualization:</b>
+              <br />
+
+              <p class="is-italic is-small has-text-grey" v-if="vizAudioSources.length < 1">
+                &lt;none&gt;
+              </p>
+              
+              <div v-if="vizAudioSources.length > 0">
+                <AudioItem
+                  v-for="audioItem in vizAudioSources" :key="audioItem.name"
+                  :source="audioItem.source"
+                  :name="audioItem.name"
+                  :format="audioItem.format"
+                  :deleteDisabled="true"
+                  @activeAudioClick="setActiveAudio"
+                />
+              </div>
+
+              <b>Default:</b>
+              <br />
+
+              <p class="is-italic is-small has-text-grey" v-if="defaultSources.length < 1">
+                &lt;none&gt;
+              </p>
+              
+              <AudioItem
+                v-else
+                v-for="audioItem in defaultSources" :key="audioItem.name"
+                :source="audioItem.source"
+                :name="audioItem.name"
+                :format="audioItem.format"
+                :deleteDisabled="true"
+                @activeAudioClick="setActiveAudio"
+              />
+
+            </div>
+
+          </div>
 
           <div>
 
@@ -134,14 +187,20 @@
                 </div>
               </div>
 
+              <div class="level-left">
+                <b-tooltip :label="'Source: ' + $store.state.audioSource.source" position="is-top">
+                  {{ $store.state.audioSource.name }}
+                </b-tooltip>
+              </div>
+
               <div class="level-right">
                 <div class="level-item">
 
-                  <b-tooltip label="Run visualization" position="is-left">
+                  <b-tooltip label="Play audio and run visualization" position="is-left">
                     <span @click="run" class="clickable-icon" v-if="((isPayable) ? isPayable && userWantsToPay : true)">
                       <b-icon
                         pack="fas"
-                        icon="play"
+                        :icon="($store.state.isPlaying) ? 'pause' : 'play'"
                         size="is-small"
                       ></b-icon>
                     </span>
@@ -169,12 +228,14 @@
 </template>
 
 <script>
+import AudioItem from "@/components/AudioItem.vue";
 import Three from "@/components/Three.vue";
 import templateViz from "!raw-loader!@/assets/template_viz.js.txt";
 
 export default {
   name: 'VizEdit',
   components: {
+    AudioItem,
     Three
   },
   data() {
@@ -188,6 +249,24 @@ export default {
       paymentPointer: "",
       activeTab: 'Details',
       paymentEnabled: true,
+      vizAudioSources: [],
+      newAudioSource: {
+        name: "",
+        source: "",
+        format: "audio/mpeg"
+      },
+      defaultSources: [
+        {
+          name: "Tours01 - Enthusiast",
+          source: "/audio_samples/Tours01-Enthusiast.mp3",
+          format: "audio/mpeg"
+        },
+        {
+          name: "Lotus 03",
+          source: "/audio_samples/lotus_03.mp3",
+          format: "audio/mpeg"
+        },
+      ],
       userWantsToPay: false
     }
   },
@@ -211,13 +290,13 @@ export default {
     },
     async run() {
       this.$store.commit('updateCode', this.code);
-      this.$refs.three.onCodeUpdate();
+      await this.$refs.three.onCodeUpdate();
+      await this.$refs.three.onPlayClicked();
     },
     async updateFromParam() {
       if(this.$route.params.id) {
         let resp = await this.$api.get(`/api/vizs/id/${this.$route.params.id}`);
         let viz = resp.data;
-        console.log(viz);
         this.id = viz._id;
         this.name = viz.name;
         this.visibility = viz.visibility;
@@ -226,12 +305,18 @@ export default {
         this.code = JSON.parse(viz.code);
         this.paymentPointer = viz.paymentPointer;
         this.paymentEnabled = viz.paymentEnabled;
+        this.vizAudioSources = viz.audioSources;
         this.$store.commit('updateCode', this.code);
+        let audioSourceToLoad = (this.vizAudioSources.length > 0) ? this.vizAudioSources[0] : this.defaultSources[0];
+        this.$store.commit('updateAudioSource', audioSourceToLoad);
+        await this.$refs.three.onAudioSourceUpdate();
 
         this.updatePaymentStream();
-
       }
-      this.run();
+    },
+    async setActiveAudio(audioSource) {
+      this.$store.commit('updateAudioSource', audioSource);
+      await this.$refs.three.onAudioSourceUpdate();
     },
     updatePaymentStream() {
       

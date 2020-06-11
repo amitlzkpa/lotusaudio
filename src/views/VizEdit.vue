@@ -265,7 +265,7 @@
 
               <div class="level-right">
 
-                <b-tooltip label="Run visualization" position="is-left">
+                <b-tooltip label="Play audio and run visualization" position="is-left">
                   <div class="level-item clickable-icon" @click="run">
                     <b-icon
                       pack="fas"
@@ -317,7 +317,7 @@ export default {
       paymentPointer: "",
       paymentEnabled: false,
       vizAudioSources: [],
-      activeTab: 'Audio',
+      activeTab: 'Code',
       newAudioSource: {
         name: "",
         source: "",
@@ -360,6 +360,7 @@ export default {
       };
       let v = await this.$api.post("/api/vizs/save", postData);
       console.log(v.data);
+      this.$buefy.toast.open('Saved successfully');
     },
     async saveNew() {
       let postData = {
@@ -373,6 +374,7 @@ export default {
       };
       let v = await this.$api.post("/api/vizs/new", postData);
       console.log(v.data);
+      this.$buefy.toast.open('New save successful');
     },
     async run() {
       this.$store.commit('updateCode', this.code);
@@ -423,7 +425,7 @@ export default {
     },
     removeAudioSource(audioParams) {
       if (this.$store.state.audioSource.name === audioParams.name) {
-      this.$buefy.toast.open({
+        this.$buefy.toast.open({
           duration: 3000,
           message: `Can't remove a source while its playing.`,
           position: 'is-bottom',
