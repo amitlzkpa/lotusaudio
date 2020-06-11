@@ -1,31 +1,26 @@
 <template>
   <div>
-    <div class="columns">
 
-      <div class="tile is-ancestor">
-        <div class="tile is-4 is-child" v-for="viz in vizs" :key="viz._id">
-            
-          <div class="card" exapnded>
-            <div class="card-content">
-              <p class="has-text-weight-light is-size-7 is-italic">
-                {{ viz.author.username }}
-              </p>
-              <p class="has-text-weight-semibold is-size-4">
-                {{ viz.name }}
-              </p>
-            </div>
-          </div>
-            
-        </div>
+    <div class="tile is-ancestor">
+      <div class="tile is-4 is-child" style="padding: 6px;" v-for="viz in vizs" :key="viz._id">
+          
+        <VizCard :visualization="viz" />
+        
       </div>
-
     </div>
+
   </div>
 </template>
 
 <script>
+import VizCard from '@/components/VizCard.vue';
+
 export default {
+  name: 'VizGallery',
   props: ['visualizations'],
+  components: {
+    VizCard
+  },
   data() {
     return {
       vizs: []
@@ -44,6 +39,11 @@ export default {
 
     let v = await this.$api.get("/api/vizs/all");
     this.vizs = v.data;
+  },
+  watch: { 
+    visualizations: function(newVal) {
+      this.vizs = newVal
+    }
   }
 }
 </script>

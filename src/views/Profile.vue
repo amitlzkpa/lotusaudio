@@ -27,6 +27,7 @@
       </div>
       
       <hr/>
+      <br/><br/>
 
       <VizGallery :visualizations="vizs" />
       
@@ -53,7 +54,7 @@ export default {
   async mounted() {
 
     console.log(this.vizs);
-    
+
     while(this.$auth.loading) {
       await this.wait(100);
     }

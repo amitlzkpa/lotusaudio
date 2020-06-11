@@ -2,14 +2,21 @@
   <div>
     <Navbar />
     <div class="container">
-      <br/>
-      <br/>
+      
+      <br/><br/>
+
       <Banner />
+
       <br/>
+      
       <hr/>
-      <br/>
-      <br/>
+      
+      <br/><br/>
+      
       <VizGallery />
+
+      <br/><br/>
+
     </div>
   </div>
 </template>
