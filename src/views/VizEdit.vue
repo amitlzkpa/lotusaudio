@@ -376,12 +376,11 @@ export default {
     },
     async run() {
       this.$store.commit('updateCode', this.code);
-      this.$refs.three.onCodeUpdate();
-      this.$refs.three.onPlayClicked();
+      await this.$refs.three.onCodeUpdate();
+      await this.$refs.three.onPlayClicked();
     },
     async clear() {
       this.code = null;
-      await this.run();
     },
     async handleEnter(e) {
       if (!e.ctrlKey) return;
@@ -403,6 +402,7 @@ export default {
         this.$store.commit('updateCode', this.code);
         let audioSourceToLoad = (this.vizAudioSources.length > 0) ? this.vizAudioSources[0] : this.defaultSources[0];
         this.$store.commit('updateAudioSource', audioSourceToLoad);
+        await this.$refs.three.onAudioSourceUpdate();
       }
     },
     addNewAudioSource() {
@@ -417,8 +417,9 @@ export default {
       this.newAudioSource.name = "";
       this.newAudioSource.source = "";
     },
-    setActiveAudio(audioSource) {
+    async setActiveAudio(audioSource) {
       this.$store.commit('updateAudioSource', audioSource);
+      await this.$refs.three.onAudioSourceUpdate();
     },
     removeAudioSource(audioParams) {
       this.vizAudioSources = this.vizAudioSources.filter(s => s.name !== audioParams.name);

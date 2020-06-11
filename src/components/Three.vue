@@ -14,13 +14,9 @@ let container, renderer, scene, camera, controls;
 let vizObj;
 
 
-let audioContext = new AudioContext();
-let audioBufferSouceNode = audioContext.createBufferSource();
-let analyser = audioContext.createAnalyser();
-audioBufferSouceNode.connect(analyser);
-// each bin represents sampleRate/fftSize = 48000 / 512 = 93.75 Hz
-analyser.fftSize = 512;
-analyser.connect(audioContext.destination);
+let audioContext;
+let audioIsLoaded = false;
+
 
 export default {
   name: 'Three',
@@ -29,20 +25,38 @@ export default {
     }
   },
   methods: {
-    async onPlayClicked() {
-      console.log(this.$store.state.audioSource);
-      if (this.$store.state.isPlaying) {
-        audioBufferSouceNode.stop(0);
-      } else {
-        let resp = await this.$api.get(this.$store.state.audioSource.source, {
-          responseType: 'arraybuffer'
-        });
-        let audio = resp.data;
-        let buffer = await audioContext.decodeAudioData(audio);
-        audioBufferSouceNode.buffer = buffer;
-        audioBufferSouceNode.start(0);
+    async onAudioSourceUpdate() {
+      if (audioIsLoaded) {
+        audioContext.close();
       }
-      this.$store.commit('updatePlayStatus', !this.$store.state.isPlaying);
+      audioContext = new AudioContext();
+      let src = this.$store.state.audioSource.source;
+      let resp = await this.$api.get(src, { responseType: 'arraybuffer' });
+      let audio = resp.data;
+      let buffer = await audioContext.decodeAudioData(audio);
+      let audioBufferSouceNode = audioContext.createBufferSource();
+      let analyser = audioContext.createAnalyser();
+      analyser.fftSize = 512;
+      analyser.connect(audioContext.destination);
+      audioBufferSouceNode.connect(analyser);
+      audioBufferSouceNode.buffer = buffer;
+      audioBufferSouceNode.start(0);
+      if(this.$store.state.isPlaying) {
+        audioContext.resume();
+      } else {
+        audioContext.suspend();
+      }
+      audioIsLoaded = true;
+    },
+    async onPlayClicked() {
+      if (!audioIsLoaded) return;
+      if(this.$store.state.isPlaying) {
+        audioContext.suspend();
+        this.$store.commit('updatePlayStatus', false);
+      } else {
+        audioContext.resume();
+        this.$store.commit('updatePlayStatus', true);
+      }
     },
     onCodeUpdate() {
       try {
