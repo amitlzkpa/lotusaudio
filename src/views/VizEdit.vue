@@ -422,6 +422,15 @@ export default {
       await this.$refs.three.onAudioSourceUpdate();
     },
     removeAudioSource(audioParams) {
+      if (this.$store.state.audioSource.name === audioParams.name) {
+      this.$buefy.toast.open({
+          duration: 3000,
+          message: `Can't remove a source while its playing.`,
+          position: 'is-bottom',
+          type: 'is-danger'
+        })
+        return;
+      }
       this.vizAudioSources = this.vizAudioSources.filter(s => s.name !== audioParams.name);
     },
   },
