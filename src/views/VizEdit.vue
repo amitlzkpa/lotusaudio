@@ -257,6 +257,12 @@
 
               </div>
 
+              <div class="level-left">
+                <b-tooltip :label="'Source: ' + $store.state.audioSource.source" position="is-top">
+                  {{ $store.state.audioSource.name }}
+                </b-tooltip>
+              </div>
+
               <div class="level-right">
 
                 <b-tooltip label="Run visualization" position="is-left">
@@ -394,6 +400,8 @@ export default {
         this.paymentEnabled = viz.paymentEnabled;
         this.vizAudioSources = viz.audioSources;
         this.$store.commit('updateCode', this.code);
+        let audioSourceToLoad = (this.vizAudioSources.length > 0) ? this.vizAudioSources[0] : this.defaultSources[0];
+        this.$store.commit('updateAudioSource', audioSourceToLoad);
       }
       this.run();
     },
@@ -409,11 +417,10 @@ export default {
       this.newAudioSource.name = "";
       this.newAudioSource.source = "";
     },
-    setActiveAudio(audioParams) {
-      console.log(audioParams);
+    setActiveAudio(audioSource) {
+      this.$store.commit('updateAudioSource', audioSource);
     },
     removeAudioSource(audioParams) {
-      console.log(audioParams);
       this.vizAudioSources = this.vizAudioSources.filter(s => s.name !== audioParams.name);
     },
   },
