@@ -307,7 +307,7 @@ export default {
       this.$store.commit('updateAudioSource', audioSource);
       await this.$refs.three.onAudioSourceUpdate();
     },
-    updatePaymentStream() {
+    async updatePaymentStream() {
       
       let metas = Array.from(document.getElementsByTagName("meta"));
       let elem = metas.filter(m => Array.from(m.attributes).filter(a => { return a.name === "name" && a.value === "monetization"; }).length > 0 )[0];
@@ -317,6 +317,10 @@ export default {
       if ((shouldBeOn && isCurrentlyOn) || (!shouldBeOn && !isCurrentlyOn)) return;
       if (!shouldBeOn && isCurrentlyOn) {
         elem.parentNode.removeChild(elem);
+        if(this.$store.state.isPlaying) {
+          // this.$store.commit('updatePlayStatus', false);
+          await this.$refs.three.onPlayClicked();
+        }
         return;
       }
       if (shouldBeOn && !isCurrentlyOn) {

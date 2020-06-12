@@ -346,7 +346,8 @@ export default {
           audioSources: this.vizAudioSources
       };
       let v = await this.$api.post("/api/vizs/save", postData);
-      console.log(v.data);
+      let viz = v.data;
+      await this.updateVizInView(viz);
       this.$buefy.toast.open('Saved successfully');
     },
     async saveNew() {
@@ -356,11 +357,12 @@ export default {
           visibility: this.visibility,
           short_description: this.short_description,
           description: this.description,
-          code: this.code,
+          code: JSON.stringify(this.code),
           audioSources: this.vizAudioSources
       };
       let v = await this.$api.post("/api/vizs/new", postData);
-      console.log(v.data);
+      let viz = v.data;
+      await this.updateVizInView(viz);
       this.$buefy.toast.open('New save successful');
     },
     async run() {
@@ -379,21 +381,24 @@ export default {
       if(this.$route.params.id) {
         let resp = await this.$api.get(`/api/vizs/id/${this.$route.params.id}`);
         let viz = resp.data;
-        this.id = viz._id;
-        this.name = viz.name;
-        this.author = viz.author;
-        this.visibility = viz.visibility;
-        this.short_description = viz.short_description;
-        this.description = viz.description;
-        this.code = JSON.parse(viz.code);
-        this.paymentPointer = viz.paymentPointer;
-        this.paymentEnabled = viz.paymentEnabled;
-        this.vizAudioSources = viz.audioSources;
-        this.$store.commit('updateCode', this.code);
-        let audioSourceToLoad = (this.vizAudioSources.length > 0) ? this.vizAudioSources[0] : this.defaultSources[0];
-        this.$store.commit('updateAudioSource', audioSourceToLoad);
-        await this.$refs.three.onAudioSourceUpdate();
+        await this.updateVizInView(viz);
       }
+    },
+    async updateVizInView(viz) {
+      this.id = viz._id;
+      this.name = viz.name;
+      this.author = viz.author;
+      this.visibility = viz.visibility;
+      this.short_description = viz.short_description;
+      this.description = viz.description;
+      this.code = JSON.parse(viz.code);
+      this.paymentPointer = viz.paymentPointer;
+      this.paymentEnabled = viz.paymentEnabled;
+      this.vizAudioSources = viz.audioSources;
+      this.$store.commit('updateCode', this.code);
+      let audioSourceToLoad = (this.vizAudioSources.length > 0) ? this.vizAudioSources[0] : this.defaultSources[0];
+      this.$store.commit('updateAudioSource', audioSourceToLoad);
+      await this.$refs.three.onAudioSourceUpdate();
     },
     addNewAudioSource() {
       if (this.newAudioSource.name === ""
