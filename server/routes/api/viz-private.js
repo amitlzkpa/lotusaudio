@@ -3,6 +3,14 @@ const router = require('express').Router();
 const Viz = require('../../models/Viz');
 
 
+router.delete('/id/:id', async (req, res) => {
+  let id = req.params.id;
+  let viz = await Viz.findOne({_id: id});
+  await viz.delete();
+  return res.json({ message: 'Successfully deleted' });
+});
+
+
 router.post('/new', async (req, res) => {
   let data = req.body;
   data.author = req.user;

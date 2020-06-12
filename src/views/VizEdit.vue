@@ -38,9 +38,15 @@
                       <b-button
                         type="is-text"
                         size="is-small"
+                        @click="deleteDialog"
+                      >Delete</b-button>
+                      <b-button
+                        type="is-text"
+                        size="is-small"
                         @click="saveNew"
                       >Save as new</b-button>
                       <b-button
+                        v-if="id !== ''"
                         type="is-primary"
                         size="is-small"
                         @click="save"
@@ -364,6 +370,19 @@ export default {
       let viz = v.data;
       await this.updateVizInView(viz);
       this.$buefy.toast.open('New save successful');
+    },
+    async deleteDialog() {
+      this.$buefy.dialog.confirm({
+        title: 'Delete',
+        message: `Are you sure you want to delete?`,
+        cancelText: 'No',
+        confirmText: 'Yes',
+        type: 'is-danger',
+        onConfirm: async () => {
+          await this.$api.delete(`/api/vizs/id/${this.id}`);
+          this.$router.replace('/');
+        }
+      })
     },
     async run() {
       this.$store.commit('updateCode', this.code);
