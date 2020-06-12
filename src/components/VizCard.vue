@@ -1,11 +1,11 @@
 <template>
   <div>
     
-    <div class="card" v-if="viz">
+    <div class="card" v-if="viz" style="min-height: 420px;">
 
       <div class="card-image">
         <figure class="image is-3by2">
-          <img :src="img" />
+          <img :src="img" style="object-fit: cover" />
         </figure>
       </div>
 
