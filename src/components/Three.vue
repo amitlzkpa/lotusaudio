@@ -11,11 +11,29 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 window.THREE = THREE;
 
 let container, renderer, scene, camera, controls;
-let vizObj;
 
 
 let audioContext;
+let analyser;
 let audioIsLoaded = false;
+
+
+
+let ARR_SIZE = 16;
+let array = new Uint8Array(ARR_SIZE * ARR_SIZE);
+let lowFreqArray = new Uint8Array(ARR_SIZE * ARR_SIZE);
+let midFreqArray = new Uint8Array(ARR_SIZE * ARR_SIZE);
+let higFreqArray = new Uint8Array(ARR_SIZE * ARR_SIZE);
+let FREQOBJ = {};
+FREQOBJ['allFreqArray'] = array;
+FREQOBJ['lowFreqArray'] = lowFreqArray;
+FREQOBJ['midFreqArray'] = midFreqArray;
+FREQOBJ['higFreqArray'] = higFreqArray;
+let firstBrk = 86;
+let secondBrk = 170;
+let lowIdx, midIdx, higIdx;
+
+
 
 
 export default {
@@ -35,7 +53,7 @@ export default {
       let audio = resp.data;
       let buffer = await audioContext.decodeAudioData(audio);
       let audioBufferSouceNode = audioContext.createBufferSource();
-      let analyser = audioContext.createAnalyser();
+      analyser = audioContext.createAnalyser();
       analyser.fftSize = 512;
       analyser.connect(audioContext.destination);
       audioBufferSouceNode.connect(analyser);
@@ -58,27 +76,45 @@ export default {
         this.$store.commit('updatePlayStatus', true);
       }
     },
-    onCodeUpdate() {
+    async onCodeUpdate() {
       try {
 
-        if(vizObj) {
-          scene.remove(vizObj);
-          vizObj = null;
-        }
+        if(this.$store.state.isPlaying) return;
 
         eval.apply(window, [this.$store.state.code]);
-        vizObj = window.__init__();
-        scene.add(vizObj);
+
+        let vizObjRefs = window.getRefs();
+        for(let j = 0; j < vizObjRefs.length; j++) {
+            let vizObjRefResource = await this.$api.get(vizObjRefs[j]);
+            let vizObjRefText = vizObjRefResource.data;
+            eval.apply(window, [vizObjRefText]);
+        }
+
+        window.__init__(scene);
 
       } catch(ex) {
         console.log(ex);
       }
     },
+    updateViz() {
+      if (this.$store.state.isPlaying) {
+        lowIdx = 0;
+        midIdx = 0;
+        higIdx = 0;
+        analyser.getByteFrequencyData(array);
+        for(let p=0; p<array.length; p++) {
+          if (array[p] < firstBrk) { lowFreqArray[lowIdx] = array[p]; lowIdx++; }
+          else if (array[p] > secondBrk) { higFreqArray[higIdx] = array[p]; higIdx++; }
+          else { midFreqArray[midIdx] = array[p]; midIdx++; }
+        }
+        window.__renderFrame__(scene, FREQOBJ);
+      }
+    },
     init: function() {
       container = document.getElementById('container');
 
-      camera = new THREE.PerspectiveCamera(60, container.clientWidth/container.clientHeight, 1, 1000);
-      camera.position.z = 100;
+      camera = new THREE.PerspectiveCamera(60, container.clientWidth/container.clientHeight, 10, 100000);
+      camera.position.set(30, 80, 60);
       camera.lookAt(new THREE.Vector3());
 
       scene = new THREE.Scene();
@@ -98,6 +134,7 @@ export default {
 
     },
     animate: function() {
+      this.updateViz();
       requestAnimationFrame(this.animate);
       controls.update();
       renderer.render(scene, camera);
