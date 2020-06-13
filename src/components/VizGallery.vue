@@ -1,8 +1,8 @@
 <template>
   <div>
 
-    <div class="tile is-ancestor">
-      <div class="tile is-4 is-child" style="padding: 6px;" v-for="viz in vizs" :key="viz._id">
+    <div class="columns is-multiline">
+      <div class="column is-3 is-child" style="padding: 6px;" v-for="viz in vizs" :key="viz._id">
         
         <router-link :to="{ name: 'view', params: { id: viz._id } }">
           <VizCard :visualization="viz" />

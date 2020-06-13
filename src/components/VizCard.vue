@@ -1,7 +1,7 @@
 <template>
   <div>
     
-    <div class="card" v-if="viz" style="min-height: 420px;">
+    <div class="card" v-if="viz" style="min-height: 360px;">
 
       <div class="card-image">
         <figure class="image is-3by2">
