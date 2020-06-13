@@ -386,7 +386,7 @@ export default {
     },
     async run() {
       this.$store.commit('updateCode', this.code);
-      await this.$refs.three.onCodeUpdate();
+      await this.$refs.three.initViz();
       await this.$refs.three.onPlayClicked();
     },
     async clear() {
@@ -418,6 +418,7 @@ export default {
       let audioSourceToLoad = (this.vizAudioSources.length > 0) ? this.vizAudioSources[0] : this.defaultSources[0];
       this.$store.commit('updateAudioSource', audioSourceToLoad);
       await this.$refs.three.onAudioSourceUpdate();
+      await this.$refs.three.initViz();
     },
     addNewAudioSource() {
       if (this.newAudioSource.name === ""

@@ -34,6 +34,8 @@ let secondBrk = 170;
 let lowIdx, midIdx, higIdx;
 
 
+let vizObjInstance;
+let sceneContent;
 
 
 export default {
@@ -76,39 +78,41 @@ export default {
         this.$store.commit('updatePlayStatus', true);
       }
     },
-    async onCodeUpdate() {
-      try {
+    async initViz() {
+      if (this.$store.state.isPlaying) return;
 
-        if(this.$store.state.isPlaying) return;
-
-        eval.apply(window, [this.$store.state.code]);
-
-        let vizObjRefs = window.getRefs();
-        for(let j = 0; j < vizObjRefs.length; j++) {
-            let vizObjRefResource = await this.$api.get(vizObjRefs[j]);
-            let vizObjRefText = vizObjRefResource.data;
-            eval.apply(window, [vizObjRefText]);
-        }
-
-        window.__init__(scene);
-
-      } catch(ex) {
-        console.log(ex);
+      if(sceneContent) {
+        scene.remove(sceneContent);
       }
+
+      eval.apply(window, [this.$store.state.code]);
+
+      let vizObjRefs = window.getRefs();
+      for(let j = 0; j < vizObjRefs.length; j++) {
+        let vizObjRefResource = await this.$api.get(vizObjRefs[j]);
+        let vizObjRefText = vizObjRefResource.data;
+        eval.apply(window, [vizObjRefText]);
+      }
+
+      let vizObjClass = window.getObj();
+      vizObjInstance = new vizObjClass();
+      sceneContent = await vizObjInstance.init();
+
+      scene.add(sceneContent);
     },
     updateViz() {
-      if (this.$store.state.isPlaying) {
-        lowIdx = 0;
-        midIdx = 0;
-        higIdx = 0;
-        analyser.getByteFrequencyData(array);
-        for(let p=0; p<array.length; p++) {
-          if (array[p] < firstBrk) { lowFreqArray[lowIdx] = array[p]; lowIdx++; }
-          else if (array[p] > secondBrk) { higFreqArray[higIdx] = array[p]; higIdx++; }
-          else { midFreqArray[midIdx] = array[p]; midIdx++; }
-        }
-        window.__renderFrame__(scene, FREQOBJ);
+      if (!this.$store.state.isPlaying) return;
+      
+      lowIdx = 0;
+      midIdx = 0;
+      higIdx = 0;
+      analyser.getByteFrequencyData(array);
+      for(let p=0; p<array.length; p++) {
+        if (array[p] < firstBrk) { lowFreqArray[lowIdx] = array[p]; lowIdx++; }
+        else if (array[p] > secondBrk) { higFreqArray[higIdx] = array[p]; higIdx++; }
+        else { midFreqArray[midIdx] = array[p]; midIdx++; }
       }
+      vizObjInstance.renderFrame(FREQOBJ);
     },
     init: function() {
       container = document.getElementById('container');
