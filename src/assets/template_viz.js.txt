@@ -2,21 +2,25 @@
 
 
 
-
-// A class representing a visualization
+/**
+A class representing a viz environment.
+*/
 function Viz() {
 
+  let vizObj;
 
   /**
-  Method to initialize your viz.
-  Use this to setup your visualization
+  Method to initialize your viz environment.
+  Use this to setup your viz environment.
   */
   this.init = async function() {
+    vizObj = new THREE.Object3D();
+    return vizObj;
   }
 
   /**
   Method called every frame along with sampled audio data at the frame.
-  Use this to update your visualization.
+  Use this to update your viz environment.
   The passed in argument is an object containing sampled audio under following keys:
   FREQOBJ['allFreqArray'] = array;
   FREQOBJ['lowFreqArray'] = lowFreqArray;
