@@ -1,8 +1,37 @@
 
-function __init__() {
-  let cube = new THREE.Mesh(
-    new THREE.CubeGeometry(20, 20, 20),
-    new THREE.MeshNormalMaterial()
-  );
-  return cube;
+
+
+
+
+
+function Viz() {
+
+
+  this.init = async function() {
+  }
+
+
+  this.renderFrame = async function(FREQOBJ) {
+  }
+
+
+}
+
+
+
+
+// --------------------------
+
+
+
+
+function getRefs() {
+  return  [
+  ]
+}
+
+
+
+function getObj() {
+  return Viz;
 }
