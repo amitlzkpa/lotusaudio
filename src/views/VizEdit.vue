@@ -110,6 +110,7 @@
             <div class="cont-ht">
               <vue-codemirror-editor
                 @keydown.enter="handleEnter"
+                @keydown.s="handleS"
                 v-model="code"
                 :option="{
                   theme:'base16-dark',
@@ -393,8 +394,13 @@ export default {
       this.code = null;
     },
     async handleEnter(e) {
-      if (!e.ctrlKey) return;
-      await this.run();
+      if (e.ctrlKey) await this.run();
+    },
+    async handleS(e) {
+      if (e.ctrlKey) {
+        e.preventDefault();
+        await this.save();
+      }
     },
     async updateFromParam() {
       if(this.$route.params.id) {
