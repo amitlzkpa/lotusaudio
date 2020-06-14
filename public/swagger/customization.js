@@ -1,4 +1,4 @@
-document.title = "TripMeUp API Docs";
+document.title = "LotusAudio API Docs";
 
 var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
 link.type = 'image/x-icon';
