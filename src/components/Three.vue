@@ -79,6 +79,11 @@ export default {
         this.$store.commit('updatePlayStatus', true);
       }
     },
+    onContainerResize() {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    },
     async initViz() {
       if (this.$store.state.isPlaying) return;
 
@@ -133,10 +138,9 @@ export default {
       controls.update();
       
       window.addEventListener('resize', () => {
-        camera.aspect = container.clientWidth / container.clientHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(container.clientWidth, container.clientHeight);
+        this.onContainerResize();
       }, false);
+      this.onContainerResize();
 
     },
     animate: function() {

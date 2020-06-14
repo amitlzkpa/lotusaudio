@@ -1,9 +1,9 @@
 <template>
   <div>
 
-    <Split style="height: 100vh">
+    <Split style="height: 100vh" @onDrag="paneWidthUpdate">
       
-      <SplitArea :size="35">
+      <SplitArea :size="paneWidth">
 
         <Navbar />
 
@@ -276,7 +276,7 @@
 
       </SplitArea>
 
-      <SplitArea :size="65">
+      <SplitArea :size="100-paneWidth">
         <Three ref="three" />
       </SplitArea>
       
@@ -310,6 +310,7 @@ export default {
       code: templateViz,
       paymentPointer: "",
       paymentEnabled: false,
+      paneWidth: 40,
       vizAudioSources: [],
       activeTab: 'Code',
       newAudioSource: {
@@ -455,6 +456,14 @@ export default {
         return;
       }
       this.vizAudioSources = this.vizAudioSources.filter(s => s.name !== audioParams.name);
+    },
+    paneWidthUpdate(size) {
+      this.paneWidth = size[0];
+      this.$refs.three.onContainerResize();
+    },
+    togglePaneWidth() {
+      this.paneWidth = (this.paneWidth < 10) ? 60 : 1;
+      setTimeout(() => { this.$refs.three.onContainerResize(); }, 0);
     }
   },
   async mounted() {
@@ -463,8 +472,8 @@ export default {
       await this.wait(100);
     }
 
+    setTimeout(() => { this.$refs.three.onContainerResize(); }, 0);
     await this.updateFromParam();
-
   },
   async beforeDestroy() {
     if (this.$store.state.isPlaying) {
