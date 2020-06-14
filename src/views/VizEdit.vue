@@ -453,7 +453,7 @@ export default {
         return;
       }
       this.vizAudioSources = this.vizAudioSources.filter(s => s.name !== audioParams.name);
-    },
+    }
   },
   async mounted() {
 
@@ -463,6 +463,11 @@ export default {
 
     await this.updateFromParam();
 
+  },
+  async beforeDestroy() {
+    if (this.$store.state.isPlaying) {
+      await this.$refs.three.onPlayClicked();
+    }
   }
 }
 </script>

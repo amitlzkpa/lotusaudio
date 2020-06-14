@@ -320,7 +320,6 @@ export default {
       if (!shouldBeOn && isCurrentlyOn) {
         elem.parentNode.removeChild(elem);
         if(this.$store.state.isPlaying) {
-          // this.$store.commit('updatePlayStatus', false);
           await this.$refs.three.onPlayClicked();
         }
         return;
@@ -346,6 +345,18 @@ export default {
 
     await this.updateFromParam();
 
+  },
+  async beforeDestroy() {
+    if (this.$store.state.isPlaying) {
+      await this.$refs.three.onPlayClicked();
+    }
+    
+    let metas = Array.from(document.getElementsByTagName("meta"));
+    let elem = metas.filter(m => Array.from(m.attributes).filter(a => { return a.name === "name" && a.value === "monetization"; }).length > 0 )[0];
+    let isCurrentlyOn = !!elem;
+    if (isCurrentlyOn) {
+      elem.parentNode.removeChild(elem);
+    }
   }
 }
 </script>
