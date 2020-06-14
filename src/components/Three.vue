@@ -7,6 +7,7 @@
 <script>
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
 
 window.THREE = THREE;
 
@@ -124,6 +125,7 @@ export default {
       scene = new THREE.Scene();
 
       renderer = new THREE.WebGLRenderer({antialias: true});
+      renderer.xr.enabled = true;
       renderer.setSize(container.clientWidth, container.clientHeight);
       container.appendChild(renderer.domElement);
 
@@ -138,15 +140,17 @@ export default {
 
     },
     animate: function() {
-      this.updateViz();
-      requestAnimationFrame(this.animate);
-      controls.update();
-      renderer.render(scene, camera);
+      renderer.setAnimationLoop(() => {
+        this.updateViz();
+        controls.update();
+        renderer.render(scene, camera);
+      });
     }
   },
   mounted() {
     this.init();
     this.animate();
+    document.body.appendChild( VRButton.createButton( renderer ) );
   }
 }
 </script>
