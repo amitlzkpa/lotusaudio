@@ -330,6 +330,26 @@ export default {
           source: "/audio_samples/lotus_03.mp3",
           format: "audio/mpeg"
         },
+        {
+          name: "Sine 30",
+          source: "/audio_samples/sine_30.mp3",
+          format: "audio/mpeg"
+        },
+        {
+          name: "Sine 400",
+          source: "/audio_samples/sine_400.mp3",
+          format: "audio/mpeg"
+        },
+        {
+          name: "Sine Chirp 20-600",
+          source: "/audio_samples/sine-chirp_20-600.mp3",
+          format: "audio/mpeg"
+        },
+        {
+          name: "Sine Sweep 20-20000",
+          source: "/audio_samples/sine-sweep_20-20000.mp3",
+          format: "audio/mpeg"
+        }
       ]
     }
   },
