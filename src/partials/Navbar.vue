@@ -10,7 +10,7 @@
           ></b-icon>
         </router-link>
       </div>
-      <div class="level-item">
+      <div class="level-item" v-if="$auth.isAuthenticated">
         <router-link to="/new">New</router-link>
       </div>
     </div>

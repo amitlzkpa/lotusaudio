@@ -36,6 +36,7 @@
                   <div v-else>
                     <div v-if="!$auth.isLoading && !author || $auth.dbUser._id === author._id">
                       <b-button
+                        v-if="id !== ''"
                         type="is-text"
                         size="is-small"
                         @click="deleteDialog"
