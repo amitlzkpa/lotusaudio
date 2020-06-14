@@ -371,6 +371,7 @@ export default {
       let viz = v.data;
       await this.updateVizInView(viz);
       this.$buefy.toast.open('New save successful');
+      this.$router.replace(`/edit/${viz._id}`);
     },
     async deleteDialog() {
       this.$buefy.dialog.confirm({
@@ -392,6 +393,7 @@ export default {
     },
     async clear() {
       this.code = null;
+      this.$store.commit('updateCode', this.code);
     },
     async handleEnter(e) {
       if (e.ctrlKey) await this.run();
@@ -468,6 +470,8 @@ export default {
     if (this.$store.state.isPlaying) {
       await this.$refs.three.onPlayClicked();
     }
+
+    await this.clear();
   }
 }
 </script>

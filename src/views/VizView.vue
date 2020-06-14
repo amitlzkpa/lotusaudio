@@ -357,6 +357,9 @@ export default {
     if (isCurrentlyOn) {
       elem.parentNode.removeChild(elem);
     }
+
+    this.code = null;
+    this.$store.commit('updateCode', this.code);
   }
 }
 </script>
