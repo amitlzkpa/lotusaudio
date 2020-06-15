@@ -123,8 +123,13 @@ export default {
     init: function() {
       container = document.getElementById('container');
 
+      var user = new THREE.Group();
+      user.position.set(300, 800, 600);
+      scene.add(user);
+      user.add(camera);
+
       camera = new THREE.PerspectiveCamera(60, container.clientWidth/container.clientHeight, 10, 100000);
-      camera.position.set(30, 80, 60);
+      // camera.position.set(300, 800, 600);
       camera.lookAt(new THREE.Vector3());
 
       scene = new THREE.Scene();
