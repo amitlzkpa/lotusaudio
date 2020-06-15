@@ -123,16 +123,16 @@ export default {
     init: function() {
       container = document.getElementById('container');
 
-      var user = new THREE.Group();
-      user.position.set(300, 800, 600);
-      scene.add(user);
-      user.add(camera);
-
       camera = new THREE.PerspectiveCamera(60, container.clientWidth/container.clientHeight, 10, 100000);
       // camera.position.set(300, 800, 600);
       camera.lookAt(new THREE.Vector3());
 
+      var user = new THREE.Group();
+      user.position.set(300, 800, 600);
+      user.add(camera);
+
       scene = new THREE.Scene();
+      scene.add(user);
 
       renderer = new THREE.WebGLRenderer({antialias: true});
       renderer.xr.enabled = true;
