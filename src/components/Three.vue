@@ -37,6 +37,7 @@ let lowIdx, midIdx, higIdx;
 
 let vizObjInstance;
 let sceneContent;
+let vrButton;
 
 
 export default {
@@ -159,7 +160,11 @@ export default {
   mounted() {
     this.init();
     this.animate();
-    document.body.appendChild( VRButton.createButton( renderer ) );
+    vrButton = VRButton.createButton(renderer);
+    document.body.appendChild(vrButton);
+  },
+  async beforeDestroy() {
+    vrButton.remove();
   }
 }
 </script>
