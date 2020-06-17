@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/Home.vue';
 import Profile from '@/views/Profile.vue';
+import Test from '@/views/Test.vue';
 import VizEdit from '@/views/VizEdit.vue';
 import VizView from '@/views/VizView.vue';
 
@@ -38,6 +39,11 @@ export default new VueRouter({
       path: '/profile',
       name: 'profile',
       component: Profile
+    },
+    {
+      path: '/test',
+      name: 'test',
+      component: Test
     }
   ]
 });

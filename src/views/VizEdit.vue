@@ -448,6 +448,8 @@ export default {
       let audioSourceToLoad = (this.vizAudioSources.length > 0) ? this.vizAudioSources[0] : this.defaultSources[0];
       this.$store.commit('updateAudioSource', audioSourceToLoad);
       await this.$refs.three.onAudioSourceUpdate();
+      // get scene config from code
+      // update scene
       await this.$refs.three.initViz();
     },
     addNewAudioSource() {
