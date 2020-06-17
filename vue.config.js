@@ -4,6 +4,7 @@ const PORT = process.env.PORT || 8080;
 
 module.exports = {
   devServer: {
+    https: true,
     progress: false,
     overlay: false,
     proxy: {
