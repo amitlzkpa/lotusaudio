@@ -1,6 +1,6 @@
 <template>
   <div id="wrapper">
-    <div id="container"></div>
+    <div id="container" @mousedown="onMouseDown" @mouseup="onMouseUp"></div>
   </div>
 </template>
 
@@ -137,6 +137,8 @@ export default {
       container.appendChild(renderer.domElement);
 
       controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor  = 0.2;
       controls.update();
       
       window.addEventListener('resize', () => {
@@ -151,6 +153,10 @@ export default {
         controls.update();
         renderer.render(scene, camera);
       });
+    },
+    onMouseDown: function() {
+    },
+    onMouseUp: function() {
     }
   },
   mounted() {
