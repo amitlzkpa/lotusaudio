@@ -7,11 +7,15 @@
 <script>
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+// import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass';
 import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
 
 window.THREE = THREE;
 
-let container, renderer, scene, camera, controls;
+let container, renderer, scene, camera, controls, composer;
 
 
 let audioContext;
@@ -136,6 +140,11 @@ export default {
       renderer.setSize(container.clientWidth, container.clientHeight);
       container.appendChild(renderer.domElement);
 
+      composer = new EffectComposer(renderer);
+      composer.addPass(new RenderPass(scene, camera));
+      // composer.addPass(new UnrealBloomPass(scene, camera));
+      composer.addPass(new GlitchPass());
+
       controls = new OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
       controls.dampingFactor  = 0.2;
@@ -151,7 +160,8 @@ export default {
       renderer.setAnimationLoop(() => {
         this.updateViz();
         controls.update();
-        renderer.render(scene, camera);
+        composer.render();
+        // renderer.render(scene, camera);
       });
     },
     onMouseDown: function() {
