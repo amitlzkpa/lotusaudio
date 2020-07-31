@@ -1,6 +1,10 @@
 <template>
   <div id="wrapper">
-    <div id="container" @mousedown="onMouseDown" @mouseup="onMouseUp"></div>
+    <div
+      id="container"
+      @mousedown="onMouseDown"
+      @mouseup="onMouseUp"
+    ></div>
   </div>
 </template>
 
@@ -9,7 +13,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
-import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
 
 window.THREE = THREE;
@@ -141,7 +145,7 @@ export default {
 
       composer = new EffectComposer(renderer);
       composer.addPass(new RenderPass(scene, camera));
-      composer.addPass(new SMAAPass());
+      composer.addPass(new UnrealBloomPass());
 
       controls = new OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
