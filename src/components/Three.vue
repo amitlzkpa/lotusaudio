@@ -131,7 +131,7 @@ export default {
     init: function() {
       container = document.getElementById('container');
 
-      camera = new THREE.PerspectiveCamera(60, container.clientWidth/container.clientHeight, 10, 100000);
+      camera = new THREE.PerspectiveCamera(60, container.clientWidth/container.clientHeight, 10, 10000000);
       camera.position.set(300, 800, 600);
       camera.lookAt(new THREE.Vector3());
 
