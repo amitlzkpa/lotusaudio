@@ -88,7 +88,7 @@ class XComponent extends Rete.Component {
     builder = async(node) => {
       var out1 = new Rete.Output('num', "Number", numSocket);
       three.updateObjectInScene(this.generateWait(), node.id);
-      await wait(Math.round(Math.random() * 2000) + 200);
+      await wait(Math.round(Math.random() * 4000) + 200);
       let geom = await this.generateGeom(node.data);
       three.updateObjectInScene(geom, node.id);
       return node.addControl(new NumControl(this.editor, 'num')).addOutput(out1);
@@ -98,7 +98,7 @@ class XComponent extends Rete.Component {
       if(this.lastInps === JSON.stringify(node.data)) return;
       outputs['num'] = node.data.num;
       three.updateObjectInScene(this.generateWait(), node.id);
-      await wait(Math.round(Math.random() * 2000) + 200);
+      await wait(Math.round(Math.random() * 4000) + 200);
       let geom = await this.generateGeom(node.data);
       three.updateObjectInScene(geom, node.id);
       this.lastInps = JSON.stringify(node.data);
@@ -136,7 +136,7 @@ class YComponent extends Rete.Component {
     builder = async(node) => {
       var out1 = new Rete.Output('num', "Number", numSocket);
       three.updateObjectInScene(this.generateWait(), node.id);
-      await wait(Math.round(Math.random() * 2000) + 200);
+      await wait(Math.round(Math.random() * 4000) + 200);
       let geom = await this.generateGeom(node.data);
       three.updateObjectInScene(geom, node.id);
       return node.addControl(new NumControl(this.editor, 'num')).addOutput(out1);
@@ -146,7 +146,7 @@ class YComponent extends Rete.Component {
       if(this.lastInps === JSON.stringify(node.data)) return;
       outputs['num'] = node.data.num;
       three.updateObjectInScene(this.generateWait(), node.id);
-      await wait(Math.round(Math.random() * 2000) + 200);
+      await wait(Math.round(Math.random() * 4000) + 200);
       let geom = await this.generateGeom(node.data);
       three.updateObjectInScene(geom, node.id);
       this.lastInps = JSON.stringify(node.data);
@@ -173,7 +173,7 @@ class SquareComponent extends Rete.Component {
       return g;
     }
     
-    lastInps = '{}';
+    lastInps = '{"num":[4],"num2":[3]}';
 
     constructor(){
       super("Square");
@@ -184,13 +184,18 @@ class SquareComponent extends Rete.Component {
       var inp2 = new Rete.Input('num2', "Number2", numSocket);
       var out = new Rete.Output('num3', "Number", numSocket);
 
-      three.updateObjectInScene(this.generateWait(), node.id);
-      await wait(Math.round(Math.random() * 2000) + 200);
-      let geom = await this.generateGeom(node.data);
-      three.updateObjectInScene(geom, node.id);
-
       inp1.addControl(new NumControl(this.editor, 'num'));
       inp2.addControl(new NumControl(this.editor, 'num2'));
+
+      let lInp = JSON.parse(this.lastInps);
+      let updInps = {
+        num: lInp.num[0],
+        num2: lInp.num2[0]
+      };
+      three.updateObjectInScene(this.generateWait(), node.id);
+      await wait(Math.round(Math.random() * 4000) + 200);
+      let geom = await this.generateGeom(updInps);
+      three.updateObjectInScene(geom, node.id);
 
       return node
               .addInput(inp1)
@@ -200,28 +205,27 @@ class SquareComponent extends Rete.Component {
     }
 
     worker = async(node, inputs, outputs) => {
-      if(this.lastInps === JSON.stringify(inputs)) return;
-
       let lInp = JSON.parse(this.lastInps);
 
-      var n1 = inputs['num'].length?(inputs['num'][0] || lInp.num[0]):node.data.num1;
-      var n2 = inputs['num2'].length?(inputs['num2'][0] || lInp.num2[0]):node.data.num2;
+      var n1 = inputs['num'][0] || lInp.num[0];
+      var n2 = inputs['num2'][0] || lInp.num2[0];
       var sum = n1 + n2;
 
       let updInps = {
-        num: n1,
-        num2: n2
+        num: [n1],
+        num2: [n2]
       };
+      if(this.lastInps === JSON.stringify(updInps)) return;
 
       three.updateObjectInScene(this.generateWait(), node.id);
-      await wait(Math.round(Math.random() * 2000) + 200);
+      await wait(Math.round(Math.random() * 4000) + 200);
       let geom = await this.generateGeom(updInps);
       three.updateObjectInScene(geom, node.id);
       
       this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
       outputs['num3'] = sum;
 
-      this.lastInps = JSON.stringify(inputs);
+      this.lastInps = JSON.stringify(updInps);
     }
 }
 
@@ -305,7 +309,7 @@ export default {
     });
     
     this.canvasZoomExtents();
-    editor.trigger('process');
+    // editor.trigger('process');
 
   }
 }
