@@ -146,14 +146,39 @@ class YComponent extends Rete.Component {
 }
 
 class SquareComponent extends Rete.Component {
+
+    generateWait = () => {
+      let g = new THREE.Mesh(
+        new THREE.SphereGeometry(2),
+        new THREE.MeshStandardMaterial({ color: 0xdedede })
+      );
+      return g;
+    }
+
+
+    generateGeom = async(inps) => {
+      console.log(inps);
+      let g = new THREE.Mesh(
+        new THREE.CubeGeometry(10, 10, 10),
+        new THREE.MeshStandardMaterial({ color: 0xdedede })
+      );
+      g.scale.set(inps.num, 1, inps.num2);
+      return g;
+    }
+
     constructor(){
       super("Square");
     }
 
-    builder(node) {
+    builder = async(node) => {
       var inp1 = new Rete.Input('num',"Number", numSocket);
       var inp2 = new Rete.Input('num2', "Number2", numSocket);
       var out = new Rete.Output('num3', "Number", numSocket);
+
+      three.updateObjectInScene(this.generateWait(), node.id);
+      await wait(Math.round(Math.random() * 2000) + 200);
+      let geom = await this.generateGeom(node.data);
+      three.updateObjectInScene(geom, node.id);
 
       inp1.addControl(new NumControl(this.editor, 'num'));
       inp2.addControl(new NumControl(this.editor, 'num2'));
@@ -165,10 +190,15 @@ class SquareComponent extends Rete.Component {
               .addOutput(out);
     }
 
-    worker(node, inputs, outputs) {
+    worker = async(node, inputs, outputs) => {
       var n1 = inputs['num'].length?inputs['num'][0]:node.data.num1;
       var n2 = inputs['num2'].length?inputs['num2'][0]:node.data.num2;
       var sum = n1 + n2;
+
+      three.updateObjectInScene(this.generateWait(), node.id);
+      await wait(Math.round(Math.random() * 2000) + 200);
+      let geom = await this.generateGeom(inputs);
+      three.updateObjectInScene(geom, node.id);
       
       this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
       outputs['num3'] = sum;
