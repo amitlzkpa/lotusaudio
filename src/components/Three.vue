@@ -182,9 +182,12 @@ export default {
     updateObjectInScene(obj, id) {
       if (nodeEdObjs[id]) {
         scene.remove(nodeEdObjs[id]);
+        nodeEdObjs[id] = null;
       }
-      scene.add(obj);
-      nodeEdObjs[id] = obj;
+      if (obj) {
+        scene.add(obj);
+        nodeEdObjs[id] = obj;
+      }
     }
   },
   mounted() {

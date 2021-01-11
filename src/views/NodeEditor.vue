@@ -40,6 +40,10 @@ let editor, engine;
 let three;
 
 
+let wait = async function(ms) {
+	return new Promise((resolve) => setTimeout(() => resolve(), ms));
+}
+
 
 class NumControl extends Rete.Control {
 
@@ -56,6 +60,14 @@ class NumControl extends Rete.Control {
 
 class XComponent extends Rete.Component {
 
+    generateWait = () => {
+      let g = new THREE.Mesh(
+        new THREE.SphereGeometry(2),
+        new THREE.MeshStandardMaterial({ color: 0xff0000 })
+      );
+      g.position.set(0, 0, 40);
+      return g;
+    }
 
     generateGeom = async(inps) => {
       let g = new THREE.Mesh(
@@ -73,6 +85,8 @@ class XComponent extends Rete.Component {
 
     builder = async(node) => {
       var out1 = new Rete.Output('num', "Number", numSocket);
+      three.updateObjectInScene(this.generateWait(), node.id);
+      await wait(Math.round(Math.random() * 2000) + 200);
       let geom = await this.generateGeom(node.data);
       three.updateObjectInScene(geom, node.id);
       return node.addControl(new NumControl(this.editor, 'num')).addOutput(out1);
@@ -80,12 +94,23 @@ class XComponent extends Rete.Component {
 
     worker = async(node, inputs, outputs) => {
       outputs['num'] = node.data.num;
+      three.updateObjectInScene(this.generateWait(), node.id);
+      await wait(Math.round(Math.random() * 2000) + 200);
       let geom = await this.generateGeom(node.data);
       three.updateObjectInScene(geom, node.id);
     }
 }
 
 class YComponent extends Rete.Component {
+
+    generateWait = () => {
+      let g = new THREE.Mesh(
+        new THREE.SphereGeometry(2),
+        new THREE.MeshStandardMaterial({ color: 0x0085fe })
+      );
+      g.position.set(40, 0, 0);
+      return g;
+    }
 
 
     generateGeom = async(inps) => {
@@ -104,6 +129,8 @@ class YComponent extends Rete.Component {
 
     builder = async(node) => {
       var out1 = new Rete.Output('num', "Number", numSocket);
+      three.updateObjectInScene(this.generateWait(), node.id);
+      await wait(Math.round(Math.random() * 2000) + 200);
       let geom = await this.generateGeom(node.data);
       three.updateObjectInScene(geom, node.id);
       return node.addControl(new NumControl(this.editor, 'num')).addOutput(out1);
@@ -111,6 +138,8 @@ class YComponent extends Rete.Component {
 
     worker = async(node, inputs, outputs) => {
       outputs['num'] = node.data.num;
+      three.updateObjectInScene(this.generateWait(), node.id);
+      await wait(Math.round(Math.random() * 2000) + 200);
       let geom = await this.generateGeom(node.data);
       three.updateObjectInScene(geom, node.id);
     }
