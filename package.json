@@ -34,6 +34,7 @@
     "rete": "^1.4.5-rc.1",
     "rete-area-plugin": "^0.2.1",
     "rete-comment-plugin": "^0.7.0-rc.1",
+    "rete-connection-mastery-plugin": "^0.2.4",
     "rete-connection-plugin": "^0.9.0",
     "rete-context-menu-plugin": "^0.6.0-rc.1",
     "rete-history-plugin": "^0.2.1",

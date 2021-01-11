@@ -9,13 +9,14 @@
       <div class="threejsContainer">
         <Three ref="three" />
       </div>
-      <div class="nodeeditorContainer" v-if="nodeEditorIsOn">
+      <div class="nodeeditorContainer" v-show="nodeEditorIsOn">
         <div style="width: 420px; height: 360px;" id="rete"></div>
       </div>
   </div>
 </template>
 
 <script>
+import * as THREE from 'three';
 import Three from "@/components/Three.vue";
 
 import Rete from "rete";
@@ -25,12 +26,20 @@ import ContextMenuPlugin from 'rete-context-menu-plugin';
 import AreaPlugin from 'rete-area-plugin';
 import CommentPlugin from 'rete-comment-plugin';
 import HistoryPlugin from 'rete-history-plugin';
-// import ConnectionMasteryPlugin from 'rete-connection-mastery-plugin';
+import ConnectionMasteryPlugin from 'rete-connection-mastery-plugin';
 
 import VueNumControl from '@/components/NodeComponent.vue'
 
 
-var numSocket = new Rete.Socket('Number value');
+var numSocket = new Rete.Socket('Number');
+var anyTypeSocket = new Rete.Socket('Any type');
+numSocket.combineWith(anyTypeSocket);
+
+
+let editor, engine;
+let three;
+
+
 
 class NumControl extends Rete.Control {
 
@@ -48,52 +57,85 @@ class NumControl extends Rete.Control {
 class NumComponent extends Rete.Component {
 
     constructor(){
-        super("Number");
+      super("Number");
     }
 
     builder(node) {
-        var out1 = new Rete.Output('num', "Number", numSocket);
+      var out1 = new Rete.Output('num', "Number", numSocket);
 
-        return node.addControl(new NumControl(this.editor, 'num')).addOutput(out1);
+      let cube = new THREE.Mesh(
+        new THREE.CubeGeometry(10, 10, 10),
+        new THREE.MeshNormalMaterial()
+      );
+      cube.position.set(node.data.num * 10, 0, 0);
+      // cube.scale.set(node.data.num, 0, 0);
+      three.updateObjectInScene(cube, node.id);
+
+      return node.addControl(new NumControl(this.editor, 'num')).addOutput(out1);
     }
 
     worker(node, inputs, outputs) {
-        outputs['num'] = node.data.num;
+      outputs['num'] = node.data.num;
+
+      let cube = new THREE.Mesh(
+        new THREE.CubeGeometry(10, 10, 10),
+        new THREE.MeshNormalMaterial()
+      );
+      cube.position.set(node.data.num * 10, 0, 0);
+      // cube.scale.set(node.data.num, 0, 0);
+      three.updateObjectInScene(cube, node.id);
     }
 }
 
 class AddComponent extends Rete.Component {
     constructor(){
-        super("Add");
+      super("Add");
     }
 
     builder(node) {
-        var inp1 = new Rete.Input('num',"Number", numSocket);
-        var inp2 = new Rete.Input('num2', "Number2", numSocket);
-        var out = new Rete.Output('num3', "Number", numSocket);
+      var inp1 = new Rete.Input('num',"Number", numSocket);
+      var inp2 = new Rete.Input('num2', "Number2", numSocket);
+      var out = new Rete.Output('num3', "Number", numSocket);
 
-        inp1.addControl(new NumControl(this.editor, 'num'))
-        inp2.addControl(new NumControl(this.editor, 'num2'))
+      inp1.addControl(new NumControl(this.editor, 'num'));
+      inp2.addControl(new NumControl(this.editor, 'num2'));
 
-        return node
-            .addInput(inp1)
-            .addInput(inp2)
-            .addControl(new NumControl(this.editor, 'preview', true))
-            .addOutput(out);
+      return node
+              .addInput(inp1)
+              .addInput(inp2)
+              .addControl(new NumControl(this.editor, 'preview', true))
+              .addOutput(out);
     }
 
     worker(node, inputs, outputs) {
-        var n1 = inputs['num'].length?inputs['num'][0]:node.data.num1;
-        var n2 = inputs['num2'].length?inputs['num2'][0]:node.data.num2;
-        var sum = n1 + n2;
-        
-        this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
-        outputs['num3'] = sum;
+      var n1 = inputs['num'].length?inputs['num'][0]:node.data.num1;
+      var n2 = inputs['num2'].length?inputs['num2'][0]:node.data.num2;
+      var sum = n1 + n2;
+      
+      this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
+      outputs['num3'] = sum;
     }
 }
 
+class PanelComponent extends Rete.Component {
 
-let editor, engine;
+  constructor(){
+    super("Panel");
+  }
+
+  builder(node) {
+    var inp = new Rete.Input('result',"Result", anyTypeSocket, true);
+
+    return node.addInput(inp);
+  }
+
+  worker(node, inputs, outputs) {
+    console.log(node);
+    console.log(inputs);
+    console.log(outputs);
+    console.log('------------');
+  }
+}
 
 
 export default {
@@ -116,6 +158,7 @@ export default {
     }
   },
   async mounted() {
+    three = this.$refs.three;
 
     let container = document.querySelector('#rete');
     editor = new Rete.NodeEditor('demo@0.1.0', container);
@@ -125,38 +168,38 @@ export default {
     editor.use(AreaPlugin);
     editor.use(CommentPlugin);
     editor.use(HistoryPlugin);
-    // editor.use(ConnectionMasteryPlugin);
+    editor.use(ConnectionMasteryPlugin);
 
     engine = new Rete.Engine('demo@0.1.0');
 
-    let components = [new NumComponent(), new AddComponent()];
+    let components = [new NumComponent(), new AddComponent(), new PanelComponent()];
     components.map(c => {
       editor.register(c);
       engine.register(c);
     });
 
-    let n1 = await components[0].createNode({num: 2});
-    let n2 = await components[0].createNode({num: 0});
+    let n1 = await components[0].createNode({num: 4});
+    let n2 = await components[0].createNode({num: 3});
     let n3 = await components[0].createNode({num: 7});
     let add1 = await components[1].createNode();
-    let add2 = await components[1].createNode();
+    let res = await components[2].createNode();
 
     n1.position = [80, 200];
     n2.position = [80, 400];
-    n3.position = [400, 600];
-    add1.position = [500, 240];
-    add2.position = [1000, 400];
+    n3.position = [600, 600];
+    add1.position = [600, 300];
+    res.position = [1200, 400];
 
     editor.addNode(n1);
     editor.addNode(n2);
     editor.addNode(n3);
     editor.addNode(add1);
-    editor.addNode(add2);
+    editor.addNode(res);
 
     editor.connect(n1.outputs.get('num'), add1.inputs.get('num'));
     editor.connect(n2.outputs.get('num'), add1.inputs.get('num2'));
-    editor.connect(add1.outputs.get('num3'), add2.inputs.get('num'));
-    editor.connect(n3.outputs.get('num'), add2.inputs.get('num2'));
+    editor.connect(add1.outputs.get('num3'), res.inputs.get('result'));
+    editor.connect(n3.outputs.get('num'), res.inputs.get('result'));
 
     editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async () => {
       await engine.abort();
@@ -165,8 +208,6 @@ export default {
     
     editor.trigger('process');
     this.canvasZoomExtents();
-
-    console.log(editor);
 
   }
 }

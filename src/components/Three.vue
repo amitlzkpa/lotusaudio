@@ -47,6 +47,9 @@ let sceneContent;
 let vrButton;
 
 
+let nodeEdObjs = {};
+
+
 export default {
   name: 'Three',
   data() {
@@ -132,7 +135,7 @@ export default {
       container = document.getElementById('container');
 
       camera = new THREE.PerspectiveCamera(60, container.clientWidth/container.clientHeight, 10, 10000000);
-      camera.position.set(300, 800, 600);
+      camera.position.set(30, 80, 60);
       camera.lookAt(new THREE.Vector3());
 
       scene = new THREE.Scene();
@@ -169,6 +172,11 @@ export default {
     onMouseDown: function() {
     },
     onMouseUp: function() {
+    },
+    updateObjectInScene(obj, id) {
+      if (nodeEdObjs[id]) nodeEdObjs[id].remove();
+      nodeEdObjs[id] = obj;
+      scene.add(obj);
     }
   },
   mounted() {
