@@ -54,42 +54,71 @@ class NumControl extends Rete.Control {
   }
 }
 
-class NumComponent extends Rete.Component {
+class XComponent extends Rete.Component {
 
-    constructor(){
-      super("Number");
+
+    generateGeom = async(inps) => {
+      let g = new THREE.Mesh(
+        new THREE.CubeGeometry(10, 10, 10),
+        new THREE.MeshStandardMaterial({ color: 0xff0000 })
+      );
+      g.scale.set(inps.num, 1, 1);
+      g.position.set(0, 0, 40);
+      return g;
     }
 
-    builder(node) {
+    constructor(){
+      super("XComponent");
+    }
+
+    builder = async(node) => {
       var out1 = new Rete.Output('num', "Number", numSocket);
-
-      let cube = new THREE.Mesh(
-        new THREE.CubeGeometry(10, 10, 10),
-        new THREE.MeshNormalMaterial()
-      );
-      cube.position.set(node.data.num * 10, 0, 0);
-      // cube.scale.set(node.data.num, 0, 0);
-      three.updateObjectInScene(cube, node.id);
-
+      let geom = await this.generateGeom(node.data);
+      three.updateObjectInScene(geom, node.id);
       return node.addControl(new NumControl(this.editor, 'num')).addOutput(out1);
     }
 
-    worker(node, inputs, outputs) {
+    worker = async(node, inputs, outputs) => {
       outputs['num'] = node.data.num;
-
-      let cube = new THREE.Mesh(
-        new THREE.CubeGeometry(10, 10, 10),
-        new THREE.MeshNormalMaterial()
-      );
-      cube.position.set(node.data.num * 10, 0, 0);
-      // cube.scale.set(node.data.num, 0, 0);
-      three.updateObjectInScene(cube, node.id);
+      let geom = await this.generateGeom(node.data);
+      three.updateObjectInScene(geom, node.id);
     }
 }
 
-class AddComponent extends Rete.Component {
+class YComponent extends Rete.Component {
+
+
+    generateGeom = async(inps) => {
+      let g = new THREE.Mesh(
+        new THREE.CubeGeometry(10, 10, 10),
+        new THREE.MeshStandardMaterial({ color: 0x0085fe })
+      );
+      g.scale.set(1, 1, inps.num);
+      g.position.set(40, 0, 0);
+      return g;
+    }
+
     constructor(){
-      super("Add");
+      super("YComponent");
+    }
+
+    builder = async(node) => {
+      var out1 = new Rete.Output('num', "Number", numSocket);
+      let geom = await this.generateGeom(node.data);
+      three.updateObjectInScene(geom, node.id);
+      return node.addControl(new NumControl(this.editor, 'num')).addOutput(out1);
+    }
+
+    worker = async(node, inputs, outputs) => {
+      outputs['num'] = node.data.num;
+      let geom = await this.generateGeom(node.data);
+      three.updateObjectInScene(geom, node.id);
+    }
+}
+
+class SquareComponent extends Rete.Component {
+    constructor(){
+      super("Square");
     }
 
     builder(node) {
@@ -172,17 +201,17 @@ export default {
 
     engine = new Rete.Engine('demo@0.1.0');
 
-    let components = [new NumComponent(), new AddComponent(), new PanelComponent()];
+    let components = [new XComponent(), new YComponent(), new SquareComponent(), new PanelComponent()];
     components.map(c => {
       editor.register(c);
       engine.register(c);
     });
 
     let n1 = await components[0].createNode({num: 4});
-    let n2 = await components[0].createNode({num: 3});
+    let n2 = await components[1].createNode({num: 3});
     let n3 = await components[0].createNode({num: 7});
-    let add1 = await components[1].createNode();
-    let res = await components[2].createNode();
+    let add1 = await components[2].createNode();
+    let res = await components[3].createNode();
 
     n1.position = [80, 200];
     n2.position = [80, 400];
@@ -201,13 +230,13 @@ export default {
     editor.connect(add1.outputs.get('num3'), res.inputs.get('result'));
     editor.connect(n3.outputs.get('num'), res.inputs.get('result'));
 
-    editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async () => {
+    editor.on('process', async () => {
       await engine.abort();
       await engine.process(editor.toJSON());
     });
     
-    editor.trigger('process');
     this.canvasZoomExtents();
+    editor.trigger('process');
 
   }
 }

@@ -13,7 +13,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+// import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
 
 window.THREE = THREE;
@@ -146,9 +146,15 @@ export default {
       renderer.setSize(container.clientWidth, container.clientHeight);
       container.appendChild(renderer.domElement);
 
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+      scene.add(directionalLight);
+
+      const light = new THREE.AmbientLight(0x404040);
+      scene.add(light);
+
       composer = new EffectComposer(renderer);
       composer.addPass(new RenderPass(scene, camera));
-      composer.addPass(new UnrealBloomPass());
+      // composer.addPass(new UnrealBloomPass());
 
       controls = new OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
@@ -174,9 +180,12 @@ export default {
     onMouseUp: function() {
     },
     updateObjectInScene(obj, id) {
-      if (nodeEdObjs[id]) nodeEdObjs[id].remove();
-      nodeEdObjs[id] = obj;
+      console.log(nodeEdObjs);
+      if (nodeEdObjs[id]) {
+        scene.remove(nodeEdObjs[id]);
+      }
       scene.add(obj);
+      nodeEdObjs[id] = obj;
     }
   },
   mounted() {
