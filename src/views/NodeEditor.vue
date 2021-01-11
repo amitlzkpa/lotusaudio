@@ -79,6 +79,8 @@ class XComponent extends Rete.Component {
       return g;
     }
 
+    lastInps = '';
+
     constructor(){
       super("XComponent");
     }
@@ -93,11 +95,13 @@ class XComponent extends Rete.Component {
     }
 
     worker = async(node, inputs, outputs) => {
+      if(this.lastInps === JSON.stringify(node.data)) return;
       outputs['num'] = node.data.num;
       three.updateObjectInScene(this.generateWait(), node.id);
       await wait(Math.round(Math.random() * 2000) + 200);
       let geom = await this.generateGeom(node.data);
       three.updateObjectInScene(geom, node.id);
+      this.lastInps = JSON.stringify(node.data);
     }
 }
 
@@ -123,6 +127,8 @@ class YComponent extends Rete.Component {
       return g;
     }
 
+    lastInps = '';
+
     constructor(){
       super("YComponent");
     }
@@ -137,11 +143,13 @@ class YComponent extends Rete.Component {
     }
 
     worker = async(node, inputs, outputs) => {
+      if(this.lastInps === JSON.stringify(node.data)) return;
       outputs['num'] = node.data.num;
       three.updateObjectInScene(this.generateWait(), node.id);
       await wait(Math.round(Math.random() * 2000) + 200);
       let geom = await this.generateGeom(node.data);
       three.updateObjectInScene(geom, node.id);
+      this.lastInps = JSON.stringify(node.data);
     }
 }
 
@@ -157,7 +165,6 @@ class SquareComponent extends Rete.Component {
 
 
     generateGeom = async(inps) => {
-      console.log(inps);
       let g = new THREE.Mesh(
         new THREE.CubeGeometry(10, 10, 10),
         new THREE.MeshStandardMaterial({ color: 0xdedede })
@@ -165,6 +172,8 @@ class SquareComponent extends Rete.Component {
       g.scale.set(inps.num, 1, inps.num2);
       return g;
     }
+    
+    lastInps = '{}';
 
     constructor(){
       super("Square");
@@ -191,17 +200,28 @@ class SquareComponent extends Rete.Component {
     }
 
     worker = async(node, inputs, outputs) => {
-      var n1 = inputs['num'].length?inputs['num'][0]:node.data.num1;
-      var n2 = inputs['num2'].length?inputs['num2'][0]:node.data.num2;
+      if(this.lastInps === JSON.stringify(inputs)) return;
+
+      let lInp = JSON.parse(this.lastInps);
+
+      var n1 = inputs['num'].length?(inputs['num'][0] || lInp.num[0]):node.data.num1;
+      var n2 = inputs['num2'].length?(inputs['num2'][0] || lInp.num2[0]):node.data.num2;
       var sum = n1 + n2;
+
+      let updInps = {
+        num: n1,
+        num2: n2
+      };
 
       three.updateObjectInScene(this.generateWait(), node.id);
       await wait(Math.round(Math.random() * 2000) + 200);
-      let geom = await this.generateGeom(inputs);
+      let geom = await this.generateGeom(updInps);
       three.updateObjectInScene(geom, node.id);
       
       this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
       outputs['num3'] = sum;
+
+      this.lastInps = JSON.stringify(inputs);
     }
 }
 
@@ -217,12 +237,6 @@ class PanelComponent extends Rete.Component {
     return node.addInput(inp);
   }
 
-  worker(node, inputs, outputs) {
-    console.log(node);
-    console.log(inputs);
-    console.log(outputs);
-    console.log('------------');
-  }
 }
 
 
