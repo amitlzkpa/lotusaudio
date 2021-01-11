@@ -6,6 +6,8 @@ import Test from '@/views/Test.vue';
 import VizEdit from '@/views/VizEdit.vue';
 import VizView from '@/views/VizView.vue';
 
+import NodeEditor from '@/views/NodeEditor.vue';
+
 import { authGuard } from "@/auth/authGuard";
 
 Vue.use(VueRouter);
@@ -39,6 +41,11 @@ export default new VueRouter({
       path: '/profile',
       name: 'profile',
       component: Profile
+    },
+    {
+      path: '/node-editor',
+      name: 'node-editor',
+      component: NodeEditor
     },
     {
       path: '/test',
