@@ -1,12 +1,15 @@
 <template>
-  <input
-    type="number"
-    :readonly="readonly"
-    :value="value"
-    @input="change($event)"
-    @dblclick.stop=""
-    @pointerdown.stop=""
-    @pointermove.stop=""/>
+  <div>
+    <b-progress v-if="isLoading"></b-progress>
+    <input
+      type="number"
+      :readonly="readonly"
+      :value="value"
+      @input="change($event)"
+      @dblclick.stop=""
+      @pointerdown.stop=""
+      @pointermove.stop=""/>
+  </div>
 </template>
 
 
@@ -18,6 +21,7 @@ export default {
   data() {
     return {
       value: 0,
+      isLoading: false
     }
   },
   methods: {

@@ -209,26 +209,22 @@ export default {
 
     let n1 = await components[0].createNode({num: 4});
     let n2 = await components[1].createNode({num: 3});
-    let n3 = await components[0].createNode({num: 7});
     let add1 = await components[2].createNode();
     let res = await components[3].createNode();
 
     n1.position = [80, 200];
     n2.position = [80, 400];
-    n3.position = [600, 600];
     add1.position = [600, 300];
     res.position = [1200, 400];
 
     editor.addNode(n1);
     editor.addNode(n2);
-    editor.addNode(n3);
     editor.addNode(add1);
     editor.addNode(res);
 
     editor.connect(n1.outputs.get('num'), add1.inputs.get('num'));
     editor.connect(n2.outputs.get('num'), add1.inputs.get('num2'));
     editor.connect(add1.outputs.get('num3'), res.inputs.get('result'));
-    editor.connect(n3.outputs.get('num'), res.inputs.get('result'));
 
     editor.on('process', async () => {
       await engine.abort();

@@ -180,7 +180,6 @@ export default {
     onMouseUp: function() {
     },
     updateObjectInScene(obj, id) {
-      console.log(nodeEdObjs);
       if (nodeEdObjs[id]) {
         scene.remove(nodeEdObjs[id]);
       }
