@@ -137,26 +137,34 @@ export default {
 
     let n1 = await components[0].createNode({num: 2});
     let n2 = await components[0].createNode({num: 0});
-    let add = await components[1].createNode();
+    let n3 = await components[0].createNode({num: 7});
+    let add1 = await components[1].createNode();
+    let add2 = await components[1].createNode();
 
     n1.position = [80, 200];
     n2.position = [80, 400];
-    add.position = [500, 240];
+    n3.position = [400, 600];
+    add1.position = [500, 240];
+    add2.position = [1000, 400];
 
     editor.addNode(n1);
     editor.addNode(n2);
-    editor.addNode(add);
+    editor.addNode(n3);
+    editor.addNode(add1);
+    editor.addNode(add2);
 
-    editor.connect(n1.outputs.get('num'), add.inputs.get('num'));
-    editor.connect(n2.outputs.get('num'), add.inputs.get('num2'));
+    editor.connect(n1.outputs.get('num'), add1.inputs.get('num'));
+    editor.connect(n2.outputs.get('num'), add1.inputs.get('num2'));
+    editor.connect(add1.outputs.get('num3'), add2.inputs.get('num'));
+    editor.connect(n3.outputs.get('num'), add2.inputs.get('num2'));
 
     editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async () => {
       await engine.abort();
       await engine.process(editor.toJSON());
     });
     
-    this.canvasZoomExtents();
     editor.trigger('process');
+    this.canvasZoomExtents();
 
     console.log(editor);
 
@@ -181,7 +189,7 @@ export default {
   bottom: 20px;
   left: 20px;
   z-index: 10;
-  background-color: rosybrown;
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 </style>
