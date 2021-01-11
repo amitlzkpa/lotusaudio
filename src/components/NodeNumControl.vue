@@ -1,14 +1,20 @@
 <template>
   <div>
     <b-progress v-if="isLoading"></b-progress>
-    <input
-      type="number"
-      :readonly="readonly"
-      :value="value"
-      @input="change($event)"
-      @dblclick.stop=""
-      @pointerdown.stop=""
-      @pointermove.stop=""/>
+    <b-field>
+      <b-input
+        placeholder="Number"
+        type="number"
+        :readonly="readonly"
+        :value="value"
+        @input="change($event)"
+        @dblclick.stop=""
+        @pointerdown.stop=""
+        @pointermove.stop=""
+        min="1"
+        max="10">
+      </b-input>
+    </b-field>
   </div>
 </template>
 
@@ -26,7 +32,7 @@ export default {
   },
   methods: {
     change(e){
-      this.value = +e.target.value;
+      this.value = +e;
       this.update();
     },
     update() {

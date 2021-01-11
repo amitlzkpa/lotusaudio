@@ -28,7 +28,7 @@ import CommentPlugin from 'rete-comment-plugin';
 import HistoryPlugin from 'rete-history-plugin';
 import ConnectionMasteryPlugin from 'rete-connection-mastery-plugin';
 
-import VueNumControl from '@/components/NodeComponent.vue'
+import NodeNumControl from '@/components/NodeNumControl.vue'
 
 
 var numSocket = new Rete.Socket('Number');
@@ -45,7 +45,7 @@ class NumControl extends Rete.Control {
 
   constructor(emitter, key, readonly) {
     super(key);
-    this.component = VueNumControl;
+    this.component = NodeNumControl;
     this.props = { emitter, ikey: key, readonly };
   }
 
