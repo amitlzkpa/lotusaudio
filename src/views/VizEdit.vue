@@ -428,6 +428,9 @@ export default {
       }
     },
     async updateFromParam() {
+      if (this.$route.params.id === 'new_viz.js') {
+        return;
+      }
       if (this.$route.params.id) {
         let resp = await this.$api.get(`/api/vizs/id/${this.$route.params.id}`);
         let viz = resp.data;
