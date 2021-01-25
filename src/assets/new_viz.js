@@ -48,13 +48,14 @@ function Viz() {
 
 
   
-  let v = [
-    new THREE.Vector3(0,    0,    0),
+  let triangle = [
     new THREE.Vector3(0,    0,    600),
-    new THREE.Vector3(520,  0,    300),
-    new THREE.Vector3(260,  600,  300),
-    // new THREE.Vector3(400,  400,  200)
+    new THREE.Vector3(520,  0,    -300),
+    new THREE.Vector3(-520,  0,    -300),
+    new THREE.Vector3(0,    600,  0),
   ];
+  
+  let v = triangle;
 
   let prev = new THREE.Vector3(200, 0, 340);
 
@@ -101,6 +102,8 @@ function Viz() {
     let particleSystem = new THREE.Points(particles, pMaterial);
 
     retObj.add(particleSystem);
+
+    retObj.add(new THREE.AxesHelper(100));
 
     return retObj;
   }
