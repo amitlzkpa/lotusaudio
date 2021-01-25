@@ -62,7 +62,7 @@ export default {
 }
 
 .cont-ht {
-  height: 82vh;
+  height: 80vh;
 }
 
 .side-pad {
