@@ -2,9 +2,6 @@
 
 
 
-/**
-A class representing a viz environment.
-*/
 function Viz() {
 
   let vizObj;

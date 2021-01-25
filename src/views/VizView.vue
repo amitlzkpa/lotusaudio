@@ -216,7 +216,7 @@
 import Navbar from '@/partials/Navbar.vue';
 import AudioItem from "@/components/AudioItem.vue";
 import Three from "@/components/Three.vue";
-import templateViz from "!raw-loader!@/assets/template_viz.js.txt";
+import templateViz from "!raw-loader!@/assets/template_viz.js";
 
 export default {
   name: 'VizEdit',
