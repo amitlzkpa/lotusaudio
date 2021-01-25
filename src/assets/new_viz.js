@@ -49,9 +49,11 @@ function Viz() {
 
   
   let v = [
-    new THREE.Vector3(0,    0,  0),
-    new THREE.Vector3(0,    0,  600),
-    new THREE.Vector3(520,  0,  300)
+    new THREE.Vector3(0,    0,    0),
+    new THREE.Vector3(0,    0,    600),
+    new THREE.Vector3(520,  0,    300),
+    new THREE.Vector3(260,  600,  300),
+    // new THREE.Vector3(400,  400,  200)
   ];
 
   let prev = new THREE.Vector3(200, 0, 340);
@@ -72,7 +74,7 @@ function Viz() {
       let r = pRat * size;
 
 
-      let i = getRandomInt(3);
+      let i = getRandomInt(v.length);
       let pP = prev.clone();
       let rP = v[i].clone();
       let np = getPointInBetweenByLen(pP, rP);
