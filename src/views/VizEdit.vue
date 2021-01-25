@@ -291,7 +291,8 @@
 import Navbar from '@/partials/Navbar.vue';
 import AudioItem from "@/components/AudioItem.vue";
 import Three from "@/components/Three.vue";
-import templateViz from "!raw-loader!@/assets/template_viz.js.txt";
+// import templateViz from "!raw-loader!@/assets/template_viz.js.txt";
+import newViz from "!raw-loader!@/assets/new_viz.js";
 
 export default {
   name: 'VizEdit',
@@ -308,7 +309,7 @@ export default {
       visibility: "public",
       short_description: "",
       description: "",
-      code: templateViz,
+      code: newViz,
       paymentPointer: "",
       paymentEnabled: false,
       paneWidth: 40,
@@ -427,7 +428,7 @@ export default {
       }
     },
     async updateFromParam() {
-      if(this.$route.params.id) {
+      if (this.$route.params.id) {
         let resp = await this.$api.get(`/api/vizs/id/${this.$route.params.id}`);
         let viz = resp.data;
         await this.updateVizInView(viz);
