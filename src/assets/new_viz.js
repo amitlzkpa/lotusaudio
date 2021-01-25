@@ -83,13 +83,6 @@ function Viz() {
       particle = new THREE.Vector3(np.x, np.y, np.z);
       prev = np;
 
-      // let phi = Math.random() * Math.PI,
-      //     theta = Math.random() * Math.PI;
-      // let pX = r * Math.sin(phi) * Math.cos(theta),
-      //     pZ = r * Math.cos(phi),
-      //     pY = r * Math.sin(phi) * Math.sin(theta),
-      //     particle = new THREE.Vector3(pX, pY, pZ);
-
       particles.vertices.push(particle);
       let col = new THREE.Color(1 - pRat, 0, 1);
       particles.colors.push(col);
