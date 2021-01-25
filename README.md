@@ -6,6 +6,9 @@ Enable monetization of your creations using Web Monetization.
 
 ## Developer
 
+### Node Editor
+![Node editor](./public/imgs/node-editor.gif)
+
 ## Project setup
 ```
 npm install
