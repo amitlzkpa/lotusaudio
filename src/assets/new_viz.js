@@ -58,6 +58,7 @@ function Viz() {
 
   let prev = new THREE.Vector3(200, 0, 340);
 
+  let t = v.length / (v.length + 4);
   
 
   this.init = async function() {
@@ -77,7 +78,7 @@ function Viz() {
       let i = getRandomInt(v.length);
       let pP = prev.clone();
       let rP = v[i].clone();
-      let np = getPointInBetweenByT(pP, rP, 0.5);
+      let np = getPointInBetweenByT(pP, rP, t);
       particle = new THREE.Vector3(np.x, np.y, np.z);
       prev = np;
 
