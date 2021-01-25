@@ -4,8 +4,8 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-function getPointInBetweenByLen(a, b) {
-  let pp = new THREE.Vector3((a.x+b.x)/2, (a.y+b.y)/2, (a.z+b.z)/2);
+function getPointInBetweenByT(a, b, t=0.5) {
+  let pp = new THREE.Vector3((a.x+b.x) * t, (a.y+b.y) * t, (a.z+b.z) * t);
   return pp;
 }
 
@@ -77,7 +77,7 @@ function Viz() {
       let i = getRandomInt(v.length);
       let pP = prev.clone();
       let rP = v[i].clone();
-      let np = getPointInBetweenByLen(pP, rP);
+      let np = getPointInBetweenByT(pP, rP, 0.5);
       particle = new THREE.Vector3(np.x, np.y, np.z);
       prev = np;
 
