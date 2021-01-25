@@ -20,7 +20,7 @@ export default new VueRouter({
       component: Home
     },
     {
-      path: '/new',
+      path: '/new/:id?',
       name: 'new',
       component: VizEdit,
     },
