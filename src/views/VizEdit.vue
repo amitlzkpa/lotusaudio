@@ -291,7 +291,7 @@
 import Navbar from '@/partials/Navbar.vue';
 import AudioItem from "@/components/AudioItem.vue";
 import Three from "@/components/Three.vue";
-// import templateViz from "!raw-loader!@/assets/template_viz.js";
+import templateViz from "!raw-loader!@/assets/template_viz.js";
 import newViz from "!raw-loader!@/assets/new_viz.js";
 
 export default {
@@ -309,7 +309,7 @@ export default {
       visibility: "public",
       short_description: "",
       description: "",
-      code: newViz,
+      code: templateViz,
       paymentPointer: "",
       paymentEnabled: false,
       paneWidth: 40,
@@ -429,6 +429,7 @@ export default {
     },
     async updateFromParam() {
       if (this.$route.params.id === 'new_viz.js') {
+        this.code = newViz;
         this.$store.commit('updateCode', this.code);
         let audioSourceToLoad = (this.vizAudioSources.length > 0) ? this.vizAudioSources[0] : this.defaultSources[3];
         this.$store.commit('updateAudioSource', audioSourceToLoad);

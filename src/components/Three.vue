@@ -151,6 +151,10 @@ export default {
       controls.enableDamping = true;
       controls.dampingFactor  = 0.2;
       controls.update();
+
+      // controls.addEventListener('change', async () => {
+      //   console.log('foo');
+      // });
       
       window.addEventListener('resize', () => {
         this.onContainerResize();
