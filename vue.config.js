@@ -11,6 +11,10 @@ module.exports = {
       "/api": {
         target: `http://localhost:${PORT}/`,
         logLevel: "debug"
+      },
+      "/peerjs": {
+        target: `http://localhost:${PORT}/`,
+        logLevel: "debug"
       }
     }
   }

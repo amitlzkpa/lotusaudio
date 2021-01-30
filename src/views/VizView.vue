@@ -59,6 +59,17 @@
               <span v-if="activeTab === 'Audio'" class="has-text-weight-bold">Audio</span>
               <span v-else>Audio</span>
             </span>
+
+            &nbsp;&nbsp;
+            <span class="is-size-7">|</span>
+            &nbsp;&nbsp;
+
+            <span
+               @click="activeTab = 'Live'"
+               class="is-size-7 clickable-icon">
+              <span v-if="activeTab === 'Live'" class="has-text-weight-bold">Live</span>
+              <span v-else>Live</span>
+            </span>
           </div>
 
           <div v-if="activeTab === 'Details'">
@@ -151,6 +162,12 @@
             </div>
 
           </div>
+          
+          <div v-if="activeTab === 'Live'">
+            <div class="cont-ht side-pad">
+              Your room ID:
+            </div>
+          </div>
 
           <div>
 
@@ -218,6 +235,10 @@ import AudioItem from "@/components/AudioItem.vue";
 import Three from "@/components/Three.vue";
 import templateViz from "!raw-loader!@/assets/template_viz.js";
 
+import Peer from 'peerjs';
+
+let peer, conn;
+
 export default {
   name: 'VizEdit',
   components: {
@@ -276,7 +297,8 @@ export default {
           format: "audio/mpeg"
         }
       ],
-      userWantsToPay: false
+      userWantsToPay: false,
+      myRoomId: '',
     }
   },
   computed: {
@@ -364,6 +386,24 @@ export default {
     togglePaneWidth() {
       this.paneWidth = (this.paneWidth < 10) ? 60 : 1;
       setTimeout(() => { this.$refs.three.onContainerResize(); }, 0);
+    },
+    async registerPeerId() {
+      let id = 'fooo';
+      // id = this.myRoomId;
+      console.log(window.location.port);
+      let peerjsOpts = {
+        host: window.location.hostname,
+        port: window.location.port,
+        // port: 9004,
+        path: '/peerjs'
+      };
+      peer = new Peer(id, peerjsOpts);
+      console.log(peer);
+
+      peer.on('open', function(id) {
+        console.log(`Registered with peer id: ${id}`);
+      });
+
     }
   },
   async mounted() {
@@ -371,6 +411,8 @@ export default {
     while(this.$auth.loading) {
       await this.wait(100);
     }
+
+    this.registerPeerId();
 
     setTimeout(() => { this.$refs.three.onContainerResize(); }, 0);
     await this.updateFromParam();

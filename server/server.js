@@ -13,6 +13,11 @@ const mongoURI = process.env.MONGO_URL;
 mongoose.connect(mongoURI, { useNewUrlParser: true });
 
 const app = express();
+
+app.use('/peerjs', require('peer').ExpressPeerServer(app, {
+  debug: true
+}));
+
 app.use(express.static(DIR));
 
 app.use(cookieParser());
