@@ -22,6 +22,9 @@ body {
 a {
   color: #0033cc;
 }
+i {
+  margin: 4px;
+}
 
 @media (prefers-color-scheme: dark) {
   body {

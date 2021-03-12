@@ -67,18 +67,14 @@
               <div class="columns">
 
                 <span class="column">
-                  <b-icon
-                    :icon="(visibility === 'public') ? 'eye' : 'eye-slash'"
-                  ></b-icon>
-                  {{ (visibility === 'public') ? 'Public' : 'Private' }}
+                  <i :class="`fas fa-${visibility === 'public' ? 'eye' : 'eye-slash'}`"></i>
+                  {{ visibility === 'public' ? 'Public' : 'Private' }}
                 </span>
 
                 &nbsp;&nbsp;
                 
                 <span class="column">
-                  <b-icon
-                    :icon="isPayable ? 'lock' : 'lock-open'"
-                  ></b-icon>
+                  <i :class="`fas fa-${isPayable ? 'lock' : 'lock-open'}`"></i>
                   {{ isPayable ? 'Paid' : 'Free' }}
                 </span>
                 
@@ -148,11 +144,7 @@
                 <div class="level-item">
                   
                   <span class="clickable-icon" @click="toggleUserWantsToPay" v-if="isPayable" :alt="(userWantsToPay ? 'Stop' : 'Start') + ' streaming payments'">
-                    <b-icon
-                      pack="fas"
-                      :icon="userWantsToPay ? 'tint' : 'tint-slash'"
-                      size="is-small"
-                    ></b-icon>
+                    <i :class="`fas fa-${userWantsToPay ? 'tint' : 'tint-slash'}`"></i>
                   </span>
 
                 </div>
@@ -168,11 +160,7 @@
                 <div class="level-item">
 
                   <span alt="Play audio and run visualization" @click="run" class="clickable-icon" v-if="((isPayable) ? isPayable && userWantsToPay : true)">
-                    <b-icon
-                      pack="fas"
-                      :icon="($store.state.isPlaying) ? 'pause' : 'play'"
-                      size="is-small"
-                    ></b-icon>
+                    <i :class="`fas fa-${$store.state.isPlaying ? 'pause' : 'play'}`"></i>
                   </span>
                   
                 </div>

@@ -228,21 +228,15 @@
               <div class="level-left">
 
                 <span @click="paymentEnabled = !paymentEnabled" class="clickable-icon">
-                  <b-icon
-                    :icon="(paymentEnabled) ? 'coins' : 'star-of-life'"
-                    size="is-small"
-                  ></b-icon>
-                  <span>Make {{ (paymentEnabled ? 'free' : 'paid') }}</span>
+                  <i :class="`fas fa-${paymentEnabled ? 'coins' : 'star-of-life'}`"></i>
+                  <span>Make {{ paymentEnabled ? 'free' : 'paid' }}</span>
                 </span>
 
                 &nbsp;&nbsp;
                 
                 <span @click="visibility = !visibility" class="clickable-icon">
-                  <b-icon
-                    :icon="(visibility === 'public') ? 'eye' : 'eye-slash'"
-                    size="is-small"
-                  ></b-icon>
-                  <span>Make {{ (visibility === 'private' ? 'public' : 'private') }}</span>
+                  <i :class="`fas fa-${visibility === 'public' ? 'eye' : 'eye-slash'}`"></i>
+                  <span>Make {{ visibility === 'private' ? 'public' : 'private' }}</span>
                 </span>
 
               </div>
@@ -256,11 +250,7 @@
               <div class="level-right">
 
                   <span alt="Play audio and run visualization" @click="run" class="clickable-icon" v-if="((isPayable) ? isPayable && userWantsToPay : true)">
-                    <b-icon
-                      pack="fas"
-                      :icon="($store.state.isPlaying) ? 'pause' : 'play'"
-                      size="is-small"
-                    ></b-icon>
+                    <i :class="`fas fa-${$store.state.isPlaying ? 'pause' : 'play'}`"></i>
                   </span>
                 
               </div>
@@ -348,6 +338,11 @@ export default {
           format: "audio/mpeg"
         }
       ]
+    }
+  },
+  computed: {
+    isPayable() {
+      return this.paymentPointer !== "" && this.paymentEnabled;
     }
   },
   methods: {

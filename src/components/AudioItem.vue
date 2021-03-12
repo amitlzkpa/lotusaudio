@@ -6,19 +6,11 @@
       <div class="has-text-weight-bold" style="padding: 6px;">
         
         <span @click="removeAudio" v-if="!deleteDisabled">
-          <b-icon
-            pack="fas"
-            icon="times"
-            size="is-small"
-          ></b-icon>
+          <i class="fas fa-times"></i>
         </span>
         
         <span @click="setActiveAudio">
-          <b-icon
-            pack="fas"
-            icon="plus"
-            size="is-small"
-          ></b-icon>
+          <i class="fas fa-plus"></i>
         </span>
         
         <span>
