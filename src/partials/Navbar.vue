@@ -4,11 +4,11 @@
     <div class="level-left">
       <div class="level-item">
         <router-link to="/" class="clickable-icon">
-          Lotus Audio
+          <b>Lotus Audio</b>
         </router-link>
       </div>
       <div class="level-item" v-if="$auth.isAuthenticated">
-        <router-link to="/new">New</router-link>
+        <router-link to="/new">Create New</router-link>
       </div>
     </div>
     
@@ -18,7 +18,7 @@
           <a v-if="!$auth.isAuthenticated" @click="login" href="#!">Log in</a>
           <a v-if="$auth.isAuthenticated" href="#!">
             <router-link to="/profile">{{ $auth.dbUser.username }}</router-link>
-            &nbsp;|&nbsp;
+            <br/>
             <a @click="logout" href="#!">Log out</a>
           </a>
         </span>
