@@ -1,8 +1,7 @@
 <template>
-  <div style="min-height: 300px;">
+  <div>
     
     <div class="columns">
-
 
       <div class="column is-two-thirds">
         <p class="is-size-1">

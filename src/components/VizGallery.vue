@@ -8,6 +8,8 @@
           <VizCard :visualization="viz" />
         </router-link>
         
+        <hr />
+        
       </div>
     </div>
 

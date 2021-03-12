@@ -3,11 +3,7 @@
     <Navbar />
     <div class="container">
       
-      <br/><br/>
-
       <Banner />
-
-      <br/>
       
       <hr/>
       
