@@ -1,7 +1,7 @@
 <template>
   <div>
     
-    <div class="card" v-if="viz">
+    <div v-if="viz">
 
       <router-link :to="{ name: 'view', params: { id: viz._id } }">
         <img :src="img" style="object-fit: cover; height: 120px; width: 180px;" />
@@ -24,7 +24,7 @@
       <span>{{ viz.paymentEnabled ? 'paid' : 'free' }}</span>
       <br/>
 
-      <p class="has-text-weight-light">
+      <p>
         {{ viz.short_description }}
       </p>
 
@@ -75,7 +75,4 @@ export default {
 </script>
 
 <style scoped>
-div a {
-  text-decoration: none;
-}
 </style>

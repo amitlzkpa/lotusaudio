@@ -1,14 +1,12 @@
 <template>
   <div>
 
-    <div class="columns is-multiline">
-      <div class="column is-3 is-child" style="padding: 6px;" v-for="viz in vizs" :key="viz._id">
-        
-        <VizCard :visualization="viz" />
-        
-        <hr />
-        
-      </div>
+    <div style="padding: 6px;" v-for="viz in vizs" :key="viz._id">
+      
+      <VizCard :visualization="viz" />
+      
+      <hr />
+      
     </div>
 
   </div>

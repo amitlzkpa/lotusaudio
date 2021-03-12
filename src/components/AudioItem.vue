@@ -1,35 +1,28 @@
 <template>
   <div>
     
-    <div slot="trigger" class="card-header" role="button">
-
-      <div class="has-text-weight-bold" style="padding: 6px;">
-        
-        <span @click="removeAudio" v-if="!deleteDisabled">
-          <i class="fas fa-times"></i>
-        </span>
-        
-        <span @click="setActiveAudio">
-          <i class="fas fa-plus"></i>
-        </span>
-        
-        <span>
-          {{ name }}
-        </span>
-
-      </div>
+    <div style="padding: 6px;">
+      
+      <span @click="removeAudio" v-if="!deleteDisabled">
+        <i class="fas fa-times"></i>
+      </span>
+      
+      <span @click="setActiveAudio">
+        <i class="fas fa-plus"></i>
+      </span>
+      
+      <span>
+        {{ name }}
+      </span>
 
     </div>
 
 
-    <div class="card-content">
-      <div class="content">
-
-        <audio controls style="width:100%">
-          <source :src="source" :type="format">
-          Your browser does not support the audio element.
-        </audio>
-      </div>
+    <div>
+      <audio controls style="width:100%">
+        <source :src="source" :type="format">
+        Your browser does not support the audio element.
+      </audio>
     </div>
 
   </div>
