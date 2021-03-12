@@ -7,8 +7,6 @@
       
       <hr/>
       
-      <br/><br/>
-      
       <VizGallery />
 
       <br/><br/>

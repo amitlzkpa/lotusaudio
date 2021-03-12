@@ -4,9 +4,7 @@
     <div class="columns is-multiline">
       <div class="column is-3 is-child" style="padding: 6px;" v-for="viz in vizs" :key="viz._id">
         
-        <router-link :to="{ name: 'view', params: { id: viz._id } }">
-          <VizCard :visualization="viz" />
-        </router-link>
+        <VizCard :visualization="viz" />
         
         <hr />
         

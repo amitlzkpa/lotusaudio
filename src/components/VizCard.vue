@@ -1,40 +1,33 @@
 <template>
   <div>
     
-    <div class="card" v-if="viz" style="min-height: 360px;">
+    <div class="card" v-if="viz">
 
-      <div class="card-image">
-        <figure class="image is-3by2">
-          <img :src="img" style="object-fit: cover" />
-        </figure>
-      </div>
+      <router-link :to="{ name: 'view', params: { id: viz._id } }">
+        <img :src="img" style="object-fit: cover; height: 120px; width: 180px;" />
+        <br/>
+        <small>{{ viz._id }}</small>
+        <br/>
+      </router-link>
 
-      <div class="card-content">
-        
-        <div class="media">
-          <div class="media-content">
-            
-            <span>{{ viz.visibility }}</span>
-              
-            <span style="margin: 0px 6px 0px 6px;"></span>
-            
-            <span>{{ viz.paymentEnabled ? 'paid' : 'free' }}</span>
+      <b class="title is-4">{{ viz.name }}</b>
+      <br/>
 
-            <p class="title is-4">{{ viz.name }}</p>
-
-            <p class="subtitle is-6 is-italic has-text-grey">{{ viz.author.username }}</p>
-
-          </div>
-        </div>
-
-        <div class="content">
-          <p class="has-text-weight-light">
-            {{ viz.short_description }}
-          </p>
-        </div>
-        
-      </div>
+      <i>{{ viz.author.username }}</i>
+      <br/>
       
+      <i :class="`fas fa-${viz.visibility === 'public' ? 'eye' : 'eye-slash'}`"></i>
+      <span>{{ viz.visibility }}</span>
+      <br/>
+      
+      <i :class="`fas fa-${viz.paymentEnabled ? 'coins' : 'star-of-life'}`"></i>
+      <span>{{ viz.paymentEnabled ? 'paid' : 'free' }}</span>
+      <br/>
+
+      <p class="has-text-weight-light">
+        {{ viz.short_description }}
+      </p>
+
     </div>
 
   </div>
@@ -82,5 +75,7 @@ export default {
 </script>
 
 <style scoped>
-
+div a {
+  text-decoration: none;
+}
 </style>
