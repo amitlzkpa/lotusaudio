@@ -1,13 +1,10 @@
 <template>
-  <div class="level is-marginless">
+  <div class="level is-marginless" style="margin-botom: 6px">
     
     <div class="level-left">
       <div class="level-item">
         <router-link to="/" class="clickable-icon">
-          <b-icon
-            size="is-small"
-            icon="spa"
-          ></b-icon>
+          Lotus Audio
         </router-link>
       </div>
       <div class="level-item" v-if="$auth.isAuthenticated">
@@ -20,17 +17,9 @@
         <span v-if="!$auth.loading">
           <a v-if="!$auth.isAuthenticated" @click="login" href="#!">Log in</a>
           <a v-if="$auth.isAuthenticated" href="#!">
-            <b-dropdown position="is-bottom-left" aria-role="list">
-              <button class="button is-text" slot="trigger">
-                {{ $auth.dbUser.username }}
-              </button>
-              <b-dropdown-item aria-role="listitem">
-                <router-link to="/profile">Profile</router-link>
-              </b-dropdown-item>
-              <b-dropdown-item aria-role="listitem" >
-                <a @click="logout" href="#!">Log out</a>  
-              </b-dropdown-item>
-            </b-dropdown>
+            <router-link to="/profile">{{ $auth.dbUser.username }}</router-link>
+            &nbsp;|&nbsp;
+            <a @click="logout" href="#!">Log out</a>
           </a>
         </span>
       </div>

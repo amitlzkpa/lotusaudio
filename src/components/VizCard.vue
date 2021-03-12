@@ -14,23 +14,11 @@
         <div class="media">
           <div class="media-content">
             
-            <b-tooltip :label="'Is ' + viz.visibility" position="is-right">
-              <b-icon
-                :icon="(viz.visibility === 'public') ? 'eye' : 'eye-slash'"
-                size="is-small"
-                class="has-text-grey-light"
-              ></b-icon>
-            </b-tooltip>
+            <span>{{ viz.visibility }}</span>
               
             <span style="margin: 0px 6px 0px 6px;"></span>
             
-            <b-tooltip :label="'Is ' + (viz.paymentEnabled ? 'paid' : 'free')" position="is-right">
-              <b-icon
-                :icon="(viz.paymentEnabled) ? 'coins' : 'star-of-life'"
-                size="is-small"
-                class="has-text-grey-light"
-              ></b-icon>
-            </b-tooltip>
+            <span>{{ viz.paymentEnabled ? 'paid' : 'free' }}</span>
 
             <p class="title is-4">{{ viz.name }}</p>
 

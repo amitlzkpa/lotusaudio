@@ -29,10 +29,10 @@
               <div class="level-right">
                 <div class="level-item">
                   <router-link :to="{ name: 'edit', params: { id: id } }" v-if="$auth.isAuthenticated && $auth.dbUser._id === author._id">
-                    <b-button
+                    <button
                       type="is-text"
                       size="is-small"
-                    >Edit</b-button>
+                    >Edit</button>
                   </router-link>
                 </div>
               </div>
@@ -66,41 +66,31 @@
 
               <div class="columns">
 
-                <div class="column">
-                  <p>
-                    <b-icon
-                      :icon="(visibility === 'public') ? 'eye' : 'eye-slash'"
-                    ></b-icon>
-                    {{ (visibility === 'public') ? 'Public' : 'Private' }}
-                  </p>
-                </div>
+                <span class="column">
+                  <b-icon
+                    :icon="(visibility === 'public') ? 'eye' : 'eye-slash'"
+                  ></b-icon>
+                  {{ (visibility === 'public') ? 'Public' : 'Private' }}
+                </span>
+
+                &nbsp;&nbsp;
                 
-                <div class="column">
-                  <p>
-                    <b-icon
-                      :icon="isPayable ? 'lock' : 'lock-open'"
-                    ></b-icon>
-                    {{ isPayable ? 'Paid' : 'Free' }}
-                  </p>
-                </div>
+                <span class="column">
+                  <b-icon
+                    :icon="isPayable ? 'lock' : 'lock-open'"
+                  ></b-icon>
+                  {{ isPayable ? 'Paid' : 'Free' }}
+                </span>
                 
               </div>
 
               <div class="columns">
                 <div class="column">
-
-                    <b-field label="Short Description">
-                      <p>
-                        {{ short_description }}
-                      </p>
-                    </b-field>
-                    
-                    <b-field label="Description">
-                      <p>
-                        {{ description }}
-                      </p>
-                    </b-field>
-                    
+                
+                  <p>
+                    {{ description }}
+                  </p>
+                  
                 </div>
               </div>
               
@@ -111,9 +101,7 @@
 
             <div class="cont-ht side-pad">
 
-              <b-field label="Available sources"></b-field>
-
-              <b>Visualization:</b>
+              <b>Available sources:</b>
               <br />
 
               <p class="is-italic is-small has-text-grey" v-if="vizAudioSources.length < 1">
@@ -159,37 +147,33 @@
               <div class="level-left">
                 <div class="level-item">
                   
-                  <b-tooltip :label="(userWantsToPay ? 'Stop' : 'Start') + ' streaming payments'" position="is-right" v-if="isPayable">
-                    <span class="clickable-icon" @click="toggleUserWantsToPay" v-if="isPayable">
-                      <b-icon
-                        pack="fas"
-                        :icon="userWantsToPay ? 'tint' : 'tint-slash'"
-                        size="is-small"
-                      ></b-icon>
-                    </span>
-                  </b-tooltip>
+                  <span class="clickable-icon" @click="toggleUserWantsToPay" v-if="isPayable" :alt="(userWantsToPay ? 'Stop' : 'Start') + ' streaming payments'">
+                    <b-icon
+                      pack="fas"
+                      :icon="userWantsToPay ? 'tint' : 'tint-slash'"
+                      size="is-small"
+                    ></b-icon>
+                  </span>
 
                 </div>
               </div>
 
               <div class="level-left">
-                <b-tooltip :label="'Source: ' + $store.state.audioSource.source" position="is-top">
-                  {{ $store.state.audioSource.name }}
-                </b-tooltip>
+                {{ $store.state.audioSource.name }}
+                <br/>
+                <small>{{ $store.state.audioSource.source }}</small>
               </div>
 
               <div class="level-right">
                 <div class="level-item">
 
-                  <b-tooltip label="Play audio and run visualization" position="is-left">
-                    <span @click="run" class="clickable-icon" v-if="((isPayable) ? isPayable && userWantsToPay : true)">
-                      <b-icon
-                        pack="fas"
-                        :icon="($store.state.isPlaying) ? 'pause' : 'play'"
-                        size="is-small"
-                      ></b-icon>
-                    </span>
-                  </b-tooltip>
+                  <span alt="Play audio and run visualization" @click="run" class="clickable-icon" v-if="((isPayable) ? isPayable && userWantsToPay : true)">
+                    <b-icon
+                      pack="fas"
+                      :icon="($store.state.isPlaying) ? 'pause' : 'play'"
+                      size="is-small"
+                    ></b-icon>
+                  </span>
                   
                 </div>
               </div>

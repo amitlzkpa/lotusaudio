@@ -35,23 +35,23 @@
                   </div>
                   <div v-else>
                     <div v-if="!$auth.isLoading && !author || $auth.dbUser._id === author._id">
-                      <b-button
+                      <button
                         v-if="id !== ''"
                         type="is-text"
                         size="is-small"
                         @click="deleteDialog"
-                      >Delete</b-button>
-                      <b-button
+                      >Delete</button>
+                      <button
                         type="is-text"
                         size="is-small"
                         @click="saveNew"
-                      >Save as new</b-button>
-                      <b-button
+                      >Save as new</button>
+                      <button
                         v-if="id !== ''"
                         type="is-primary"
                         size="is-small"
                         @click="save"
-                      >Save</b-button>
+                      >Save</button>
                     </div>
                   </div>
                 </div>
@@ -59,20 +59,13 @@
               
             </div>
 
-            <b-field>
-
-              <p class="control" size="is-small">
-                <span class="button is-static is-small">Name:</span>
-              </p>
-              
-              <b-input
-                expanded
-                placeholder="<unnamed>"
-                v-model="name"
-                size="is-small"
-              ></b-input>
-
-            </b-field>
+            <span>Name:</span>
+            <input
+              type="text"
+              placeholder="<unnamed>"
+              v-model="name"
+            />
+            <br/>
             
           </div>
 
@@ -124,31 +117,36 @@
           <div v-if="activeTab === 'Details'">
             <div class="cont-ht side-pad">
 
-              <b-field label="Payment Pointer">
-                <b-input
-                  :disabled="!paymentEnabled"
-                  type="text"
-                  v-model="paymentPointer"
-                ></b-input>
-              </b-field>
+              <span>Payment Pointer:</span>
+              <input
+                :disabled="!paymentEnabled"
+                type="text"
+                v-model="paymentPointer"
+              />
+              <br/>
 
-              <b-field label="Short Description">
-                <b-input
-                  type="textarea"
-                  v-model="short_description"
-                  minlength="0"
-                  maxlength="100"
-                ></b-input>
-              </b-field>
-              
-              <b-field label="Description">
-                <b-input
-                  type="textarea"
-                  v-model="description"
-                  minlength="0"
-                  maxlength="800"
-                ></b-input>
-              </b-field>
+              <span>Short Description:</span>
+              <br/>
+              <textarea
+                :value="short_description"
+                minlength="0"
+                maxlength="300"
+                resize
+                rows="3"
+              />
+              <br/>
+
+              <span>Description:</span>
+              <br/>
+              <textarea
+                v-model="description"
+                minlength="0"
+                maxlength="800"
+                resize
+                rows="8"
+              />
+              <br/>
+
             </div>
           </div>
 
@@ -156,9 +154,7 @@
 
             <div class="cont-ht side-pad">
 
-              <b-field label="Available sources"></b-field>
-
-              <b>Visualization:</b>
+              <b>Available sources:</b>
               <br />
 
               <p class="is-italic is-small has-text-grey" v-if="vizAudioSources.length < 1">
@@ -181,19 +177,23 @@
                 
                 <div class="panel-block">
 
-                  <b-input
+                  <span>Name</span>
+                  <input
                     type="text"
                     v-model="newAudioSource.name"
-                    placeholder="Name"
-                  ></b-input>
+                    placeholder=""
+                  />
+                  <br/>
 
-                  <b-input
+                  <span>Source</span>
+                  <input
                     type="text"
                     v-model="newAudioSource.source"
-                    placeholder="Source"
-                  ></b-input>
+                    placeholder=""
+                  />
+                  <br/>
 
-                  <b-button type="is-primary" expanded @click="addNewAudioSource">Add new source</b-button>
+                  <button type="is-primary" expanded @click="addNewAudioSource">Add new source</button>
 
                 </div>
                 
@@ -227,45 +227,41 @@
 
               <div class="level-left">
 
-                <b-tooltip :label="'Make ' + (paymentEnabled ? 'free' : 'paid')" position="is-right">
-                  <div @click="paymentEnabled = !paymentEnabled" class="clickable-icon">
-                    <b-icon
-                      :icon="(paymentEnabled) ? 'coins' : 'star-of-life'"
-                      size="is-small"
-                    ></b-icon>
-                  </div>
-                </b-tooltip>
+                <span @click="paymentEnabled = !paymentEnabled" class="clickable-icon">
+                  <b-icon
+                    :icon="(paymentEnabled) ? 'coins' : 'star-of-life'"
+                    size="is-small"
+                  ></b-icon>
+                  <span>Make {{ (paymentEnabled ? 'free' : 'paid') }}</span>
+                </span>
 
-                <div style="margin: 0px 6px 0px 0px"></div>
+                &nbsp;&nbsp;
                 
-                <b-tooltip :label="'Make ' + (visibility === 'public' ? 'private' : 'public')" position="is-right">
-                  <div @click="visibility = (visibility === 'public') ? 'private' : 'public'" class="clickable-icon">
-                    <b-icon
-                      :icon="(visibility === 'public') ? 'eye' : 'eye-slash'"
-                      size="is-small"
-                    ></b-icon>
-                  </div>
-                </b-tooltip>
+                <span @click="visibility = !visibility" class="clickable-icon">
+                  <b-icon
+                    :icon="(visibility === 'public') ? 'eye' : 'eye-slash'"
+                    size="is-small"
+                  ></b-icon>
+                  <span>Make {{ (visibility === 'private' ? 'public' : 'private') }}</span>
+                </span>
 
               </div>
 
               <div class="level-left">
-                <b-tooltip :label="'Source: ' + $store.state.audioSource.source" position="is-top">
-                  {{ $store.state.audioSource.name }}
-                </b-tooltip>
+                {{ $store.state.audioSource.name }}
+                <br/>
+                <small>{{ $store.state.audioSource.source }}</small>
               </div>
 
               <div class="level-right">
 
-                <b-tooltip label="Play audio and run visualization" position="is-left">
-                  <div class="level-item clickable-icon" @click="run">
+                  <span alt="Play audio and run visualization" @click="run" class="clickable-icon" v-if="((isPayable) ? isPayable && userWantsToPay : true)">
                     <b-icon
                       pack="fas"
                       :icon="($store.state.isPlaying) ? 'pause' : 'play'"
                       size="is-small"
                     ></b-icon>
-                  </div>
-                </b-tooltip>
+                  </span>
                 
               </div>
               
