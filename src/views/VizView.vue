@@ -7,102 +7,62 @@
 
         <Navbar />
 
-        <div class="flex-container" v-if="id !== ''">
+        <div v-if="id !== ''">
 
-          <div class="side-pad">
+          <span>{{ name }}</span>
+          <br/>
 
-            <span class="has-text-weight-bold is-size-4">
-              {{ name }}
-            </span>
+          <span>{{ id }}</span>
+          <br/>
+          
+          <router-link
+            v-if="$auth.isAuthenticated && $auth.dbUser._id === author._id"
+            :to="{ name: 'edit', params: { id: id } }"
+            tag="button"
+          >
+            Edit
+          </router-link>
+          <br/>
 
-            <div class="level" style="margin: 2px 0px 2px 0px;">
-              
-              <div class="level-left">
-                <div class="level-item">
-                  <span
-                    class="has-text-grey-light is-italic is-size-7"
-                  >{{ id }}
-                  </span>
-                </div>
-              </div>
+          <span
+            @click="activeTab = 'Details'"
+            style="cursor: pointer;"
+          >
+            <b v-if="activeTab === 'Details'">Details</b>
+            <span v-else>Details</span>
+          </span>
 
-              <div class="level-right">
-                <div class="level-item">
-                  <router-link :to="{ name: 'edit', params: { id: id } }" v-if="$auth.isAuthenticated && $auth.dbUser._id === author._id">
-                    <button
-                      type="is-text"
-                      size="is-small"
-                    >Edit</button>
-                  </router-link>
-                </div>
-              </div>
-              
-            </div>
+          &nbsp;&nbsp;|&nbsp;&nbsp;
 
-          </div>
-
-          <div class="is-marginless is-paddingless side-pad">
-            <span
-               @click="activeTab = 'Details'"
-               class="is-size-7 clickable-icon">
-              <span v-if="activeTab === 'Details'" class="has-text-weight-bold">Details</span>
-              <span v-else>Details</span>
-            </span>
-
-            &nbsp;&nbsp;
-            <span class="is-size-7">|</span>
-            &nbsp;&nbsp;
-
-            <span
-               @click="activeTab = 'Audio'"
-               class="is-size-7 clickable-icon">
-              <span v-if="activeTab === 'Audio'" class="has-text-weight-bold">Audio</span>
-              <span v-else>Audio</span>
-            </span>
-          </div>
+          <span
+            @click="activeTab = 'Audio'"
+            style="cursor: pointer;"
+          >
+            <b v-if="activeTab === 'Audio'">Audio</b>
+            <span v-else>Audio</span>
+          </span>
 
           <div v-if="activeTab === 'Details'">
-            <div class="cont-ht side-pad">
+            
+            <i :class="`fas fa-${visibility === 'public' ? 'eye' : 'eye-slash'}`"></i>
+            {{ visibility === 'public' ? 'Public' : 'Private' }}
 
-              <div class="columns">
+            <i :class="`fas fa-${isPayable ? 'lock' : 'lock-open'}`"></i>
+            {{ isPayable ? 'Paid' : 'Free' }}
 
-                <span class="column">
-                  <i :class="`fas fa-${visibility === 'public' ? 'eye' : 'eye-slash'}`"></i>
-                  {{ visibility === 'public' ? 'Public' : 'Private' }}
-                </span>
+            <p>
+              {{ description }}
+            </p>
 
-                &nbsp;&nbsp;
-                
-                <span class="column">
-                  <i :class="`fas fa-${isPayable ? 'lock' : 'lock-open'}`"></i>
-                  {{ isPayable ? 'Paid' : 'Free' }}
-                </span>
-                
-              </div>
-
-              <div class="columns">
-                <div class="column">
-                
-                  <p>
-                    {{ description }}
-                  </p>
-                  
-                </div>
-              </div>
-              
-            </div>
           </div>
 
           <div v-if="activeTab === 'Audio'">
 
-            <div class="cont-ht side-pad">
-
-              <b>Available sources:</b>
-              <br />
-
-              <p class="is-italic is-small has-text-grey" v-if="vizAudioSources.length < 1">
+            <details open>
+              <summary>Available sources:</summary>
+              <i v-if="vizAudioSources.length < 1">
                 &lt;none&gt;
-              </p>
+              </i>
               
               <div v-if="vizAudioSources.length > 0">
                 <AudioItem
@@ -114,13 +74,13 @@
                   @activeAudioClick="setActiveAudio"
                 />
               </div>
+            </details>
 
-              <b>Default:</b>
-              <br />
-
-              <p class="is-italic is-small has-text-grey" v-if="defaultSources.length < 1">
+            <details>
+              <summary>Default sources:</summary>
+              <i v-if="defaultSources.length < 1">
                 &lt;none&gt;
-              </p>
+              </i>
               
               <AudioItem
                 v-else
@@ -131,42 +91,21 @@
                 :deleteDisabled="true"
                 @activeAudioClick="setActiveAudio"
               />
-
-            </div>
+            </details>
 
           </div>
 
           <div>
 
-            <div class="level is-marginless">
+            <span @click="toggleUserWantsToPay" v-if="isPayable" :alt="(userWantsToPay ? 'Stop' : 'Start') + ' streaming payments'">
+              <i :class="`fas fa-${userWantsToPay ? 'donate' : 'ticket-alt'}`"></i>
+            </span>
 
-              <div class="level-left">
-                <div class="level-item">
-                  
-                  <span class="clickable-icon" @click="toggleUserWantsToPay" v-if="isPayable" :alt="(userWantsToPay ? 'Stop' : 'Start') + ' streaming payments'">
-                    <i :class="`fas fa-${userWantsToPay ? 'tint' : 'tint-slash'}`"></i>
-                  </span>
+            {{ $store.state.audioSource.name }}
 
-                </div>
-              </div>
-
-              <div class="level-left">
-                {{ $store.state.audioSource.name }}
-                <br/>
-                <small>{{ $store.state.audioSource.source }}</small>
-              </div>
-
-              <div class="level-right">
-                <div class="level-item">
-
-                  <span alt="Play audio and run visualization" @click="run" class="clickable-icon" v-if="((isPayable) ? isPayable && userWantsToPay : true)">
-                    <i :class="`fas fa-${$store.state.isPlaying ? 'pause' : 'play'}`"></i>
-                  </span>
-                  
-                </div>
-              </div>
-              
-            </div>
+            <span alt="Play audio and run visualization" @click="run" class="clickable-icon" v-if="((isPayable) ? isPayable && userWantsToPay : true)">
+              <i :class="`fas fa-${$store.state.isPlaying ? 'pause' : 'play'}`"></i>
+            </span>
 
           </div>
 
