@@ -103,7 +103,7 @@
 
             {{ $store.state.audioSource.name }}
 
-            <span alt="Play audio and run visualization" @click="run" class="clickable-icon" v-if="((isPayable) ? isPayable && userWantsToPay : true)">
+            <span alt="Play audio and run visualization" @click="run" v-if="((isPayable) ? isPayable && userWantsToPay : true)">
               <i :class="`fas fa-${$store.state.isPlaying ? 'pause' : 'play'}`"></i>
             </span>
 
