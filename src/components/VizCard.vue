@@ -10,7 +10,7 @@
         <br/>
       </router-link>
 
-      <b class="title is-4">{{ viz.name }}</b>
+      <b>{{ viz.name }}</b>
       <br/>
 
       <i>{{ viz.author.username }}</i>
