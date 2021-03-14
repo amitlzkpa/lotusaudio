@@ -1,203 +1,209 @@
 <template>
   <div>
 
-    <Split style="height: 100vh" @onDrag="paneWidthUpdate">
+    <Split style="position: absolute; left: 0; right 0: top: 0; bottom: 0;" @onDrag="paneWidthUpdate">
       
-      <SplitArea :size="paneWidth">
+      <SplitArea style="padding: 6px;" :size="paneWidth">
 
         <Navbar />
-
-        <router-link :to="{ name: 'view', params: { id: id } }">
-          <span>{{ id }}</span>
-        </router-link>
-
-        <div v-if="!$auth.isLoading && !$auth.isAuthenticated">
-          <span>
-            Please login to save.
-          </span>
-        </div>
-        <div v-else>
-          <div v-if="!$auth.isLoading && !author || $auth.dbUser._id === author._id">
-            <button
-              v-if="id !== ''"
-              @click="deleteDialog"
-            >Delete</button>
-            <button
-              @click="saveNew"
-            >Save as new</button>
-            <button
-              v-if="id !== ''"
-              @click="save"
-            >Save</button>
-          </div>
-        </div>
-
-        <span>Name:</span>
-        <input
-          type="text"
-          placeholder="<unnamed>"
-          v-model="name"
-        />
-        <br/>
-
-        <span
-          @click="activeTab = 'Code'"
-          style="cursor: pointer;"
-        >
-          <b v-if="activeTab === 'Code'">Code</b>
-          <span v-else>Code</span>
-        </span>
-
-        &nbsp;&nbsp;|&nbsp;&nbsp;
-
-        <span
-          @click="activeTab = 'Details'"
-          style="cursor: pointer;"
-        >
-          <b v-if="activeTab === 'Details'">Details</b>
-          <span v-else>Details</span>
-        </span>
-
-        &nbsp;&nbsp;|&nbsp;&nbsp;
-
-        <span
-          @click="activeTab = 'Audio'"
-          style="cursor: pointer;"
-        >
-          <b v-if="activeTab === 'Audio'">Audio</b>
-          <span v-else>Audio</span>
-        </span>
-
-        <br/>
-
-        <div v-if="activeTab === 'Code'">
-          <vue-codemirror-editor
-            @keydown.enter="handleEnter"
-            @keydown.s="handleS"
-            v-model="code"
-            :option="{
-              theme:'base16-dark',
-              mode:'text/javascript',
-            }"
-          />
-        </div>
-
-        <div v-if="activeTab === 'Details'">
-          <span>Payment Pointer:</span>
-          <input
-            :disabled="!paymentEnabled"
-            type="text"
-            v-model="paymentPointer"
-          />
-          <br/>
-
-          <span>Short Description:</span>
-          <br/>
-          <textarea
-            v-model="short_description"
-            minlength="0"
-            maxlength="300"
-            resize
-            rows="3"
-          />
-          <br/>
-
-          <span>Description:</span>
-          <br/>
-          <textarea
-            v-model="description"
-            minlength="0"
-            maxlength="800"
-            resize
-            rows="8"
-          />
-          <br/>
-        </div>
-
-
         
+        <div v-if="id !== ''" style="height: 91vh; display: flex; flex-direction: column;">
 
-        <div v-if="activeTab === 'Audio'">
+          <div style="flex: 0 0 auto;">
 
-          <details open>
-            <summary>Available sources:</summary>
-            <i v-if="vizAudioSources.length < 1">
-              &lt;none&gt;
-            </i>
+            <router-link :to="{ name: 'view', params: { id: id } }">
+              <span>{{ id }}</span>
+            </router-link>
+
+            <div v-if="!$auth.isLoading && !$auth.isAuthenticated">
+              <span>
+                Please login to save.
+              </span>
+            </div>
+            <div v-else>
+              <div v-if="!$auth.isLoading && !author || $auth.dbUser._id === author._id">
+                <button
+                  v-if="id !== ''"
+                  @click="deleteDialog"
+                >Delete</button>
+                <button
+                  @click="saveNew"
+                >Save as new</button>
+                <button
+                  v-if="id !== ''"
+                  @click="save"
+                >Save</button>
+              </div>
+            </div>
             
-            <div v-if="vizAudioSources.length > 0">
-              <AudioItem
-                v-for="audioItem in vizAudioSources" :key="audioItem.name"
-                :source="audioItem.source"
-                :name="audioItem.name"
-                :format="audioItem.format"
-                :deleteDisabled="true"
-                @activeAudioClick="setActiveAudio"
+            <span>Name:</span>
+            <input
+              type="text"
+              placeholder="<unnamed>"
+              v-model="name"
+            />
+
+          </div>
+
+          <div style="flex: 1 0 auto;">
+
+            <div>
+              <span
+                @click="activeTab = 'Code'"
+                style="cursor: pointer;"
+              >
+                <b v-if="activeTab === 'Code'">Code</b>
+                <span v-else>Code</span>
+              </span>
+
+              &nbsp;&nbsp;|&nbsp;&nbsp;
+
+              <span
+                @click="activeTab = 'Details'"
+                style="cursor: pointer;"
+              >
+                <b v-if="activeTab === 'Details'">Details</b>
+                <span v-else>Details</span>
+              </span>
+
+              &nbsp;&nbsp;|&nbsp;&nbsp;
+
+              <span
+                @click="activeTab = 'Audio'"
+                style="cursor: pointer;"
+              >
+                <b v-if="activeTab === 'Audio'">Audio</b>
+                <span v-else>Audio</span>
+              </span>
+            </div>
+
+            <div v-if="activeTab === 'Code'">
+              <vue-codemirror-editor
+                @keydown.enter="handleEnter"
+                @keydown.s="handleS"
+                v-model="code"
+                :option="{
+                  theme:'base16-dark',
+                  mode:'text/javascript',
+                }"
               />
+            </div>
+
+            <div v-if="activeTab === 'Details'">
+              <span>Payment Pointer:</span>
+              <input
+                :disabled="!paymentEnabled"
+                type="text"
+                v-model="paymentPointer"
+              />
+              <br/>
+
+              <span>Short Description:</span>
+              <br/>
+              <textarea
+                v-model="short_description"
+                minlength="0"
+                maxlength="300"
+                resize
+                rows="3"
+              />
+              <br/>
+
+              <span>Description:</span>
+              <br/>
+              <textarea
+                v-model="description"
+                minlength="0"
+                maxlength="800"
+                resize
+                rows="8"
+              />
+              <br/>
+            </div>
+
+            <div v-if="activeTab === 'Audio'">
+
+              <details open>
+                <summary>Available sources:</summary>
+                <i v-if="vizAudioSources.length < 1">
+                  &lt;none&gt;
+                </i>
+                
+                <div v-if="vizAudioSources.length > 0">
+                  <AudioItem
+                    v-for="audioItem in vizAudioSources" :key="audioItem.name"
+                    :source="audioItem.source"
+                    :name="audioItem.name"
+                    :format="audioItem.format"
+                    :deleteDisabled="true"
+                    @activeAudioClick="setActiveAudio"
+                  />
+                </div>
+
+                <div>
+                  <span>Name</span>
+                  <input
+                    type="text"
+                    v-model="newAudioSource.name"
+                    placeholder=""
+                  />
+                  <br/>
+
+                  <span>Source</span>
+                  <input
+                    type="text"
+                    v-model="newAudioSource.source"
+                    placeholder=""
+                  />
+                  <br/>
+
+                  <button @click="addNewAudioSource">Add new source</button>
+                </div>
+              </details>
+
+              <details>
+                <summary>Default sources:</summary>
+                <i v-if="defaultSources.length < 1">
+                  &lt;none&gt;
+                </i>
+                
+                <AudioItem
+                  v-else
+                  v-for="audioItem in defaultSources" :key="audioItem.name"
+                  :source="audioItem.source"
+                  :name="audioItem.name"
+                  :format="audioItem.format"
+                  :deleteDisabled="true"
+                  @activeAudioClick="setActiveAudio"
+                />
+              </details>
+
+            </div>
+            
+          </div>
+
+          <div style="flex: 0 0 auto; text-align: center">
+
+            <div>
+              <span @click="paymentEnabled = !paymentEnabled">
+                <i :class="`fas fa-${paymentEnabled ? 'coins' : 'star-of-life'}`"></i>
+                <span>Make {{ paymentEnabled ? 'free' : 'paid' }}</span>
+              </span>
+              
+              <span @click="visibility = !visibility">
+                <i :class="`fas fa-${visibility === 'public' ? 'eye' : 'eye-slash'}`"></i>
+                <span>Make {{ visibility === 'private' ? 'public' : 'private' }}</span>
+              </span>
             </div>
 
             <div>
-              <span>Name</span>
-              <input
-                type="text"
-                v-model="newAudioSource.name"
-                placeholder=""
-              />
-              <br/>
-
-              <span>Source</span>
-              <input
-                type="text"
-                v-model="newAudioSource.source"
-                placeholder=""
-              />
-              <br/>
-
-              <button @click="addNewAudioSource">Add new source</button>
+              {{ $store.state.audioSource.name }}
+              <span alt="Play audio and run visualization" @click="run">
+                <i :class="`fas fa-${$store.state.isPlaying ? 'pause' : 'play'}`"></i>
+              </span>
             </div>
-          </details>
 
-          <details>
-            <summary>Default sources:</summary>
-            <i v-if="defaultSources.length < 1">
-              &lt;none&gt;
-            </i>
-            
-            <AudioItem
-              v-else
-              v-for="audioItem in defaultSources" :key="audioItem.name"
-              :source="audioItem.source"
-              :name="audioItem.name"
-              :format="audioItem.format"
-              :deleteDisabled="true"
-              @activeAudioClick="setActiveAudio"
-            />
-          </details>
-
-        </div>
-
-
-        <div>
-
-          <span @click="paymentEnabled = !paymentEnabled">
-            <i :class="`fas fa-${paymentEnabled ? 'coins' : 'star-of-life'}`"></i>
-            <span>Make {{ paymentEnabled ? 'free' : 'paid' }}</span>
-          </span>
-          
-          <span @click="visibility = !visibility">
-            <i :class="`fas fa-${visibility === 'public' ? 'eye' : 'eye-slash'}`"></i>
-            <span>Make {{ visibility === 'private' ? 'public' : 'private' }}</span>
-          </span>
-
-        </div>
-
-        <div>
-
-          {{ $store.state.audioSource.name }}
-
-          <span alt="Play audio and run visualization" @click="run">
-            <i :class="`fas fa-${$store.state.isPlaying ? 'pause' : 'play'}`"></i>
-          </span>
+          </div>
 
         </div>
 
