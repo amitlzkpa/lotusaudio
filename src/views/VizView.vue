@@ -1,101 +1,109 @@
 <template>
   <div>
 
-    <Split style="height: 100vh" @onDrag="paneWidthUpdate">
+    <Split style="position: absolute; left: 0; right 0: top: 0; bottom: 0;" @onDrag="paneWidthUpdate">
       
-      <SplitArea :size="paneWidth">
+      <SplitArea style="padding: 6px;" :size="paneWidth">
 
         <Navbar />
 
-        <div v-if="id !== ''">
+        <div v-if="id !== ''" style="height: 91vh; display: flex; flex-direction: column;">
 
-          <span>{{ name }}</span>
-          <br/>
+          <div style="flex: 0 0 auto;">
 
-          <span>{{ id }}</span>
-          <br/>
-          
-          <router-link
-            v-if="$auth.isAuthenticated && $auth.dbUser._id === author._id"
-            :to="{ name: 'edit', params: { id: id } }"
-            tag="button"
-          >
-            Edit
-          </router-link>
-          <br/>
+            <span>{{ name }}</span>
+            <br/>
 
-          <span
-            @click="activeTab = 'Details'"
-            style="cursor: pointer;"
-          >
-            <b v-if="activeTab === 'Details'">Details</b>
-            <span v-else>Details</span>
-          </span>
-
-          &nbsp;&nbsp;|&nbsp;&nbsp;
-
-          <span
-            @click="activeTab = 'Audio'"
-            style="cursor: pointer;"
-          >
-            <b v-if="activeTab === 'Audio'">Audio</b>
-            <span v-else>Audio</span>
-          </span>
-
-          <div v-if="activeTab === 'Details'">
+            <span>{{ id }}</span>
+            <br/>
             
-            <i :class="`fas fa-${visibility === 'public' ? 'eye' : 'eye-slash'}`"></i>
-            {{ visibility === 'public' ? 'Public' : 'Private' }}
-
-            <i :class="`fas fa-${isPayable ? 'lock' : 'lock-open'}`"></i>
-            {{ isPayable ? 'Paid' : 'Free' }}
-
-            <p>
-              {{ description }}
-            </p>
+            <router-link
+              v-if="$auth.isAuthenticated && $auth.dbUser._id === author._id"
+              :to="{ name: 'edit', params: { id: id } }"
+              tag="button"
+            >
+              Edit
+            </router-link>
 
           </div>
 
-          <div v-if="activeTab === 'Audio'">
+          <div style="flex: 1 0 auto;">
 
-            <details open>
-              <summary>Available sources:</summary>
-              <i v-if="vizAudioSources.length < 1">
-                &lt;none&gt;
-              </i>
+            <div>
+              <span
+                @click="activeTab = 'Details'"
+                style="cursor: pointer;"
+              >
+                <b v-if="activeTab === 'Details'">Details</b>
+                <span v-else>Details</span>
+              </span>
+
+              &nbsp;&nbsp;|&nbsp;&nbsp;
+
+              <span
+                @click="activeTab = 'Audio'"
+                style="cursor: pointer;"
+              >
+                <b v-if="activeTab === 'Audio'">Audio</b>
+                <span v-else>Audio</span>
+              </span>
+            </div>
+
+            <div v-if="activeTab === 'Details'">
               
-              <div v-if="vizAudioSources.length > 0">
+              <i :class="`fas fa-${visibility === 'public' ? 'eye' : 'eye-slash'}`"></i>
+              {{ visibility === 'public' ? 'Public' : 'Private' }}
+
+              <i :class="`fas fa-${isPayable ? 'lock' : 'lock-open'}`"></i>
+              {{ isPayable ? 'Paid' : 'Free' }}
+
+              <p>
+                {{ description }}
+              </p>
+
+            </div>
+
+            <div v-if="activeTab === 'Audio'">
+
+              <details open>
+                <summary>Available sources:</summary>
+                <i v-if="vizAudioSources.length < 1">
+                  &lt;none&gt;
+                </i>
+                
+                <div v-if="vizAudioSources.length > 0">
+                  <AudioItem
+                    v-for="audioItem in vizAudioSources" :key="audioItem.name"
+                    :source="audioItem.source"
+                    :name="audioItem.name"
+                    :format="audioItem.format"
+                    :deleteDisabled="true"
+                    @activeAudioClick="setActiveAudio"
+                  />
+                </div>
+              </details>
+
+              <details>
+                <summary>Default sources:</summary>
+                <i v-if="defaultSources.length < 1">
+                  &lt;none&gt;
+                </i>
+                
                 <AudioItem
-                  v-for="audioItem in vizAudioSources" :key="audioItem.name"
+                  v-else
+                  v-for="audioItem in defaultSources" :key="audioItem.name"
                   :source="audioItem.source"
                   :name="audioItem.name"
                   :format="audioItem.format"
                   :deleteDisabled="true"
                   @activeAudioClick="setActiveAudio"
                 />
-              </div>
-            </details>
+              </details>
 
-            <details>
-              <summary>Default sources:</summary>
-              <i v-if="defaultSources.length < 1">
-                &lt;none&gt;
-              </i>
-              
-              <AudioItem
-                v-else
-                v-for="audioItem in defaultSources" :key="audioItem.name"
-                :source="audioItem.source"
-                :name="audioItem.name"
-                :format="audioItem.format"
-                :deleteDisabled="true"
-                @activeAudioClick="setActiveAudio"
-              />
-            </details>
-
+            </div>
           </div>
 
-          <div>
+          <div style="flex: 0 0 auto; text-align: center">
 
             <span @click="toggleUserWantsToPay" v-if="isPayable" :alt="(userWantsToPay ? 'Stop' : 'Start') + ' streaming payments'">
               <i :class="`fas fa-${userWantsToPay ? 'donate' : 'ticket-alt'}`"></i>

@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <div style="display: flex; padding-right: 6px;">
+    <div style="display: flex;">
     
       <div style="flex-grow: 1">
         <router-link to="/">
