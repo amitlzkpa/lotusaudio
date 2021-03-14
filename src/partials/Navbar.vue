@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <div style="display: flex">
+    <div style="display: flex; padding-right: 6px;">
     
       <div style="flex-grow: 1">
         <router-link to="/">
@@ -15,7 +15,7 @@
         </router-link>
       </div>
       
-      <div v-if="!$auth.loading">
+      <div v-if="!$auth.loading" style="text-align: right;">
         <a v-if="!$auth.isAuthenticated" @click="login" href="#!">Log in</a>
 
         <a v-if="$auth.isAuthenticated" href="#!">
