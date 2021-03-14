@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <div style="padding: 6px;" v-for="viz in vizs" :key="viz._id">
+    <div v-for="viz in vizs" :key="viz._id">
       
       <VizCard :visualization="viz" />
       
