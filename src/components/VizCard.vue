@@ -1,32 +1,33 @@
 <template>
   <div>
     
-    <div v-if="viz">
+    <div style="height: 18em; display: flex;" v-if="viz">
 
-      <router-link :to="{ name: 'view', params: { id: viz._id } }">
-        <img :src="img" style="object-fit: cover; height: 120px; width: 180px;" />
+      <div style="height: 100%; overflow-x: hidden; overflow-y: auto; flex: 0 0 17em;">
+        <router-link :to="{ name: 'view', params: { id: viz._id } }">
+          <img :src="img" style="object-fit: cover; height: 10em; width: 16em;"/>
+          <br/>
+          <small>{{ viz._id }}</small>
+          <br/>
+        </router-link>
+
+        <b>{{ viz.name }}</b>
         <br/>
-        <small>{{ viz._id }}</small>
+
+        <i>{{ viz.author.username }}</i>
         <br/>
-      </router-link>
+        
+        <i :class="`fas fa-${viz.visibility === 'public' ? 'eye' : 'eye-slash'}`"></i>
+        <span>{{ viz.visibility }}</span>
+        <br/>
+        
+        <i :class="`fas fa-${viz.paymentEnabled ? 'coins' : 'star-of-life'}`"></i>
+        <span>{{ viz.paymentEnabled ? 'paid' : 'free' }}</span>
+      </div>
 
-      <b>{{ viz.name }}</b>
-      <br/>
-
-      <i>{{ viz.author.username }}</i>
-      <br/>
-      
-      <i :class="`fas fa-${viz.visibility === 'public' ? 'eye' : 'eye-slash'}`"></i>
-      <span>{{ viz.visibility }}</span>
-      <br/>
-      
-      <i :class="`fas fa-${viz.paymentEnabled ? 'coins' : 'star-of-life'}`"></i>
-      <span>{{ viz.paymentEnabled ? 'paid' : 'free' }}</span>
-      <br/>
-
-      <p>
+      <div style="height: 100%; overflow-x: hidden; overflow-y: auto;">
         {{ viz.short_description }}
-      </p>
+      </div>
 
     </div>
 

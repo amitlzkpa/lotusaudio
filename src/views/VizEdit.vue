@@ -94,7 +94,7 @@
           <span>Short Description:</span>
           <br/>
           <textarea
-            :value="short_description"
+            v-model="short_description"
             minlength="0"
             maxlength="300"
             resize
