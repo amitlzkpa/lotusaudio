@@ -34,14 +34,27 @@
                   @click="save"
                 >Save</button>
               </div>
+
+              <div>
+                <span @click="paymentEnabled = !paymentEnabled">
+                  <i :class="`fas fa-${paymentEnabled ? 'coins' : 'star-of-life'}`"></i>
+                  <span>Make {{ paymentEnabled ? 'free' : 'paid' }}</span>
+                </span>
+                
+                <span @click="visibility = !visibility">
+                  <i :class="`fas fa-${visibility === 'public' ? 'eye' : 'eye-slash'}`"></i>
+                  <span>Make {{ visibility === 'private' ? 'public' : 'private' }}</span>
+                </span>
+              </div>
+
+              <span>Name:</span>
+              <input
+                type="text"
+                placeholder="<unnamed>"
+                v-model="name"
+              />
+
             </div>
-            
-            <span>Name:</span>
-            <input
-              type="text"
-              placeholder="<unnamed>"
-              v-model="name"
-            />
 
           </div>
 
@@ -104,6 +117,7 @@
                 v-model="short_description"
                 minlength="0"
                 maxlength="300"
+                style="width:100%"
                 resize
                 rows="3"
               />
@@ -115,6 +129,7 @@
                 v-model="description"
                 minlength="0"
                 maxlength="800"
+                style="width:100%"
                 resize
                 rows="8"
               />
@@ -179,22 +194,10 @@
               </details>
 
             </div>
-            
+
           </div>
 
           <div style="flex: 0 0 auto; text-align: center">
-
-            <div>
-              <span @click="paymentEnabled = !paymentEnabled">
-                <i :class="`fas fa-${paymentEnabled ? 'coins' : 'star-of-life'}`"></i>
-                <span>Make {{ paymentEnabled ? 'free' : 'paid' }}</span>
-              </span>
-              
-              <span @click="visibility = !visibility">
-                <i :class="`fas fa-${visibility === 'public' ? 'eye' : 'eye-slash'}`"></i>
-                <span>Make {{ visibility === 'private' ? 'public' : 'private' }}</span>
-              </span>
-            </div>
 
             <div>
               {{ $store.state.audioSource.name }}
