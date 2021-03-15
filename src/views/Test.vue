@@ -1,8 +1,8 @@
 <template>
   <div>
-    <b-button
+    <button
       @click="onClick"
-    >Click</b-button>
+    >Click</button>
   </div>
 </template>
 

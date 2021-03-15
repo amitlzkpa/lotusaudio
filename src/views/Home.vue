@@ -1,28 +1,19 @@
 <template>
   <div>
     <Navbar />
-    <div class="container">
-      
-      <br/><br/>
 
-      <Banner />
+    <Banner />
+    
+    <hr/>
+    
+    <VizGallery />
 
-      <br/>
-      
-      <hr/>
-      
-      <br/><br/>
-      
-      <VizGallery />
-
-      <br/><br/>
-
-    </div>
+    <br/><br/>
   </div>
 </template>
 
 <script>
-import Navbar from '@/partials/Navbar.vue';
+import Navbar from '@/components/Navbar.vue';
 import Banner from '@/components/Banner.vue';
 import VizGallery from '@/components/VizGallery.vue';
 

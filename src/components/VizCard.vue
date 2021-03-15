@@ -1,52 +1,34 @@
 <template>
   <div>
     
-    <div class="card" v-if="viz" style="min-height: 360px;">
+    <div style="height: 18em; display: flex;" v-if="viz">
 
-      <div class="card-image">
-        <figure class="image is-3by2">
-          <img :src="img" style="object-fit: cover" />
-        </figure>
+      <div style="height: 100%; overflow-x: hidden; overflow-y: auto; flex: 0 0 17em;">
+        <router-link :to="{ name: 'view', params: { id: viz._id } }">
+          <img :src="img" style="object-fit: cover; height: 10em; width: 16em;"/>
+          <br/>
+          <small>{{ viz._id }}</small>
+          <br/>
+        </router-link>
+
+        <b>{{ viz.name }}</b>
+        <br/>
+
+        <i>{{ viz.author.username }}</i>
+        <br/>
+        
+        <i :class="`fas fa-${viz.visibility === 'public' ? 'eye' : 'eye-slash'}`"></i>
+        <span>{{ viz.visibility }}</span>
+        <br/>
+        
+        <i :class="`fas fa-${viz.paymentEnabled ? 'coins' : 'star-of-life'}`"></i>
+        <span>{{ viz.paymentEnabled ? 'paid' : 'free' }}</span>
       </div>
 
-      <div class="card-content">
-        
-        <div class="media">
-          <div class="media-content">
-            
-            <b-tooltip :label="'Is ' + viz.visibility" position="is-right">
-              <b-icon
-                :icon="(viz.visibility === 'public') ? 'eye' : 'eye-slash'"
-                size="is-small"
-                class="has-text-grey-light"
-              ></b-icon>
-            </b-tooltip>
-              
-            <span style="margin: 0px 6px 0px 6px;"></span>
-            
-            <b-tooltip :label="'Is ' + (viz.paymentEnabled ? 'paid' : 'free')" position="is-right">
-              <b-icon
-                :icon="(viz.paymentEnabled) ? 'coins' : 'star-of-life'"
-                size="is-small"
-                class="has-text-grey-light"
-              ></b-icon>
-            </b-tooltip>
-
-            <p class="title is-4">{{ viz.name }}</p>
-
-            <p class="subtitle is-6 is-italic has-text-grey">{{ viz.author.username }}</p>
-
-          </div>
-        </div>
-
-        <div class="content">
-          <p class="has-text-weight-light">
-            {{ viz.short_description }}
-          </p>
-        </div>
-        
+      <div style="height: 100%; overflow-x: hidden; overflow-y: auto;">
+        {{ viz.short_description }}
       </div>
-      
+
     </div>
 
   </div>
@@ -94,5 +76,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
