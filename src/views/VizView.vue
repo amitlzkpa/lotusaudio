@@ -137,6 +137,31 @@
                   <button
                     @click="toggleConnToPeer"
                   >{{ theirPeerId === '' ? 'Connect' : 'Disconnect' }}</button>
+
+                  <br/>
+                  <br/>
+
+                  <div v-if="theirPeerId !== ''">
+                    Message:
+                    <input
+                      type="text"
+                      v-model="msgForPeer"
+                    />
+                    <br/>
+                    <button
+                      @click="sendMsgToPeer"
+                    >Send</button>
+
+                    <br/>
+
+                    <span
+                      v-for="(msg, idx) in msgsHistory"
+                      :key="idx"
+                    >
+                      {{ msg.peer }}: {{ msg.txt }} <br/>
+                    </span>
+                  </div>
+                  
                 </div>
                 
               </div>
@@ -196,6 +221,8 @@ export default {
       theirPeerId: "",
       peerIdToConnectTo: "",
       peerIsLive: false,
+      msgForPeer: "",
+      msgsHistory: [],
 
       id: "",
       name: "",
@@ -335,6 +362,22 @@ export default {
       this.paneWidth = (this.paneWidth < 10) ? 60 : 1;
       setTimeout(() => { this.$refs.three.onContainerResize(); }, 0);
     },
+    async recvMsgFmPeer(data) {
+      this.msgsHistory.push({
+        peer: this.theirPeerId,
+        txt: data.msg
+      });
+    },
+    async sendMsgToPeer() {
+      let data = {
+        msg: this.msgForPeer
+      };
+      conn.send(data);
+      this.msgsHistory.push({
+        peer: this.myPeerId,
+        txt: this.msgForPeer
+      });
+    },
     async toggleConnToPeer() {
       if (conn) {
 
@@ -350,8 +393,11 @@ export default {
         let that = this;
   
         conn.on('data', function(data) {
+          that.recvMsgFmPeer(data);
+        });
+        
+        conn.on('open', function(data) {
           console.log(data);
-          // that.receivedDataFromPeer(data);
         });
   
         // invitee gone
@@ -409,10 +455,14 @@ export default {
           }
           conn = newConn;
           that.theirPeerId = conn.peer;
+          that.peerIdToConnectTo = conn.peer;
           
           conn.on('data', function(data) {
+            that.recvMsgFmPeer(data);
+          });
+        
+          conn.on('open', function(data) {
             console.log(data);
-            // that.receivedDataFromPeer(data);
           });
 
           // inviter gone
