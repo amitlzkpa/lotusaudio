@@ -1,40 +1,33 @@
 <template>
-  <div class="level is-marginless">
+  <div>
+
+    <div style="display: flex;">
     
-    <div class="level-left">
-      <div class="level-item">
-        <router-link to="/" class="clickable-icon">
-          <b-icon
-            size="is-small"
-            icon="spa"
-          ></b-icon>
+      <div style="flex-grow: 1">
+        <router-link to="/">
+          <b>Lotus Audio</b>
+        </router-link>
+
+        <br/>
+
+        <router-link to="/new">
+          Create New
         </router-link>
       </div>
-      <div class="level-item" v-if="$auth.isAuthenticated">
-        <router-link to="/new">New</router-link>
+      
+      <div v-if="!$auth.loading" style="text-align: right;">
+        <a v-if="!$auth.isAuthenticated" @click="login" href="#!">Log in</a>
+
+        <a v-if="$auth.isAuthenticated" href="#!">
+          <a @click="logout" href="#!">Log out</a>
+          <br/>
+          <router-link to="/profile">{{ $auth.dbUser.username }}</router-link>
+        </a>
       </div>
+
     </div>
-    
-    <div class="level-right">
-      <div class="level-item">
-        <span v-if="!$auth.loading">
-          <a v-if="!$auth.isAuthenticated" @click="login" href="#!">Log in</a>
-          <a v-if="$auth.isAuthenticated" href="#!">
-            <b-dropdown position="is-bottom-left" aria-role="list">
-              <button class="button is-text" slot="trigger">
-                {{ $auth.dbUser.username }}
-              </button>
-              <b-dropdown-item aria-role="listitem">
-                <router-link to="/profile">Profile</router-link>
-              </b-dropdown-item>
-              <b-dropdown-item aria-role="listitem" >
-                <a @click="logout" href="#!">Log out</a>  
-              </b-dropdown-item>
-            </b-dropdown>
-          </a>
-        </span>
-      </div>
-    </div>
+
+    <hr />
     
   </div>
 </template>
@@ -55,22 +48,5 @@ export default {
 }
 </script>
 
-<style>
-.flex-container {
-  display:flex;
-  flex-direction:column;
-}
-
-.cont-ht {
-  height: 80vh;
-}
-
-.side-pad {
-  padding: 0px 6px 0px 6px;
-}
-
-.clickable-icon {
-  cursor: pointer;
-  margin: 4px;
-}
+<style scoped>
 </style>

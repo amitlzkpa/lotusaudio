@@ -1,37 +1,20 @@
 <template>
   <div>
     <Navbar />
-    <div class="container">
 
-      <br/>
-      <br/>
+    <img :src="$auth.user.picture" />
+    <br/>
 
-      <div class="columns">
+    <span>{{ $auth.user.name }}</span>
+    <br/>
 
-        <div class="column is-one-fifth">
-          <img :src="$auth.user.picture" />
-        </div>
+    <span>{{ $auth.user.nickname }}</span>
+    <br/>
 
-        <div class="column">
-          <p class="is-size-4 has-text-weight-semibold">
-            {{ $auth.user.name }}
-          </p>
-          <p class="is-size-6 has-text-weight-light is-italic">
-            {{ $auth.user.nickname }}
-          </p>
-          <p class="is-size-5">
-            {{ $auth.dbUser.bio }}
-          </p>
-        </div>
+    <hr/>
+    <br/><br/>
 
-      </div>
-      
-      <hr/>
-      <br/><br/>
-
-      <VizGallery :visualizations="vizs" />
-      
-    </div>
+    <VizGallery :visualizations="vizs" />
   </div>
 </template>
 
