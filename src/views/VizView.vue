@@ -112,59 +112,11 @@
                 </details>
 
               </div>
-          
+              
               <div v-if="activeTab === 'Live'">
-                
-                Status: {{ peerIsLive ? 'online' : 'offline' }}
-                <br/>
-                
-                <button
-                  @click="setPeerOnlineStatus(!peerIsLive)"
-                >
-                  Go {{ !peerIsLive ? 'online' : 'offline' }}
-                </button>
-
-                <div v-if="peerIsLive">
-                  Your ID: {{ myPeerId }}
-                  <br/>
-                  Partner ID:
-                  <input
-                    type="text"
-                    v-model="peerIdToConnectTo"
-                    :disabled="theirPeerId !== ''"
-                  />
-                  <br/>
-                  <button
-                    @click="toggleConnToPeer"
-                  >{{ theirPeerId === '' ? 'Connect' : 'Disconnect' }}</button>
-
-                  <br/>
-                  <br/>
-
-                  <div v-if="theirPeerId !== ''">
-                    Message:
-                    <input
-                      type="text"
-                      v-model="msgForPeer"
-                    />
-                    <br/>
-                    <button
-                      @click="sendMsgToPeer"
-                    >Send</button>
-
-                    <br/>
-
-                    <span
-                      v-for="(msg, idx) in msgsHistory"
-                      :key="idx"
-                    >
-                      {{ msg.peer }}: {{ msg.txt }} <br/>
-                    </span>
-                  </div>
-                  
-                </div>
-                
+                boo
               </div>
+              
             </div>
 
           </div>
@@ -203,11 +155,6 @@ import AudioItem from "@/components/AudioItem.vue";
 import Three from "@/components/Three.vue";
 import templateViz from "!raw-loader!@/assets/template_viz.js";
 
-import Peer from 'peerjs';
-
-let peer = null;
-let conn = null;
-
 export default {
   name: 'VizEdit',
   components: {
@@ -217,13 +164,6 @@ export default {
   },
   data() {
     return {
-      myPeerId: "",
-      theirPeerId: "",
-      peerIdToConnectTo: "",
-      peerIsLive: false,
-      msgForPeer: "",
-      msgsHistory: [],
-
       id: "",
       name: "",
       author: null,
@@ -362,152 +302,22 @@ export default {
       this.paneWidth = (this.paneWidth < 10) ? 60 : 1;
       setTimeout(() => { this.$refs.three.onContainerResize(); }, 0);
     },
-    async recvMsgFmPeer(data) {
-      this.msgsHistory.push({
-        peer: this.theirPeerId,
-        txt: data.msg
-      });
-    },
-    async sendMsgToPeer() {
-      let data = {
-        msg: this.msgForPeer
-      };
-      conn.send(data);
-      this.msgsHistory.push({
-        peer: this.myPeerId,
-        txt: this.msgForPeer
-      });
-    },
-    async toggleConnToPeer() {
-      if (conn) {
-
-        conn.close();
-        conn = null;
-        this.theirPeerId = '';
-        
-      } else {
-
-        conn = peer.connect(this.peerIdToConnectTo, {});
-        this.theirPeerId = conn.peer;
-        
-        let that = this;
-  
-        conn.on('data', function(data) {
-          that.recvMsgFmPeer(data);
-        });
-        
-        conn.on('open', function(data) {
-          console.log(data);
-        });
-  
-        // invitee gone
-        conn.on('close', function() {
-          conn.close();
-          conn = null;
-          that.theirPeerId = '';
-        });
-  
-        conn.on('error', function(err) {
-          console.log('Error in connection.');
-          console.log(err);
-          if (conn) {
-            conn.close();
-            conn = null;
-            that.theirPeerId = '';
-          }
-        });
-        
-      }
-
-    },
-    async setPeerOnlineStatus(isOnline) {
-
-      this.peerIsLive = isOnline;
-      if (this.peerIsLive) {
-        
-        let peerjsOpts = {
-          host: location.hostname,
-          port: location.port,
-          path: '/peerjs'
-        };
-
-        peer = new Peer(this.myPeerId, peerjsOpts);
-
-        // connected to PeerServer
-        peer.on('open', function(id) {
-          console.log(`Registered with peer id: ${id}`);
-        });
-
-        // error in connecting to PeerServer
-        peer.on('error', function(err) {
-          console.log('Error in connecting.');
-          console.log(err);
-        });
-
-        let that = this;
-
-        // connection received
-        peer.on('connection', function(newConn) {
-          if (conn !== null) {
-            console.log('Session already running. Ignoring connection.');
-            newConn.close();
-            return;
-          }
-          conn = newConn;
-          that.theirPeerId = conn.peer;
-          that.peerIdToConnectTo = conn.peer;
-          
-          conn.on('data', function(data) {
-            that.recvMsgFmPeer(data);
-          });
-        
-          conn.on('open', function(data) {
-            console.log(data);
-          });
-
-          // inviter gone
-          conn.on('close', function() {
-            conn.close();
-            conn = null;
-            that.theirPeerId = '';
-          });
-
-          conn.on('error', function(err) {
-            console.log('Error in connection.');
-            console.log(err);
-            if (conn) {
-              conn.close();
-              conn = null;
-              that.theirPeerId = '';
-            }
-          });
-
-        });
-
-      } else {
-        peer.destroy();
-        peer = null;
-      }
-
-    }
   },
   async mounted() {
+
+
+    console.log(this.WebRTCService);
+    this.WebRTCService.initialize();
+    
 
     while(this.$auth.loading) {
       await this.wait(100);
     }
-    
-    this.myPeerId = new Date().getTime().toString().slice(-6);
 
     setTimeout(() => { this.$refs.three.onContainerResize(); }, 0);
     await this.updateFromParam();
   },
   async beforeDestroy() {
-    if (peer) {
-      peer.destroy();
-      peer = null;
-    }
-
     if (this.$store.state.isPlaying) {
       await this.$refs.three.onPlayClicked();
     }

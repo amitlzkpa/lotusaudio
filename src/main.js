@@ -24,7 +24,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 library.add(fas);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
-Vue.use(WebRTCService);
+Vue.prototype.WebRTCService = WebRTCService;
+Vue.prototype.WebRTCService.initialize();
+console.log(Vue.prototype.WebRTCService);
+
 Vue.use(VueSplit);
 
 window.CodeMirror = CodeMirror
