@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const path = require('path');
+// const PeerServer = require('peer').PeerServer;
+const ExpressPeerServer = require('peer').ExpressPeerServer;
 const swaggerAPIDocSetup = require('./configs/apidoc');
 
 const DIR = 'dist';
@@ -13,10 +15,6 @@ const mongoURI = process.env.MONGO_URL;
 mongoose.connect(mongoURI, { useNewUrlParser: true });
 
 const app = express();
-
-app.use('/peerjs', require('peer').ExpressPeerServer(app, {
-  debug: true
-}));
 
 app.use(express.static(DIR));
 
@@ -32,6 +30,17 @@ const base = path.join(__dirname, '../');
 const indexFilePath = path.join(base, '/dist/index.html');
 app.use('/*', (req, res) => res.sendFile(indexFilePath));
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`listening on ${PORT}`);
+});
+
+const peerServer = ExpressPeerServer(server, {debug: true});
+app.use('/peerjs', peerServer);
+
+peerServer.on('error', (client) => {
+	console.log('error');
+});
+
+peerServer.on('connection', (client) => {
+	console.log(`The client ${client} is connected`);
 });
