@@ -7,6 +7,7 @@ import 'codemirror/addon/selection/active-line.js'
 
 import App from '@/App.vue';
 import router from '@/router';
+import WebRTCService from '@/WebRTCService';
 import store from '@/store';
 import axios from 'axios';
  
@@ -23,6 +24,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 library.add(fas);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
+Vue.use(WebRTCService);
 Vue.use(VueSplit);
 
 window.CodeMirror = CodeMirror
