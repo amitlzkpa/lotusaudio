@@ -54,39 +54,27 @@ export default {
     }
   },
   methods: {
-    async onAudioRemoteSourceUpdate(stream) {
-      if (audioIsLoaded) {
-        audioContext.close();
-      }
-      audioContext = new AudioContext();
-      let audioBufferSouceNode = audioContext.createMediaStreamSource(stream);
-      analyser = audioContext.createAnalyser();
-      analyser.fftSize = 512;
-      analyser.connect(audioContext.destination);
-      audioBufferSouceNode.connect(analyser);
-      audioBufferSouceNode.start(0);
-      if(this.$store.state.isPlaying) {
-        audioContext.resume();
-      } else {
-        audioContext.suspend();
-      }
-      audioIsLoaded = true;
-    },
     async onAudioSourceUpdate() {
       if (audioIsLoaded) {
         audioContext.close();
       }
       audioContext = new AudioContext();
-      let src = this.$store.state.audioSource.source;
-      let resp = await this.$api.get(src, { responseType: 'arraybuffer' });
-      let audio = resp.data;
-      let buffer = await audioContext.decodeAudioData(audio);
-      let audioBufferSouceNode = audioContext.createBufferSource();
+      let src = this.$store.state.audioSource;
+      let sourceIsStream = !!this.$store.state.audioSource.stream;
+      let audioBufferSouceNode;
+      if (sourceIsStream) {
+        audioBufferSouceNode = audioContext.createMediaStreamSource(src.stream);
+      } else {
+        let resp = await this.$api.get(src.source, { responseType: 'arraybuffer' });
+        let audio = resp.data;
+        let buffer = await audioContext.decodeAudioData(audio);
+        audioBufferSouceNode = audioContext.createBufferSource();
+        audioBufferSouceNode.buffer = buffer;
+      }
       analyser = audioContext.createAnalyser();
       analyser.fftSize = 512;
       analyser.connect(audioContext.destination);
       audioBufferSouceNode.connect(analyser);
-      audioBufferSouceNode.buffer = buffer;
       audioBufferSouceNode.start(0);
       if(this.$store.state.isPlaying) {
         audioContext.resume();

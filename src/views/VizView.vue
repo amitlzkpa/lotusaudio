@@ -366,9 +366,9 @@ export default {
     },
     async useMicAudio() {
       let stream = await utils.getMedia({ audio: true, video: false });
-      this.$refs.three.onAudioRemoteSourceUpdate(stream);
-      let audioStreamSource = {name: "Microphone Audio", source: stream};
+      let audioStreamSource = { name: "Microphone Audio", stream: stream };
       this.$store.commit('updateAudioSource', audioStreamSource);
+      this.$refs.three.onAudioSourceUpdate();
     }
   },
   async mounted() {
