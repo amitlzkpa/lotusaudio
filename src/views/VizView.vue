@@ -336,34 +336,43 @@ export default {
       setTimeout(() => { this.$refs.three.onContainerResize(); }, 0);
     },
     async toggleConnToPeer() {
-      if(conn) return;
+      if (conn) {
 
-      conn = peer.connect(this.peerIdToConnectTo, {});
-      this.theirPeerId = conn.peer;
-      
-      let that = this;
-
-      conn.on('data', function(data) {
-        console.log(data);
-        // that.receivedDataFromPeer(data);
-      });
-
-      // invitee gone
-      conn.on('close', function() {
         conn.close();
         conn = null;
-        that.theirPeerId = '';
-      });
+        this.theirPeerId = '';
+        
+      } else {
 
-      conn.on('error', function(err) {
-        console.log('Error in connection.');
-        console.log(err);
-        if (conn) {
+        conn = peer.connect(this.peerIdToConnectTo, {});
+        this.theirPeerId = conn.peer;
+        
+        let that = this;
+  
+        conn.on('data', function(data) {
+          console.log(data);
+          // that.receivedDataFromPeer(data);
+        });
+  
+        // invitee gone
+        conn.on('close', function() {
           conn.close();
           conn = null;
           that.theirPeerId = '';
-        }
-      });
+        });
+  
+        conn.on('error', function(err) {
+          console.log('Error in connection.');
+          console.log(err);
+          if (conn) {
+            conn.close();
+            conn = null;
+            that.theirPeerId = '';
+          }
+        });
+        
+      }
+
     },
     async setPeerOnlineStatus(isOnline) {
 
