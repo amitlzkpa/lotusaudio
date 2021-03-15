@@ -89,110 +89,115 @@
                 <span v-else>Audio</span>
               </span>
             </div>
+            
+            <div style="height: 75vh; overflow-y: auto; overflow-x: hidden;">
+              <div v-if="activeTab === 'Code'">
+                <vue-codemirror-editor
+                  @keydown.enter="handleEnter"
+                  @keydown.s="handleS"
+                  v-model="code"
+                  :option="{
+                    theme:'base16-dark',
+                    mode:'text/javascript',
+                  }"
+                />
+              </div>
 
-            <div v-if="activeTab === 'Code'">
-              <vue-codemirror-editor
-                @keydown.enter="handleEnter"
-                @keydown.s="handleS"
-                v-model="code"
-                :option="{
-                  theme:'base16-dark',
-                  mode:'text/javascript',
-                }"
-              />
-            </div>
+              <div v-if="activeTab === 'Details'">
+                <span>Payment Pointer:</span>
+                <input
+                  :disabled="!paymentEnabled"
+                  type="text"
+                  v-model="paymentPointer"
+                />
+                <br/>
 
-            <div v-if="activeTab === 'Details'">
-              <span>Payment Pointer:</span>
-              <input
-                :disabled="!paymentEnabled"
-                type="text"
-                v-model="paymentPointer"
-              />
-              <br/>
+                <span>Short Description:</span>
+                <br/>
+                <textarea
+                  v-model="short_description"
+                  minlength="0"
+                  maxlength="300"
+                  style="width:100%"
+                  resize
+                  rows="3"
+                />
+                <br/>
 
-              <span>Short Description:</span>
-              <br/>
-              <textarea
-                v-model="short_description"
-                minlength="0"
-                maxlength="300"
-                style="width:100%"
-                resize
-                rows="3"
-              />
-              <br/>
+                <span>Description:</span>
+                <br/>
+                <textarea
+                  v-model="description"
+                  minlength="0"
+                  maxlength="800"
+                  style="width:100%"
+                  resize
+                  rows="8"
+                />
+                <br/>
+              </div>
 
-              <span>Description:</span>
-              <br/>
-              <textarea
-                v-model="description"
-                minlength="0"
-                maxlength="800"
-                style="width:100%"
-                resize
-                rows="8"
-              />
-              <br/>
-            </div>
+              <div v-if="activeTab === 'Audio'">
 
-            <div v-if="activeTab === 'Audio'">
+                <details open>
+                  <summary>Available sources</summary>
+                  <i v-if="vizAudioSources.length < 1">
+                    &lt;none&gt;
+                  </i>
+                  
+                  <div v-if="vizAudioSources.length > 0">
+                    <AudioItem
+                      v-for="audioItem in vizAudioSources" :key="audioItem.name"
+                      :source="audioItem.source"
+                      :name="audioItem.name"
+                      :format="audioItem.format"
+                      :deleteDisabled="true"
+                      @activeAudioClick="setActiveAudio"
+                    />
+                  </div>
+                </details>
 
-              <details open>
-                <summary>Available sources:</summary>
-                <i v-if="vizAudioSources.length < 1">
-                  &lt;none&gt;
-                </i>
-                
-                <div v-if="vizAudioSources.length > 0">
+                <details>
+                  <summary>Default sources</summary>
+                  <i v-if="defaultSources.length < 1">
+                    &lt;none&gt;
+                  </i>
+                  
                   <AudioItem
-                    v-for="audioItem in vizAudioSources" :key="audioItem.name"
+                    v-else
+                    v-for="audioItem in defaultSources" :key="audioItem.name"
                     :source="audioItem.source"
                     :name="audioItem.name"
                     :format="audioItem.format"
                     :deleteDisabled="true"
                     @activeAudioClick="setActiveAudio"
                   />
-                </div>
+                </details>
 
-                <div>
-                  <span>Name</span>
-                  <input
-                    type="text"
-                    v-model="newAudioSource.name"
-                    placeholder=""
-                  />
-                  <br/>
+                <details>
+                  <summary>Add sources</summary>
+                  <div>
+                    <span>Name</span>
+                    <input
+                      type="text"
+                      v-model="newAudioSource.name"
+                      placeholder=""
+                    />
+                    <br/>
 
-                  <span>Source</span>
-                  <input
-                    type="text"
-                    v-model="newAudioSource.source"
-                    placeholder=""
-                  />
-                  <br/>
+                    <span>Source</span>
+                    <input
+                      type="text"
+                      v-model="newAudioSource.source"
+                      placeholder=""
+                    />
+                    <br/>
 
-                  <button @click="addNewAudioSource">Add new source</button>
-                </div>
-              </details>
+                    <button @click="addNewAudioSource">Add new source</button>
+                  </div>
+                </details>
 
-              <details>
-                <summary>Default sources:</summary>
-                <i v-if="defaultSources.length < 1">
-                  &lt;none&gt;
-                </i>
-                
-                <AudioItem
-                  v-else
-                  v-for="audioItem in defaultSources" :key="audioItem.name"
-                  :source="audioItem.source"
-                  :name="audioItem.name"
-                  :format="audioItem.format"
-                  :deleteDisabled="true"
-                  @activeAudioClick="setActiveAudio"
-                />
-              </details>
-
+              </div>
             </div>
 
           </div>

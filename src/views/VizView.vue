@@ -49,58 +49,61 @@
               </span>
             </div>
 
-            <div v-if="activeTab === 'Details'">
-              
-              <i :class="`fas fa-${visibility === 'public' ? 'eye' : 'eye-slash'}`"></i>
-              {{ visibility === 'public' ? 'Public' : 'Private' }}
-
-              <i :class="`fas fa-${isPayable ? 'lock' : 'lock-open'}`"></i>
-              {{ isPayable ? 'Paid' : 'Free' }}
-
-              <p>
-                {{ description }}
-              </p>
-
-            </div>
-
-            <div v-if="activeTab === 'Audio'">
-
-              <details open>
-                <summary>Available sources:</summary>
-                <i v-if="vizAudioSources.length < 1">
-                  &lt;none&gt;
-                </i>
+            <div style="height: 77vh; overflow-y: auto; overflow-x: hidden;">
+              <div v-if="activeTab === 'Details'">
                 
-                <div v-if="vizAudioSources.length > 0">
+                <i :class="`fas fa-${visibility === 'public' ? 'eye' : 'eye-slash'}`"></i>
+                {{ visibility === 'public' ? 'Public' : 'Private' }}
+
+                <i :class="`fas fa-${isPayable ? 'lock' : 'lock-open'}`"></i>
+                {{ isPayable ? 'Paid' : 'Free' }}
+
+                <p>
+                  {{ description }}
+                </p>
+
+              </div>
+
+              <div v-if="activeTab === 'Audio'">
+
+                <details open>
+                  <summary>Available sources:</summary>
+                  <i v-if="vizAudioSources.length < 1">
+                    &lt;none&gt;
+                  </i>
+                  
+                  <div v-if="vizAudioSources.length > 0">
+                    <AudioItem
+                      v-for="audioItem in vizAudioSources" :key="audioItem.name"
+                      :source="audioItem.source"
+                      :name="audioItem.name"
+                      :format="audioItem.format"
+                      :deleteDisabled="true"
+                      @activeAudioClick="setActiveAudio"
+                    />
+                  </div>
+                </details>
+
+                <details>
+                  <summary>Default sources:</summary>
+                  <i v-if="defaultSources.length < 1">
+                    &lt;none&gt;
+                  </i>
+                  
                   <AudioItem
-                    v-for="audioItem in vizAudioSources" :key="audioItem.name"
+                    v-else
+                    v-for="audioItem in defaultSources" :key="audioItem.name"
                     :source="audioItem.source"
                     :name="audioItem.name"
                     :format="audioItem.format"
                     :deleteDisabled="true"
                     @activeAudioClick="setActiveAudio"
                   />
-                </div>
-              </details>
+                </details>
 
-              <details>
-                <summary>Default sources:</summary>
-                <i v-if="defaultSources.length < 1">
-                  &lt;none&gt;
-                </i>
-                
-                <AudioItem
-                  v-else
-                  v-for="audioItem in defaultSources" :key="audioItem.name"
-                  :source="audioItem.source"
-                  :name="audioItem.name"
-                  :format="audioItem.format"
-                  :deleteDisabled="true"
-                  @activeAudioClick="setActiveAudio"
-                />
-              </details>
-
+              </div>
             </div>
+
           </div>
 
           <div style="flex: 0 0 auto; text-align: center">
