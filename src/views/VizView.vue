@@ -141,6 +141,10 @@
                   <br/>
 
                   <div v-if="WebRTCService.theirPeerId !== ''">
+                    <button
+                      @click="WebRTCService.sendAudio"
+                    >Send Audio</button>
+                    <br/>
                     Message:
                     <input
                       type="text"
