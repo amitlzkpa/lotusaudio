@@ -114,6 +114,12 @@
               </div>
           
               <div v-if="activeTab === 'Live'">
+                <button
+                  @click="registerPeerId"
+                >
+                  Go Live!
+                </button>
+                <br/>
                 Your room ID:
               </div>
             </div>
@@ -330,8 +336,6 @@ export default {
     while(this.$auth.loading) {
       await this.wait(100);
     }
-
-    this.registerPeerId();
 
     setTimeout(() => { this.$refs.three.onContainerResize(); }, 0);
     await this.updateFromParam();
