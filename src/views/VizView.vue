@@ -191,6 +191,10 @@
 
           <div style="flex: 0 0 auto; text-align: center">
 
+            <span @click="$refs.three.toggleMute">
+              <i :class="`fas fa-${isMuted ? 'volume-mute' : 'volume-up'}`"></i>
+            </span>
+
             <span @click="toggleUserWantsToPay" v-if="isPayable" :alt="(userWantsToPay ? 'Stop' : 'Start') + ' streaming payments'">
               <i :class="`fas fa-${userWantsToPay ? 'donate' : 'ticket-alt'}`"></i>
             </span>
@@ -294,6 +298,9 @@ export default {
   computed: {
     isPayable() {
       return this.paymentPointer !== "" && this.paymentEnabled;
+    },
+    isMuted() {
+      return this.$store.state.isMuted;
     }
   },
   methods: {
@@ -343,7 +350,6 @@ export default {
       await this.$refs.three.onAudioSourceUpdate();
     },
     async updatePaymentStream() {
-      
       let metas = Array.from(document.getElementsByTagName("meta"));
       let elem = metas.filter(m => Array.from(m.attributes).filter(a => { return a.name === "name" && a.value === "monetization"; }).length > 0 )[0];
       let shouldBeOn = this.isPayable ? this.isPayable && this.userWantsToPay : false;
@@ -367,7 +373,6 @@ export default {
         m.setAttributeNode(att2);
         document.head.appendChild(m);
       }
-
     },
     paneWidthUpdate(size) {
       this.paneWidth = size[0];
