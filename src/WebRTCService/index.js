@@ -1,4 +1,6 @@
 import Peer from "peerjs";
+import utils from "@/utils/index.js";
+
 
 
 function WebRTCService() {
@@ -6,6 +8,7 @@ function WebRTCService() {
 
   let peer = null;
   let conn = null;
+  let call = null;
   
   this.myPeerId = "";
   this.theirPeerId = "";
@@ -71,7 +74,6 @@ function WebRTCService() {
 
       let that = this;
 
-      // connection received
       peer.on('connection', function(newConn) {
         if (conn !== null) {
           console.log('Session already running. Ignoring connection.');
@@ -108,6 +110,8 @@ function WebRTCService() {
         });
 
       });
+
+      peer.on('call', that.onReceiveCall);
 
     } else {
       peer.destroy();
@@ -185,6 +189,70 @@ function WebRTCService() {
     });
   }
 
+
+  this.togglePeerAudio = async() => {
+    if (call) {
+      call.close();
+      call = null;
+      this.theirPeerId = '';
+    } else {
+      let stream = await utils.getMedia({ audio: true, video: false });
+      console.log('Calling ...');
+      console.log(stream);
+      call = peer.call(this.peerIdToConnectTo, stream);
+      this.theirPeerId = this.peerIdToConnectTo;
+    }
+  }
+
+  
+  this.onReceiveCall = async(recdCall) => {
+    call = recdCall;
+    console.log('peer is calling...');
+    console.log(call);
+    call.answer();
+    this.theirPeerId = call.peer;
+    this.peerIdToConnectTo = call.peer;
+    
+    let that = this;
+
+    call.on('close', function() {
+      call.close();
+      call = null;
+      that.theirPeerId = '';
+    });
+
+    call.on('error', function(err) {
+      console.log('Error in call.');
+      console.log(err);
+      if (call) {
+        call.close();
+        call = null;
+        that.theirPeerId = '';
+      }
+    });
+    
+    call.on('stream', onReceiveStream);
+  }
+
+
+  function onReceiveStream(stream) {
+    console.log(stream);
+
+    let audio = document.createElement("audio");
+    audio.id = 'audio-player';
+    audio.controls = 'controls';
+    audio.srcObject = stream;
+    
+    document.body.appendChild(audio);
+  
+    audio.onloadedmetadata = function(e){
+      console.log('now playing the audio');
+      audio.play();
+    }
+  
+  }
+  
+  
 
 }
 

@@ -154,33 +154,9 @@
                   />
                   <br/>
                   <button
-                    @click="WebRTCService.toggleConnToPeer"
-                  >{{ WebRTCService.theirPeerId === '' ? 'Connect' : 'Disconnect' }}</button>
-
+                    @click="WebRTCService.togglePeerAudio"
+                  >{{ WebRTCService.theirPeerId === '' ? 'Share audio' : 'Disconnect' }}</button>
                   <br/>
-                  <br/>
-
-                  <div v-if="WebRTCService.theirPeerId !== ''">
-                    <br/>
-                    Message:
-                    <input
-                      type="text"
-                      v-model="WebRTCService.msgForPeer"
-                    />
-                    <br/>
-                    <button
-                      @click="WebRTCService.sendMsgToPeer"
-                    >Send</button>
-
-                    <br/>
-
-                    <span
-                      v-for="(msg, idx) in WebRTCService.msgsHistory"
-                      :key="idx"
-                    >
-                      {{ msg.peer }}: {{ msg.txt }} <br/>
-                    </span>
-                  </div>
                   
                 </div>
               </div>
