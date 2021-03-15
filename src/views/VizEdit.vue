@@ -118,9 +118,8 @@
                   v-model="short_description"
                   minlength="0"
                   maxlength="300"
-                  style="width:100%"
-                  resize
-                  rows="3"
+                  style="width:100%; resize: vertical;"
+                  rows="6"
                 />
                 <br/>
 
@@ -130,9 +129,8 @@
                   v-model="description"
                   minlength="0"
                   maxlength="800"
-                  style="width:100%"
-                  resize
-                  rows="8"
+                  style="width:100%; resize: vertical;"
+                  rows="14"
                 />
                 <br/>
               </div>
