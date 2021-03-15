@@ -229,8 +229,8 @@
 import Navbar from '@/components/Navbar.vue';
 import AudioItem from "@/components/AudioItem.vue";
 import Three from "@/components/Three.vue";
-// import templateViz from "!raw-loader!@/assets/template_viz.js";
-import newViz from "!raw-loader!@/assets/new_viz.js";
+import templateViz from "!raw-loader!@/assets/template_viz.js";
+// import newViz from "!raw-loader!@/assets/new_viz.js";
 
 export default {
   name: 'VizEdit',
@@ -247,7 +247,7 @@ export default {
       visibility: "public",
       short_description: "",
       description: "",
-      code: newViz,
+      code: templateViz,
       paymentPointer: "",
       paymentEnabled: false,
       paneWidth: 40,
