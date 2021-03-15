@@ -111,6 +111,17 @@
                   />
                 </details>
 
+                <details>
+                  <summary>Microphone sources:</summary>
+                  
+                  <button
+                    @click="useMicAudio"
+                  >Use microphone audio</button>
+                  <br/>
+                  <div id="micAudioContainer"></div>
+
+                </details>
+
               </div>
               
               <div v-if="activeTab === 'Live'">
@@ -141,9 +152,6 @@
                   <br/>
 
                   <div v-if="WebRTCService.theirPeerId !== ''">
-                    <button
-                      @click="WebRTCService.sendAudio"
-                    >Send Audio</button>
                     <br/>
                     Message:
                     <input
@@ -205,6 +213,7 @@ import Navbar from '@/components/Navbar.vue';
 import AudioItem from "@/components/AudioItem.vue";
 import Three from "@/components/Three.vue";
 import templateViz from "!raw-loader!@/assets/template_viz.js";
+import utils from "@/utils/index.js";
 
 export default {
   name: 'VizEdit',
@@ -355,6 +364,12 @@ export default {
       this.paneWidth = (this.paneWidth < 10) ? 60 : 1;
       setTimeout(() => { this.$refs.three.onContainerResize(); }, 0);
     },
+    async useMicAudio() {
+      let stream = await utils.getMedia({ audio: true, video: false });
+      this.$refs.three.onAudioRemoteSourceUpdate(stream);
+      let audioStreamSource = {name: "Microphone Audio", source: stream};
+      this.$store.commit('updateAudioSource', audioStreamSource);
+    }
   },
   async mounted() {
     while(this.$auth.loading) {
