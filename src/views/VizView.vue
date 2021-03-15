@@ -115,8 +115,17 @@
                   <summary>Microphone sources:</summary>
                   
                   <button
+                    v-if="!$store.state.audioSource.stream"
                     @click="useMicAudio"
                   >Use microphone audio</button>
+                  <button
+                    v-else
+                    @click="disconnectMicAudio"
+                  >Disconnect microphone audio</button>
+                  &nbsp;&nbsp;
+                  <i v-if="!!$store.state.audioSource.stream">
+                    Using microphone audio
+                  </i>
                   <br/>
                   <div id="micAudioContainer"></div>
 
@@ -188,7 +197,11 @@
 
             {{ $store.state.audioSource.name }}
 
-            <span alt="Play audio and run visualization" @click="run" v-if="((isPayable) ? isPayable && userWantsToPay : true)">
+            <span
+              v-if="((isPayable) ? isPayable && userWantsToPay : true)"
+              alt="Play audio and run visualization"
+              @click="run"
+            >
               <i :class="`fas fa-${$store.state.isPlaying ? 'pause' : 'play'}`"></i>
             </span>
 
@@ -369,6 +382,11 @@ export default {
       let audioStreamSource = { name: "Microphone Audio", stream: stream };
       this.$store.commit('updateAudioSource', audioStreamSource);
       this.$refs.three.onAudioSourceUpdate();
+    },
+    async disconnectMicAudio() {
+      let audioSource = this.defaultSources[0];
+      this.$store.commit('updateAudioSource', audioSource);
+      await this.$refs.three.onAudioSourceUpdate();
     }
   },
   async mounted() {
