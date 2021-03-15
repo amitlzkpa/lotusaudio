@@ -3,6 +3,7 @@ import Peer from 'peerjs';
 
 function WebRTCService() {
 
+  
   let peer = null;
   let conn = null;
   
@@ -11,6 +12,9 @@ function WebRTCService() {
   this.peerIdToConnectTo = "";
   this.peerIsLive = false;
 
+  
+  this.msgForPeer = "";
+  this.msgsHistory = [];
 
   
   this.reset = async() => {
@@ -162,10 +166,10 @@ function WebRTCService() {
     console.log('Mesg received');
     console.log(data);
     console.log('---');
-    // this.msgsHistory.push({
-    //   peer: this.theirPeerId,
-    //   txt: data.msg
-    // });
+    this.msgsHistory.push({
+      peer: this.theirPeerId,
+      txt: data.msg
+    });
   }
 
 
@@ -176,13 +180,14 @@ function WebRTCService() {
     conn.send(data);
     console.log('Sending message.');
     console.log(data);
-    // this.msgsHistory.push({
-    //   peer: this.myPeerId,
-    //   txt: this.msgForPeer
-    // });
+    this.msgsHistory.push({
+      peer: this.myPeerId,
+      txt: this.msgForPeer
+    });
   }
 
 
 }
+
 
 export default new WebRTCService;

@@ -114,7 +114,54 @@
               </div>
               
               <div v-if="activeTab === 'Live'">
-                boo
+                Status: {{ WebRTCService.peerIsLive ? 'online' : 'offline' }}
+                <br/>
+                
+                <button
+                  @click="WebRTCService.setPeerOnlineStatus(!WebRTCService.peerIsLive)"
+                >
+                  Go {{ !WebRTCService.peerIsLive ? 'online' : 'offline' }}
+                </button>
+
+                <div v-if="WebRTCService.peerIsLive">
+                  Your ID: {{ WebRTCService.myPeerId }}
+                  <br/>
+                  Partner ID:
+                  <input
+                    type="text"
+                    v-model="WebRTCService.peerIdToConnectTo"
+                    :disabled="WebRTCService.theirPeerId !== ''"
+                  />
+                  <br/>
+                  <button
+                    @click="WebRTCService.toggleConnToPeer"
+                  >{{ WebRTCService.theirPeerId === '' ? 'Connect' : 'Disconnect' }}</button>
+
+                  <br/>
+                  <br/>
+
+                  <div v-if="WebRTCService.theirPeerId !== ''">
+                    Message:
+                    <input
+                      type="text"
+                      v-model="WebRTCService.msgForPeer"
+                    />
+                    <br/>
+                    <button
+                      @click="WebRTCService.sendMsgToPeer"
+                    >Send</button>
+
+                    <br/>
+
+                    <span
+                      v-for="(msg, idx) in WebRTCService.msgsHistory"
+                      :key="idx"
+                    >
+                      {{ msg.peer }}: {{ msg.txt }} <br/>
+                    </span>
+                  </div>
+                  
+                </div>
               </div>
               
             </div>
@@ -214,6 +261,8 @@ export default {
         }
       ],
       userWantsToPay: false,
+
+      WebRTCService: this.WebRTCService
     }
   },
   computed: {
@@ -304,12 +353,6 @@ export default {
     },
   },
   async mounted() {
-
-
-    console.log(this.WebRTCService);
-    this.WebRTCService.initialize();
-    
-
     while(this.$auth.loading) {
       await this.wait(100);
     }

@@ -26,7 +26,6 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.prototype.WebRTCService = WebRTCService;
 Vue.prototype.WebRTCService.initialize();
-console.log(Vue.prototype.WebRTCService);
 
 Vue.use(VueSplit);
 
