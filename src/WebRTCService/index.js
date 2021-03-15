@@ -1,16 +1,4 @@
-import Peer from 'peerjs';
-
-
-async function getMedia(constraints) {
-  constraints = constraints || { audio: true, video: false };
-  let stream = null;
-  try {
-    stream = await navigator.mediaDevices.getUserMedia(constraints);
-  } catch(err) {
-    console.log(err);
-  }
-  return stream;
-}
+import Peer from "peerjs";
 
 
 function WebRTCService() {
@@ -37,7 +25,6 @@ function WebRTCService() {
 
   this.initialize = async() => {
     this.myPeerId = new Date().getTime().toString().slice(-6);
-    console.log(this.myPeerId);
   }
 
 
@@ -196,16 +183,6 @@ function WebRTCService() {
       peer: this.myPeerId,
       txt: this.msgForPeer
     });
-  }
-
-
-  this.sendAudio = async() => {
-
-    
-    let stream = await getMedia({ audio: true, video: false });
-    console.log(stream);
-
-    
   }
 
 
