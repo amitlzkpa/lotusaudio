@@ -114,13 +114,31 @@
               </div>
           
               <div v-if="activeTab === 'Live'">
-                <button
-                  @click="registerPeerId"
-                >
-                  Go Live!
-                </button>
+                
+                Status: {{ peerIsLive ? 'online' : 'offline' }}
                 <br/>
-                Your room ID:
+                
+                <button
+                  @click="setPeerOnlineStatus(!peerIsLive)"
+                >
+                  Go {{ !peerIsLive ? 'online' : 'offline' }}
+                </button>
+
+                <div v-if="peerIsLive">
+                  Your ID: {{ myPeerId }}
+                  <br/>
+                  Partner ID:
+                  <input
+                    type="text"
+                    v-model="peerIdToConnectTo"
+                    :disabled="theirPeerId !== ''"
+                  />
+                  <br/>
+                  <button
+                    @click="toggleConnToPeer"
+                  >{{ theirPeerId === '' ? 'Connect' : 'Disconnect' }}</button>
+                </div>
+                
               </div>
             </div>
 
@@ -162,7 +180,8 @@ import templateViz from "!raw-loader!@/assets/template_viz.js";
 
 import Peer from 'peerjs';
 
-let peer, conn;
+let peer = null;
+let conn = null;
 
 export default {
   name: 'VizEdit',
@@ -173,6 +192,11 @@ export default {
   },
   data() {
     return {
+      myPeerId: "",
+      theirPeerId: "",
+      peerIdToConnectTo: "",
+      peerIsLive: false,
+
       id: "",
       name: "",
       author: null,
@@ -223,7 +247,6 @@ export default {
         }
       ],
       userWantsToPay: false,
-      myRoomId: '',
     }
   },
   computed: {
@@ -312,22 +335,100 @@ export default {
       this.paneWidth = (this.paneWidth < 10) ? 60 : 1;
       setTimeout(() => { this.$refs.three.onContainerResize(); }, 0);
     },
-    async registerPeerId() {
-      let id = 'fooo';
-      // id = this.myRoomId;
-      console.log(window.location.port);
-      let peerjsOpts = {
-        host: window.location.hostname,
-        port: window.location.port,
-        // port: 9004,
-        path: '/peerjs'
-      };
-      peer = new Peer(id, peerjsOpts);
-      console.log(peer);
+    async toggleConnToPeer() {
+      if(conn) return;
 
-      peer.on('open', function(id) {
-        console.log(`Registered with peer id: ${id}`);
+      conn = peer.connect(this.peerIdToConnectTo, {});
+      this.theirPeerId = conn.peer;
+      
+      let that = this;
+
+      conn.on('data', function(data) {
+        console.log(data);
+        // that.receivedDataFromPeer(data);
       });
+
+      // invitee gone
+      conn.on('close', function() {
+        conn.close();
+        conn = null;
+        that.theirPeerId = '';
+      });
+
+      conn.on('error', function(err) {
+        console.log('Error in connection.');
+        console.log(err);
+        if (conn) {
+          conn.close();
+          conn = null;
+          that.theirPeerId = '';
+        }
+      });
+    },
+    async setPeerOnlineStatus(isOnline) {
+
+      this.peerIsLive = isOnline;
+      if (this.peerIsLive) {
+        
+        let peerjsOpts = {
+          host: location.hostname,
+          port: location.port,
+          path: '/peerjs'
+        };
+
+        peer = new Peer(this.myPeerId, peerjsOpts);
+
+        // connected to PeerServer
+        peer.on('open', function(id) {
+          console.log(`Registered with peer id: ${id}`);
+        });
+
+        // error in connecting to PeerServer
+        peer.on('error', function(err) {
+          console.log('Error in connecting.');
+          console.log(err);
+        });
+
+        let that = this;
+
+        // connection received
+        peer.on('connection', function(newConn) {
+          if (conn !== null) {
+            console.log('Session already running. Ignoring connection.');
+            newConn.close();
+            return;
+          }
+          conn = newConn;
+          that.theirPeerId = conn.peer;
+          
+          conn.on('data', function(data) {
+            console.log(data);
+            // that.receivedDataFromPeer(data);
+          });
+
+          // inviter gone
+          conn.on('close', function() {
+            conn.close();
+            conn = null;
+            that.theirPeerId = '';
+          });
+
+          conn.on('error', function(err) {
+            console.log('Error in connection.');
+            console.log(err);
+            if (conn) {
+              conn.close();
+              conn = null;
+              that.theirPeerId = '';
+            }
+          });
+
+        });
+
+      } else {
+        peer.destroy();
+        peer = null;
+      }
 
     }
   },
@@ -336,11 +437,18 @@ export default {
     while(this.$auth.loading) {
       await this.wait(100);
     }
+    
+    this.myPeerId = new Date().getTime().toString().slice(-6);
 
     setTimeout(() => { this.$refs.three.onContainerResize(); }, 0);
     await this.updateFromParam();
   },
   async beforeDestroy() {
+    if (peer) {
+      peer.destroy();
+      peer = null;
+    }
+
     if (this.$store.state.isPlaying) {
       await this.$refs.three.onPlayClicked();
     }
