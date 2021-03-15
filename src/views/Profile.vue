@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import Navbar from '@/partials/Navbar.vue';
+import Navbar from '@/components/Navbar.vue';
 import VizGallery from '@/components/VizGallery.vue';
 
 

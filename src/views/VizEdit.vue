@@ -7,7 +7,7 @@
 
         <Navbar />
         
-        <div v-if="id !== ''" style="height: 91vh; display: flex; flex-direction: column;">
+        <div style="height: 91vh; display: flex; flex-direction: column;">
 
           <div style="flex: 0 0 auto;">
 
@@ -226,7 +226,7 @@
 </template>
 
 <script>
-import Navbar from '@/partials/Navbar.vue';
+import Navbar from '@/components/Navbar.vue';
 import AudioItem from "@/components/AudioItem.vue";
 import Three from "@/components/Three.vue";
 // import templateViz from "!raw-loader!@/assets/template_viz.js";
