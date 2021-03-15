@@ -54,6 +54,24 @@ export default {
     }
   },
   methods: {
+    async onAudioRemoteSourceUpdate(stream) {
+      if (audioIsLoaded) {
+        audioContext.close();
+      }
+      audioContext = new AudioContext();
+      let audioBufferSouceNode = audioContext.createMediaStreamSource(stream);
+      analyser = audioContext.createAnalyser();
+      analyser.fftSize = 512;
+      analyser.connect(audioContext.destination);
+      audioBufferSouceNode.connect(analyser);
+      audioBufferSouceNode.start(0);
+      if(this.$store.state.isPlaying) {
+        audioContext.resume();
+      } else {
+        audioContext.suspend();
+      }
+      audioIsLoaded = true;
+    },
     async onAudioSourceUpdate() {
       if (audioIsLoaded) {
         audioContext.close();
