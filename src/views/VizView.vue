@@ -318,12 +318,10 @@ export default {
       this.$store.commit('updateCode', this.code);
       let audioSourceToLoad = (this.vizAudioSources.length > 0) ? this.vizAudioSources[0] : this.defaultSources[0];
       this.$store.commit('updateAudioSource', audioSourceToLoad);
-      await this.$refs.three.onAudioSourceUpdate();
       await this.$refs.three.initViz();
     },
     async setActiveAudio(audioSource) {
       this.$store.commit('updateAudioSource', audioSource);
-      await this.$refs.three.onAudioSourceUpdate();
     },
     async updatePaymentStream() {
       let metas = Array.from(document.getElementsByTagName("meta"));
@@ -362,12 +360,10 @@ export default {
       let stream = await utils.getMedia({ audio: true, video: false });
       let audioStreamSource = { name: "Microphone Audio", stream: stream };
       this.$store.commit('updateAudioSource', audioStreamSource);
-      this.$refs.three.onAudioSourceUpdate();
     },
     async disconnectMicAudio() {
       let audioSource = this.defaultSources[0];
       this.$store.commit('updateAudioSource', audioSource);
-      await this.$refs.three.onAudioSourceUpdate();
     }
   },
   async mounted() {

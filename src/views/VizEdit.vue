@@ -376,7 +376,6 @@ export default {
         this.$store.commit('updateCode', this.code);
         let audioSourceToLoad = (this.vizAudioSources.length > 0) ? this.vizAudioSources[0] : this.defaultSources[3];
         this.$store.commit('updateAudioSource', audioSourceToLoad);
-        await this.$refs.three.onAudioSourceUpdate();
         await this.$refs.three.initViz();
         return;
       }
@@ -400,7 +399,6 @@ export default {
       this.$store.commit('updateCode', this.code);
       let audioSourceToLoad = (this.vizAudioSources.length > 0) ? this.vizAudioSources[0] : this.defaultSources[0];
       this.$store.commit('updateAudioSource', audioSourceToLoad);
-      await this.$refs.three.onAudioSourceUpdate();
       // get scene config from code
       // update scene
       await this.$refs.three.initViz();
@@ -419,7 +417,6 @@ export default {
     },
     async setActiveAudio(audioSource) {
       this.$store.commit('updateAudioSource', audioSource);
-      await this.$refs.three.onAudioSourceUpdate();
     },
     removeAudioSource(audioParams) {
       if (this.$store.state.audioSource.name === audioParams.name) {

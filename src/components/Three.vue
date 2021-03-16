@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
@@ -51,21 +53,26 @@ let vrButton;
 export default {
   name: 'Three',
   data() {
-    return {
+    return { }
+  },
+  computed: mapState(['audioSource']),
+  watch: {
+    audioSource (newSrc, oldSrc) {
+      this.onAudioSourceUpdate();
     }
   },
   methods: {
     async toggleMute() {
-      gainNode.gain.setValueAtTime(this.$store.state.isMuted ? 1 : 0, audioContext.currentTime);
       this.$store.commit('updateMuteStatus', !this.$store.state.isMuted);
+      gainNode.gain.setValueAtTime(this.$store.state.isMuted ? 0 : 1, audioContext.currentTime);
     },
     async onAudioSourceUpdate() {
       if (audioIsLoaded) {
         audioContext.close();
       }
       audioContext = new AudioContext();
-      let src = this.$store.state.audioSource;
-      let sourceIsStream = !!this.$store.state.audioSource.stream;
+      let src = this.audioSource;
+      let sourceIsStream = !!src.stream;
       let audioSouceNode;
       if (sourceIsStream) {
         audioSouceNode = audioContext.createMediaStreamSource(src.stream);
@@ -84,7 +91,9 @@ export default {
       audioSouceNode.connect(analyser);
       analyser.connect(gainNode);
       gainNode.connect(audioContext.destination);
-      audioSouceNode.start(0);
+      if (!sourceIsStream) {
+        audioSouceNode.start(0);
+      }
       if(this.$store.state.isPlaying) {
         audioContext.resume();
       } else {

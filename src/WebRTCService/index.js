@@ -1,4 +1,5 @@
 import Peer from "peerjs";
+import $store from "@/store/index.js";
 import utils from "@/utils/index.js";
 
 
@@ -197,8 +198,6 @@ function WebRTCService() {
       this.theirPeerId = '';
     } else {
       let stream = await utils.getMedia({ audio: true, video: false });
-      console.log('Calling ...');
-      console.log(stream);
       call = peer.call(this.peerIdToConnectTo, stream);
       this.theirPeerId = this.peerIdToConnectTo;
     }
@@ -207,8 +206,6 @@ function WebRTCService() {
   
   this.onReceiveCall = async(recdCall) => {
     call = recdCall;
-    console.log('peer is calling...');
-    console.log(call);
     call.answer();
     this.theirPeerId = call.peer;
     this.peerIdToConnectTo = call.peer;
@@ -236,20 +233,8 @@ function WebRTCService() {
 
 
   function onReceiveStream(stream) {
-    console.log(stream);
-
-    let audio = document.createElement("audio");
-    audio.id = 'audio-player';
-    audio.controls = 'controls';
-    audio.srcObject = stream;
-    
-    document.body.appendChild(audio);
-  
-    audio.onloadedmetadata = function(e){
-      console.log('now playing the audio');
-      audio.play();
-    }
-  
+    let audioStreamSource = { name: "Peer Audio", stream: stream };
+    $store.commit('updateAudioSource', audioStreamSource);
   }
   
   
