@@ -98,8 +98,9 @@ export default {
       if (!sourceIsStream) {
         audioSouceNode.start(0);
       }
-      if(this.$store.state.isPlaying) {
+      if(this.$store.state.isPlaying || sourceIsStream) {
         audioContext.resume();
+        // this.$store.commit('updatePlayStatus', true);
       } else {
         audioContext.suspend();
       }
@@ -143,7 +144,8 @@ export default {
       scene.add(sceneContent);
     },
     updateViz() {
-      if (!this.$store.state.isPlaying) return;
+      // if (!this.$store.state.isPlaying) return;
+      if (!analyser) return;
       
       lowIdx = 0;
       midIdx = 0;
