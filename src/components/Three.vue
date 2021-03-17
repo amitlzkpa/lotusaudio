@@ -73,6 +73,8 @@ export default {
       await this.wait(2000);
       audioContext = new AudioContext();
       let src = this.audioSource;
+      console.log(`Received new source...`);
+      console.log(JSON.stringify(src, null, 2));
       let sourceIsStream = !!src.stream;
       let audioSouceNode;
       if (sourceIsStream) {
