@@ -70,11 +70,13 @@ export default {
       if (audioIsLoaded) {
         audioContext.close();
       }
+      await this.wait(2000);
       audioContext = new AudioContext();
       let src = this.audioSource;
       let sourceIsStream = !!src.stream;
       let audioSouceNode;
       if (sourceIsStream) {
+        await this.wait(2000);
         audioSouceNode = audioContext.createMediaStreamSource(src.stream);
       } else {
         let resp = await this.$api.get(src.source, { responseType: 'arraybuffer' });
