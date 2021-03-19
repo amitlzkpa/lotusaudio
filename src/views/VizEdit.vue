@@ -88,6 +88,16 @@
                 <b v-if="activeTab === 'Audio'">Audio</b>
                 <span v-else>Audio</span>
               </span>
+
+              &nbsp;&nbsp;|&nbsp;&nbsp;
+
+              <span
+                @click="activeTab = 'Live'"
+                style="cursor: pointer;"
+              >
+                <b v-if="activeTab === 'Live'">Live</b>
+                <span v-else>Live</span>
+              </span>
             </div>
             
             <div style="height: 75vh; overflow-y: auto; overflow-x: hidden;">
@@ -193,6 +203,34 @@
                 </details>
 
               </div>
+              
+              <div v-if="activeTab === 'Live'">
+                Status: {{ WebRTCService.peerIsLive ? 'online' : 'offline' }}
+                <br/>
+                
+                <button
+                  @click="WebRTCService.setPeerOnlineStatus(!WebRTCService.peerIsLive)"
+                >
+                  Go {{ !WebRTCService.peerIsLive ? 'online' : 'offline' }}
+                </button>
+
+                <div v-if="WebRTCService.peerIsLive">
+                  Your ID: {{ WebRTCService.myPeerId }}
+                  <br/>
+                  Partner ID:
+                  <input
+                    type="text"
+                    v-model="WebRTCService.peerIdToConnectTo"
+                    :disabled="WebRTCService.theirPeerId !== ''"
+                  />
+                  <br/>
+                  <button
+                    @click="WebRTCService.togglePeerAudio"
+                  >{{ WebRTCService.theirPeerId === '' ? 'Share audio' : 'Disconnect' }}</button>
+                  <br/>
+                  
+                </div>
+              </div>
             </div>
 
           </div>
@@ -287,7 +325,9 @@ export default {
           source: "/audio_samples/sine-sweep_20-20000.wav",
           format: "audio/mpeg"
         }
-      ]
+      ],
+      
+      WebRTCService: this.WebRTCService
     }
   },
   computed: {
