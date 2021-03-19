@@ -138,7 +138,7 @@
               <div v-if="activeTab === 'Audio'">
 
                 <details open>
-                  <summary>Available sources</summary>
+                  <summary>Available sources:</summary>
                   <i v-if="vizAudioSources.length < 1">
                     &lt;none&gt;
                   </i>
@@ -156,7 +156,7 @@
                 </details>
 
                 <details>
-                  <summary>Default sources</summary>
+                  <summary>Default sources:</summary>
                   <i v-if="defaultSources.length < 1">
                     &lt;none&gt;
                   </i>
@@ -173,26 +173,23 @@
                 </details>
 
                 <details>
-                  <summary>Add sources</summary>
-                  <div>
-                    <span>Name</span>
-                    <input
-                      type="text"
-                      v-model="newAudioSource.name"
-                      placeholder=""
-                    />
-                    <br/>
+                  <summary>Microphone sources:</summary>
+                  
+                  <button
+                    v-if="!$store.state.audioSource.stream"
+                    @click="useMicAudio"
+                  >Use microphone audio</button>
+                  <button
+                    v-else
+                    @click="disconnectMicAudio"
+                  >Disconnect microphone audio</button>
+                  &nbsp;&nbsp;
+                  <i v-if="!!$store.state.audioSource.stream">
+                    Using microphone audio
+                  </i>
+                  <br/>
+                  <div id="micAudioContainer"></div>
 
-                    <span>Source</span>
-                    <input
-                      type="text"
-                      v-model="newAudioSource.source"
-                      placeholder=""
-                    />
-                    <br/>
-
-                    <button @click="addNewAudioSource">Add new source</button>
-                  </div>
                 </details>
 
               </div>
@@ -231,6 +228,7 @@ import AudioItem from "@/components/AudioItem.vue";
 import Three from "@/components/Three.vue";
 import templateViz from "!raw-loader!@/assets/template_viz.js";
 // import newViz from "!raw-loader!@/assets/new_viz.js";
+import utils from "@/utils/index.js";
 
 export default {
   name: 'VizEdit',
@@ -437,6 +435,15 @@ export default {
     togglePaneWidth() {
       this.paneWidth = (this.paneWidth < 10) ? 60 : 1;
       setTimeout(() => { this.$refs.three.onContainerResize(); }, 0);
+    },
+    async useMicAudio() {
+      let stream = await utils.getMedia({ audio: true, video: false });
+      let audioStreamSource = { name: "Microphone Audio", stream: stream };
+      this.$store.commit('updateAudioSource', audioStreamSource);
+    },
+    async disconnectMicAudio() {
+      let audioSource = this.defaultSources[0];
+      this.$store.commit('updateAudioSource', audioSource);
     }
   },
   async mounted() {
