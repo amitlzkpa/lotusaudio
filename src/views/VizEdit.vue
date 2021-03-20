@@ -237,12 +237,15 @@
 
           <div style="flex: 0 0 auto; text-align: center">
 
-            <div>
-              {{ $store.state.audioSource.name }}
-              <span alt="Play audio and run visualization" @click="run">
-                <i :class="`fas fa-${$store.state.isPlaying ? 'pause' : 'play'}`"></i>
-              </span>
-            </div>
+            <span @click="toggleMute">
+              <i :class="`fas fa-${isMuted ? 'volume-mute' : 'volume-up'}`"></i>
+            </span>
+
+            {{ $store.state.audioSource.name }}
+
+            <span alt="Play audio and run visualization" @click="run">
+              <i :class="`fas fa-${$store.state.isPlaying ? 'pause' : 'play'}`"></i>
+            </span>
 
           </div>
 
@@ -331,8 +334,8 @@ export default {
     }
   },
   computed: {
-    isPayable() {
-      return this.paymentPointer !== "" && this.paymentEnabled;
+    isMuted() {
+      return this.$store.state.isMuted;
     }
   },
   methods: {
@@ -484,6 +487,9 @@ export default {
     async disconnectMicAudio() {
       let audioSource = this.defaultSources[0];
       this.$store.commit('updateAudioSource', audioSource);
+    },
+    toggleMute() {
+      this.$refs.three.toggleMute();
     }
   },
   async mounted() {
