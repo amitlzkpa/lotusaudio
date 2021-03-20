@@ -415,8 +415,9 @@ export default {
       if (this.$route.params.id === 'new_viz.js') {
         this.code = newViz;
         this.$store.commit('updateCode', this.code);
-        let audioSourceToLoad = (this.vizAudioSources.length > 0) ? this.vizAudioSources[0] : this.defaultSources[3];
-        this.$store.commit('updateAudioSource', audioSourceToLoad);
+        // let audioSourceToLoad = (this.vizAudioSources.length > 0) ? this.vizAudioSources[0] : this.defaultSources[3];
+        // this.$store.commit('updateAudioSource', audioSourceToLoad);
+        await this.useMicAudio();
         await this.$refs.three.initViz();
         return;
       }
@@ -438,8 +439,9 @@ export default {
       this.paymentEnabled = viz.paymentEnabled;
       this.vizAudioSources = viz.audioSources;
       this.$store.commit('updateCode', this.code);
-      let audioSourceToLoad = (this.vizAudioSources.length > 0) ? this.vizAudioSources[0] : this.defaultSources[0];
-      this.$store.commit('updateAudioSource', audioSourceToLoad);
+      await this.useMicAudio();
+      // let audioSourceToLoad = (this.vizAudioSources.length > 0) ? this.vizAudioSources[0] : this.defaultSources[0];
+      // this.$store.commit('updateAudioSource', audioSourceToLoad);
       // get scene config from code
       // update scene
       await this.$refs.three.initViz();
@@ -457,7 +459,8 @@ export default {
       this.newAudioSource.source = "";
     },
     async setActiveAudio(audioSource) {
-      this.$store.commit('updateAudioSource', audioSource);
+      await this.useMicAudio();
+      // this.$store.commit('updateAudioSource', audioSource);
     },
     removeAudioSource(audioParams) {
       if (this.$store.state.audioSource.name === audioParams.name) {
@@ -480,6 +483,7 @@ export default {
       setTimeout(() => { this.$refs.three.onContainerResize(); }, 0);
     },
     async useMicAudio() {
+      console.log('foo');
       let stream = await utils.getMedia({ audio: true, video: false });
       let audioStreamSource = { name: "Microphone Audio", stream: stream };
       this.$store.commit('updateAudioSource', audioStreamSource);
