@@ -167,7 +167,7 @@
 
           <div style="flex: 0 0 auto; text-align: center">
 
-            <span @click="toggleMute">
+            <span @click="$refs.three.toggleMute">
               <i :class="`fas fa-${isMuted ? 'volume-mute' : 'volume-up'}`"></i>
             </span>
 
@@ -364,9 +364,6 @@ export default {
     async disconnectMicAudio() {
       let audioSource = this.defaultSources[0];
       this.$store.commit('updateAudioSource', audioSource);
-    },
-    toggleMute() {
-      this.$refs.three.toggleMute();
     }
   },
   async mounted() {
